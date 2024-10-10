@@ -3,20 +3,40 @@ Newest version of the classes in use are listed below.
 
 # servo.py
 ```python
-from maestro import Controller
+from maestro import Controller # neccessary to be able to pass controller object
 
 class Servo:
+    """
+    Class that controls position, speed and acceleration of a servo motor.
+
+    Attributes:
+    -----------
+    channel: int
+        ID number (and corresponding pin number) of unique servo.
+    controller: Controller
+        controller object passed from elsewhere in the system
+    position: int
+        Last given position of servo.
+    min_pos: int
+        Minimum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
+    max_post: int
+        Maximum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
+
+    Methods:
+    -----------
+    move(position)
+        Moves servo to given position.
+    """
     def __init__(self, controller: Controller, channel: int, min: int, max: int):
-        self.channel = channel  # ID number (and pin number) of unique servo
-        self.controller = controller # Storing instance of passed controller object
-        self.position = 0  # Default position is 0
+        self.channel = channel 
+        self.controller = controller
+        self.position = 0  # default start position
         self.min_pos = min
         self.max_pos = max
-        self.speed = 25
-        self.acceleration = 25
+        self.speed = 25 # default speed
+        self.acceleration = 25 # default acceleration
 
     def move(self, position: int):
-        """Test av move funksjon."""
         self.position = position
         self.controller.setRange(self.channel, self.min_pos, self.max_pos)
         self.controller.setAccel(self.channel, self.acceleration)
