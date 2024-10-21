@@ -4,9 +4,9 @@ import maestro
 servo = maestro.Controller()
 
 # Set acceleration for servo channel 0
-servo.setRange(2, 200, 16000)
-servo.setAccel(2, 25)
-servo.setSpeed(2,25)
+servo.setRange(1, 200, 16000)
+servo.setAccel(1, 25)
+servo.setSpeed(1,25)
 
 
 while True:
@@ -20,7 +20,7 @@ while True:
     target_position = int(user_input)
     
     # Set the target position for servo 0
-    servo.setTarget(2, target_position)
+    servo.setTarget(1, target_position)
     print(f"Servo target set to {target_position}")
 
     # Optionally, get and display the current position

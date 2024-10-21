@@ -15,7 +15,7 @@ class Servo:
         Last given position of servo.
     min_pos: int
         Minimum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
-    max_post: int
+    max_pos: int
         Maximum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
 
     Methods:
