@@ -1,45 +1,33 @@
-from sense_hat import SenseHat
 import time
+import math
+from sense_hat import SenseHat
 
-# Initialize the Sense HAT
 sense = SenseHat()
 
-# Clear the LED matrix
-sense.clear()
-
 # Define some colors
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-white = (255, 255, 255)
+blue = [0, 0, 255]
+black = [0, 0, 0]
 
-# Set a single pixel to red at coordinates (2, 2)
-sense.set_pixel(2, 2, red)
+# Function to create a wave pattern
+def draw_wave(step):
+    # Clear the display
+    sense.clear()
+    
+    # Iterate over the columns (x-axis)
+    for x in range(8):
+        # Calculate the wave's height using a sine wave function
+        # The step is used to animate the wave
+        y = int((math.sin(x + step) + 1) * 3.5)  # Shift and scale sine wave to 0-7
+        
+        # Ensure the result is clamped within the 0-7 range
+        y = min(8, max(0, y))
+        
+        # Set the LED color at the calculated position
+        sense.set_pixel(x, y, blue)
 
-# Fill the whole display with blue
-sense.clear(blue)
-
-# Wait for a bit
-time.sleep(2)
-
-# Create a simple pattern
-pattern = [
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white,
-    red, red, green, green, blue, blue, white, white
-]
-
-# Display the pattern on the LED matrix
-sense.set_pixels(pattern)
-
-# Keep the display on for 5 seconds
-time.sleep(5)
-
-# Clear the display
-sense.clear()
-
+# Animate the wave
+step = 0
+while True:
+    draw_wave(step)
+    step += 0.2  # Adjust the speed of the wave
+    time.sleep(0.1)  # Pause to control the animation speed
