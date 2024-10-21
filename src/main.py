@@ -12,12 +12,12 @@ from servo import Servo
 def main():
     # testing av servo-objekter (testet! fungerer!)
     ctrl = maestro.Controller()
-    leg0 = Leg(ctrl, 0, 0, 1, 2)
-    leg0.initial_position()
+    leg1 = Leg(ctrl, 1, 3, 4, 5)
+    leg1.initial_position()
     time.sleep(5)
-    leg0.lower_leg()
+    leg1.lower_leg()
     time.sleep(5)
-    leg0.initial_position()
+    leg1.initial_position()
 """
     servo = Servo(ctrl, 0, 2000, 5950) # creating servo object 2000min pos, 5950 max pos
     servo2 = Servo(ctrl, 1, 3950, 6900) # creating servo object 2000min pos, 5950 max pos
