@@ -10,7 +10,7 @@ import time
 from servo import Servo
 
 def main():
-    # testing av servo-objekter (testet! fungerer!)
+    # testing av leg objekter, har testet leg 0 og 1)
     ctrl = maestro.Controller()
     leg1 = Leg(ctrl, 1, 3, 4, 5)
     leg1.initial_position()
@@ -18,6 +18,9 @@ def main():
     leg1.lower_leg()
     time.sleep(5)
     leg1.initial_position()
+
+
+# gammel kode:
 """
     servo = Servo(ctrl, 0, 2000, 5950) # creating servo object 2000min pos, 5950 max pos
     servo2 = Servo(ctrl, 1, 3950, 6900) # creating servo object 2000min pos, 5950 max pos
@@ -27,12 +30,10 @@ def main():
     servo2.move(3950)
     servo3.move(4000)
     ctrl.close()
-"""
 
- #   leg0 = Leg(ctrl, 0, 0, 1, 2)
-  #  leg0.lift_leg()
+    leg0 = Leg(ctrl, 0, 0, 1, 2)
+    leg0.lift_leg()
 
-"""
     creepy_pod = CreepyPod()
     creepy_pod.display_state()
     creepy_pod.change_state(CreepyState.IDLE)

@@ -1,5 +1,3 @@
-# generert på chat gpt - ikke implementert korrekt enda
-
 # leg.py
 from servo import Servo
 from maestro import Controller
@@ -12,7 +10,7 @@ class Leg:
         self.servo_2 = Servo(controller, servo_2, 1650, 8600)
 
     def lower_leg(self):
-        # self.servo_0.move(1474)
+        # self.servo_0.move(1474) #commented out while testing
         self.servo_1.move(8250)
         self.servo_2.move(6400)
 
