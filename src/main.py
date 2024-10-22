@@ -12,12 +12,40 @@ from servo import Servo
 def main():
     # testing av leg objekter, har testet leg 0 og 1)
     ctrl = maestro.Controller()
-    leg1 = Leg(ctrl, 1, 3, 4, 5)
+    
+    leg0 = Leg(ctrl, 0, 0, 1, 2, 3550, 8250, 2350, 9900, 1600, 8100)
+    leg1 = Leg(ctrl, 1, 3, 4, 5, 3450, 8600, 2700, 10100, 1650, 8600)
+    leg2 = Leg(ctrl, 2, 6, 7, 8, 4500, 8300, 2600, 10300, 1600, 8500)
+    leg3 = Leg(ctrl, 3, 9, 10, 11, 3800, 7700, 2150, 9600, 1600, 8800)
+    leg4 = Leg(ctrl, 4, 12, 13, 14, 3400, 7800, 2550, 10250, 1600, 8450)
+    leg5 = Leg(ctrl, 5, 15, 16, 17, 3000, 7000, 2500, 10000, 1600, 8450)
+
+    leg0.initial_position()
     leg1.initial_position()
+    leg2.initial_position()
+    leg3.initial_position()
+    leg4.initial_position()
+    leg5.initial_position()
+
     time.sleep(5)
+
+    leg0.lower_leg()
     leg1.lower_leg()
+    leg2.lower_leg()
+    leg3.lower_leg()
+    leg4.lower_leg()
+    leg5.lower_leg()
+
     time.sleep(5)
+
+    leg0.initial_position()
     leg1.initial_position()
+    leg2.initial_position()
+    leg3.initial_position()
+    leg4.initial_position()
+    leg5.initial_position()
+
+
 
 
 # gammel kode:

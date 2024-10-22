@@ -4,7 +4,7 @@ import maestro
 servo = maestro.Controller()
 
 # Set acceleration for servo channel 0
-servo.setRange(16, 3950, 6900)
+servo.setRange(16, 200, 10000)
 servo.setAccel(16, 25)
 servo.setSpeed(16,25)
 
