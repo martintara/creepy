@@ -1,6 +1,30 @@
 # src
 Most relevant files and classes for insight into the system:
 
+# leg.py
+```python
+from servo import Servo
+from maestro import Controller
+
+class Leg:
+    def __init__(self, controller: Controller, leg_id: int, servo_0: int, servo_1:int, servo_2:int):
+        self.leg_id = leg_id  # Unique identifier for the leg
+        self.servo_0 = Servo(controller, servo_0, 3450, 8600)
+        self.servo_1 = Servo(controller, servo_1, 2700, 10100)
+        self.servo_2 = Servo(controller, servo_2, 1650, 8600)
+
+    def lower_leg(self):
+        # self.servo_0.move(1474) #commented out while testing
+        self.servo_1.move(8250)
+        self.servo_2.move(6400)
+
+    def initial_position(self):
+        self.servo_0.move(int((self.servo_0.max_pos+self.servo_0.min_pos)/2))
+        self.servo_1.move(self.servo_1.max_pos)
+        self.servo_2.move(self.servo_2.max_pos)
+
+```
+
 # servo.py
 ```python
 from maestro import Controller # neccessary to be able to pass controller object
@@ -53,34 +77,46 @@ class Servo:
 
 # main.py
 ```python
-# main.py
 
 from creepy_pod import CreepyPod
 from creepy_state import CreepyState
-# from maestro import Controller
-# import maestro
+from maestro import Controller
+import maestro
+from leg import Leg
+import time
 
-# from servo import Servo
+from servo import Servo
 
 def main():
-    """ testing av servo-objekter (testet! fungerer!)
+    # testing av leg objekter, har testet leg 0 og 1)
     ctrl = maestro.Controller()
+    leg1 = Leg(ctrl, 1, 3, 4, 5)
+    leg1.initial_position()
+    time.sleep(5)
+    leg1.lower_leg()
+    time.sleep(5)
+    leg1.initial_position()
 
-    servo = Servo(ctrl, 17, 2000, 5950) # creating servo object 2000min pos, 5950 max pos
-    servo2 = Servo(ctrl, 16, 3950, 6900) # creating servo object 2000min pos, 5950 max pos
-    servo3 = Servo(ctrl, 15, 4000, 7550) # creating servo object 2000min pos, 5950 max pos
 
-    servo.move(5000)
-    servo2.move(5000)
-    servo3.move(5000)
+# gammel kode:
+"""
+    servo = Servo(ctrl, 0, 2000, 5950) # creating servo object 2000min pos, 5950 max pos
+    servo2 = Servo(ctrl, 1, 3950, 6900) # creating servo object 2000min pos, 5950 max pos
+    servo3 = Servo(ctrl, 2, 4000, 7550) # creating servo object 2000min pos, 5950 max pos
+
+    servo.move(2000)
+    servo2.move(3950)
+    servo3.move(4000)
     ctrl.close()
-    """
+
+    leg0 = Leg(ctrl, 0, 0, 1, 2)
+    leg0.lift_leg()
 
     creepy_pod = CreepyPod()
     creepy_pod.display_state()
     creepy_pod.change_state(CreepyState.IDLE)
     creepy_pod.display_state()
-
+"""
 if __name__ == "__main__":
     main()
 ```
