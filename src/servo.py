@@ -23,12 +23,12 @@ class Servo:
     move(position)
         Moves servo to given position.
     """
-    def __init__(self, controller: Controller, channel: int, min: int, max: int):
+    def __init__(self, controller: Controller, channel: int, center_pos: int, range: int):
         self.channel = channel 
         self.controller = controller
         self.position = 0  # default start position
-        self.min_pos = min
-        self.max_pos = max
+        self.min_pos = center_pos-range
+        self.max_pos = center_pos+range
         self.speed = 25 # default speed
         self.acceleration = 25 # default acceleration
 
