@@ -56,15 +56,15 @@ class Servo:
 
         # Map angle to position within the min and max range
         position = ((angle - self.min_angle) / (self.max_angle - self.min_angle)) * \
-                   (self.max_position - self.min_position) + self.min_position
+                   (self.max_pos - self.min_pos) + self.min_pos
         return position
 
     def position_to_angle(self, position):
         # Constrain the position to within the servo's position range
-        position = max(self.min_position, min(self.max_position, position))
+        position = max(self.min_pos, min(self.max_pos, position))
 
         # Map position back to angle within the min and max range
-        angle = ((position - self.min_position) / (self.max_position - self.min_position)) * \
+        angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * \
                 (self.max_angle - self.min_angle) + self.min_angle
         return angle
 
