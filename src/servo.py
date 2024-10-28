@@ -26,6 +26,7 @@ class Servo:
     def __init__(self, controller: Controller, channel: int, center_pos: int, range: int):
         self.channel = channel 
         self.controller = controller
+        self.center_pos = center_pos
         self.position = 0  # default start position
         self.min_pos = center_pos-range
         self.max_pos = center_pos+range

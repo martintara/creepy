@@ -10,10 +10,14 @@ class Leg:
     def lower_leg(self):
         # self.servo_0.move(1474) #commented out while testing
         self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
+#        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/2))
+
         self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
+#        self.servos[2].move(int((self.servos[2].center_pos*2)/1.6))
 
     def initial_position(self):
         self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
+#        self.servos[0].move(self.servos[0].center_pos)
         self.servos[1].move(self.servos[1].max_pos)
         self.servos[2].move(self.servos[2].max_pos)
 
