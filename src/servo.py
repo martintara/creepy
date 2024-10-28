@@ -45,3 +45,30 @@ class Servo:
 
     def setSpeed(self, speed: int):
         self.speed = speed
+
+    def manual_control(self):
+        print(f"Entering manual control for Servo {self.id}.")
+        print(f"Type a number between {self.min_pos} and {self.max_pos}, or 'q' to quit.")
+        
+        while True:
+            user_input = input("Enter position: ")
+
+            # Exit if user enters 'q'
+            if user_input.lower() == 'q':
+                print("Exiting manual control.")
+                break
+
+            # Try to convert input to an integer
+            try:
+                position = int(user_input)
+                
+                # Check if position is within bounds
+                if self.min_pos <= position <= self.max_pos:
+                    # Simulate writing the value to the servo
+                    self.move(position)
+                    print(f"Position set to {position}")
+                else:
+                    print(f"Error: Position must be between {self.min_pos} and {self.max_pos}.")
+            
+            except ValueError:
+                print("Invalid input. Please enter an integer.")
