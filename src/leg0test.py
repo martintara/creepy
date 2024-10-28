@@ -14,9 +14,9 @@ def main():
     ctrl = maestro.Controller()
  
     servo_list0 = [
-        Servo(ctrl, 0, 5900, 2350, 0, 90),
+        Servo(ctrl, 0, 5900, 2350, 0, 45),
         Servo(ctrl, 1, 6125, 3775, 0, 45),
-        Servo(ctrl, 2, 4850, 3250, 90, 90)
+        Servo(ctrl, 2, 4850, 3250, 0, 45)
                     ]
 
 
