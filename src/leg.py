@@ -33,3 +33,5 @@ class Leg:
         self.servos[1].move(self.servos[1].min_pos)
         self.servos[2].move(self.servos[2].min_pos)
 
+    def manual_control(self, id: int):
+        self.servos[id].manual_control()

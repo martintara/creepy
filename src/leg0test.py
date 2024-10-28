@@ -14,40 +14,40 @@ def main():
     ctrl = maestro.Controller()
  
     servo_list0 = [
-        Servo(ctrl, 0, 5900, 2350),
-        Servo(ctrl, 1, 6125, 3775),
-        Servo(ctrl, 2, 4850, 3250)
+        Servo(ctrl, 0, 5900, 2350, 0, 90),
+        Servo(ctrl, 1, 6125, 3775, 0, 45),
+        Servo(ctrl, 2, 4850, 3250, 90, 90)
                     ]
 
 
     servo_list1 = [
-        Servo(ctrl, 3, 6025, 2350),
-        Servo(ctrl, 4, 6400, 3775),
-        Servo(ctrl, 5, 5125, 3250)
+        Servo(ctrl, 3, 6025, 2350, 90, 90),
+        Servo(ctrl, 4, 6400, 3775, 90, 90),
+        Servo(ctrl, 5, 5125, 3250, 90, 90)
                    ]
 
     servo_list2 = [
-        Servo(ctrl, 6, 6400, 2350),
-        Servo(ctrl, 7, 6450, 3775),
-        Servo(ctrl, 8, 5050, 3250)
+        Servo(ctrl, 6, 6400, 2350, 90, 90),
+        Servo(ctrl, 7, 6450, 3775, 90, 90),
+        Servo(ctrl, 8, 5050, 3250, 90, 90)
                    ]
 
     servo_list3 = [
-        Servo(ctrl, 9, 5750, 2350),
-        Servo(ctrl, 10, 5875, 3775),
-        Servo(ctrl, 11, 5200, 3250)
+        Servo(ctrl, 9, 5750, 2350, 90, 90),
+        Servo(ctrl, 10, 5875, 3775, 90, 90),
+        Servo(ctrl, 11, 5200, 3250, 90, 90)
             ]
 
     servo_list4 = [
-        Servo(ctrl, 12, 5600, 2350),
-        Servo(ctrl, 13, 6400, 3775),
-        Servo(ctrl, 14, 5025, 3250)
+        Servo(ctrl, 12, 5600, 2350, 90, 90),
+        Servo(ctrl, 13, 6400, 3775, 90, 90),
+        Servo(ctrl, 14, 5025, 3250, 90, 90)
                    ]
 
     servo_list5 = [
-        Servo(ctrl, 15, 5000, 2350),
-        Servo(ctrl, 16, 6250, 3775),
-        Servo(ctrl, 17, 5025, 3250)
+        Servo(ctrl, 15, 5000, 2350, 90, 90),
+        Servo(ctrl, 16, 6250, 3775, 90, 90),
+        Servo(ctrl, 17, 5025, 3250, 90, 90)
                    ]
 
 
@@ -66,7 +66,6 @@ def main():
 #   leg3.initial_position()
 #   leg4.initial_position()
 #   leg5.initial_position()
-
     time.sleep(5)
 
     leg0.lower_leg()
@@ -91,6 +90,8 @@ def main():
 #   leg3.initial_position()
 #   leg4.initial_position()
 #   leg5.initial_position()
+
+    leg0.manual_control(2)
 
 if __name__ == "__main__":
     main()

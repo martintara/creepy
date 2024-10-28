@@ -23,13 +23,15 @@ class Servo:
     move(position)
         Moves servo to given position.
     """
-    def __init__(self, controller: Controller, channel: int, center_pos: int, range: int):
+    def __init__(self, controller: Controller, channel: int, center_pos: int, range: int, center_angle, angle_range):
         self.channel = channel 
         self.controller = controller
         self.center_pos = center_pos
         self.position = 0  # default start position
         self.min_pos = center_pos-range
         self.max_pos = center_pos+range
+        self.min_angle = center_angle - angle_range
+        self.max_angle = center_angle + angle_range
         self.speed = 25 # default speed
         self.acceleration = 25 # default acceleration
 
@@ -40,6 +42,7 @@ class Servo:
         self.controller.setSpeed(self.channel, self.speed)
         self.controller.setTarget(self.channel, position)
         print(f"Servo {self.channel} moved to position {self.position}")
+        print(f"Angle {self.position_to_angle(self.position)}")
 
     def setAcceleration(self, acceleration: int):
         self.acceleration = acceleration
@@ -47,8 +50,20 @@ class Servo:
     def setSpeed(self, speed: int):
         self.speed = speed
 
+    def angle_to_position(self, angle):
+        angle = max(self.min_angle, min(self.max_angle, angle))
+        position = ((angle - self.min_angle) / (self.max_angle - self.min_angle)) * (self.max_pos - self.min_pos) + self.min_pos
+        return position
+
+    def position_to_angle(self, position):
+        position = max(self.min_pos, min(self.max_pos, position))
+        angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * (self.max_angle - self.min_angle) + self.min_angle
+        return angle
+
+
+
     def manual_control(self):
-        print(f"Entering manual control for Servo {self.id}.")
+        print(f"Entering manual control for Servo {self.channel}.")
         print(f"Type a number between {self.min_pos} and {self.max_pos}, or 'q' to quit.")
         
         while True:
