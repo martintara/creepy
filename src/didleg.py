@@ -7,7 +7,7 @@ class Leg:
         self.leg_id = leg_id  # Unique identifier for the leg
         self.servos = servos
 
-    def lower_leg(self):
+    def standby_position(self):
         # self.servo_0.move(1474) #commented out while testing
 #       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
         self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/2))
@@ -35,3 +35,18 @@ class Leg:
 
     def manual_control(self, id: int):
         self.servos[id].manual_control()
+
+
+
+    def lower_leg1(self):
+        #self.servos[0].move(self.servos[0].center_pos)
+        self.servos[1].move(self.servos[1].center_pos)
+        self.servos[2].move(int((self.servos[2].center_pos)*0.9))
+
+    def rotate_forward(self):
+        self.servos[0].move(self.servos[0].max_pos)
+
+    def rotate_backward(self):
+        self.servos[0].move(self.servos[0].min_pos)
+
+        

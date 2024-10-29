@@ -4,9 +4,9 @@ from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
-from leg import Leg
+from didleg import Leg
 import time
-
+from display import *
 from servo import Servo
 
 def main():
@@ -14,14 +14,14 @@ def main():
     ctrl = maestro.Controller()
  
     servo_list0 = [
-        Servo(ctrl, 0, 5900, 2350, 0, 45),
+        Servo(ctrl, 0, 5400, 950, 0, 45),
         Servo(ctrl, 1, 6125, 3775, 0, 45),
         Servo(ctrl, 2, 4850, 3250, 0, 45)
                     ]
 
 
     servo_list1 = [
-        Servo(ctrl, 3, 6025, 2350, 90, 90),
+            Servo(ctrl, 3, 6025, 950, 90, 90),
         Servo(ctrl, 4, 6400, 3775, 90, 90),
         Servo(ctrl, 5, 5125, 3250, 90, 90)
                    ]
@@ -54,48 +54,34 @@ def main():
 
 
     leg0 = Leg(ctrl, 0, servo_list0)
-#   leg1 = Leg(ctrl, 1, servo_list1)
-#   leg2 = Leg(ctrl, 2, servo_list2)
-#   leg3 = Leg(ctrl, 3, servo_list3)
-#   leg4 = Leg(ctrl, 4, servo_list4)
-#   leg5 = Leg(ctrl, 5, servo_list5)
+    leg1 = Leg(ctrl, 1, servo_list1)
 
+#    leg0.standby_position()
+#    time.sleep(5)
+#    leg0.initial_position()
+    startup()
+    leg0.initial_position()
+    leg1.initial_position()
+    time.sleep(2)
+#    leg0.standby_position()
+#    time.sleep(3)
+    idle()
+    leg0.lower_leg1()
+    leg1.lower_leg1()
+    time.sleep(3)
+#    leg0.initial_position()
+    leg1.rotate_forward()
+    leg0.rotate_backward()
+    time.sleep(3)
+    leg0.rotate_forward()
+    leg1.rotate_backward()
+    time.sleep(3)
+#    leg0.lower_leg1()
+#    time.sleep(3)
+#    leg0.rotate_backward()
+#    time.sleep(3)
 #    leg0.initial_position()
 
-#   leg1.initial_position()
-#   leg2.initial_position()
-#   leg3.initial_position()
-#   leg4.initial_position()
-#   leg5.initial_position()
-
-#    time.sleep(5)
-
-#    leg0.lower_leg()
-
-#   leg1.lower_leg()
-#   leg2.lower_leg()
-#   leg3.lower_leg()
-#   leg4.lower_leg()
-#   leg5.lower_leg()
-
- #   time.sleep(5)
- #   leg0.straight_up()
-
- #   time.sleep(5)
- #   leg0.straight_down()
-
-
- #   time.sleep(5)
-
-#   leg0.initial_position()
-#   leg1.initial_position()
-#   leg2.initial_position()
-#   leg3.initial_position()
-#   leg4.initial_position()
-#   leg5.initial_position()
-
-    leg0.manual_control(2)
-    leg0.manual_control(1)
 
 if __name__ == "__main__":
     main()
