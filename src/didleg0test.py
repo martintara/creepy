@@ -16,7 +16,7 @@ def main():
     servo_list0 = [
         Servo(ctrl, 0, 5900, 2350, 0, 45),
         Servo(ctrl, 1, 6125, 3775, 0, 45),
-        Servo(ctrl, 2, 5100, 3000, 0, 70)
+        Servo(ctrl, 2, 4850, 3250, 0, 45)
                     ]
 
 
