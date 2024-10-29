@@ -51,13 +51,21 @@ class Servo:
         self.speed = speed
 
     def angle_to_position(self, angle):
+        # Constrain the angle to within the servo's angle range
         angle = max(self.min_angle, min(self.max_angle, angle))
-        position = ((angle - self.min_angle) / (self.max_angle - self.min_angle)) * (self.max_pos - self.min_pos) + self.min_pos
+
+        # Map angle to position within the min and max range
+        position = ((angle - self.min_angle) / (self.max_angle - self.min_angle)) * \
+                   (self.max_position - self.min_position) + self.min_position
         return position
 
     def position_to_angle(self, position):
-        position = max(self.min_pos, min(self.max_pos, position))
-        angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * (self.max_angle - self.min_angle) + self.min_angle
+        # Constrain the position to within the servo's position range
+        position = max(self.min_position, min(self.max_position, position))
+
+        # Map position back to angle within the min and max range
+        angle = ((position - self.min_position) / (self.max_position - self.min_position)) * \
+                (self.max_angle - self.min_angle) + self.min_angle
         return angle
 
 
@@ -82,7 +90,7 @@ class Servo:
                 if self.min_pos <= position <= self.max_pos:
                     # Simulate writing the value to the servo
                     self.move(position)
-                    print(f"Position set to {position}")
+                    #print(f"Position set to {position}")
                 else:
                     print(f"Error: Position must be between {self.min_pos} and {self.max_pos}.")
             

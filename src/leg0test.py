@@ -60,31 +60,34 @@ def main():
 #   leg4 = Leg(ctrl, 4, servo_list4)
 #   leg5 = Leg(ctrl, 5, servo_list5)
 
-    leg0.initial_position()
+#    leg0.initial_position()
+
 #   leg1.initial_position()
 #   leg2.initial_position()
 #   leg3.initial_position()
 #   leg4.initial_position()
 #   leg5.initial_position()
-    time.sleep(5)
 
-    leg0.lower_leg()
+#    time.sleep(5)
+
+#    leg0.lower_leg()
+
 #   leg1.lower_leg()
 #   leg2.lower_leg()
 #   leg3.lower_leg()
 #   leg4.lower_leg()
 #   leg5.lower_leg()
 
-    time.sleep(5)
-    leg0.straight_up()
+ #   time.sleep(5)
+ #   leg0.straight_up()
 
-    time.sleep(5)
-    leg0.straight_down()
+ #   time.sleep(5)
+ #   leg0.straight_down()
 
 
-    time.sleep(5)
+ #   time.sleep(5)
 
-    leg0.initial_position()
+#   leg0.initial_position()
 #   leg1.initial_position()
 #   leg2.initial_position()
 #   leg3.initial_position()
@@ -92,6 +95,7 @@ def main():
 #   leg5.initial_position()
 
     leg0.manual_control(2)
+    leg0.manual_control(1)
 
 if __name__ == "__main__":
     main()
