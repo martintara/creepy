@@ -51,19 +51,27 @@ class Servo:
         self.speed = speed
 
     def angle_to_position(self, angle):
+        """
+        Converts an angle to the corresponding servo position.
+        Ensures angle is clamped between min_angle and max_angle.
+        """
         # Constrain the angle to within the servo's angle range
         angle = max(self.min_angle, min(self.max_angle, angle))
 
-        # Map angle to position within the min and max range
+        # Map angle to position, using center as the midpoint
         position = ((angle - self.min_angle) / (self.max_angle - self.min_angle)) * \
                    (self.max_pos - self.min_pos) + self.min_pos
         return position
 
     def position_to_angle(self, position):
+        """
+        Converts a servo position to the corresponding angle.
+        Ensures position is clamped between min_pos and max_pos.
+        """
         # Constrain the position to within the servo's position range
         position = max(self.min_pos, min(self.max_pos, position))
 
-        # Map position back to angle within the min and max range
+        # Map position back to angle, using center as the midpoint
         angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * \
                 (self.max_angle - self.min_angle) + self.min_angle
         return angle
