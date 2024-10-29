@@ -36,9 +36,11 @@ class Leg:
     def manual_control(self, id: int):
         self.servos[id].manual_control()
 
+    def rise_leg(self): 
+        self.servos[1].move(self.servos[1].max_pos)
+        self.servos[2].move(self.servos[2].max_pos)
 
-
-    def lower_leg1(self):
+    def lower_leg(self):
         #self.servos[0].move(self.servos[0].center_pos)
         self.servos[1].move(self.servos[1].center_pos)
         self.servos[2].move(int((self.servos[2].center_pos)*0.9))
