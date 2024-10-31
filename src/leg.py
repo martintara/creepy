@@ -35,3 +35,6 @@ class Leg:
 
     def manual_control(self, id: int):
         self.servos[id].manual_control()
+
+    def manual_control_angle(self, id: int):
+        self.servos[id].manual_control_angle()

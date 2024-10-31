@@ -51,4 +51,8 @@ class Leg:
     def rotate_backward(self):
         self.servos[0].move(self.servos[0].min_pos)
 
-        
+    def standby_position2(self):
+        self.servos[1].move(int(((self.servos[1].max_pos)/10)*7))
+        self.servos[2].move(int((self.servos[2].center_pos*2)/1.8))
+
+       

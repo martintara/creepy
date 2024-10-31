@@ -104,3 +104,30 @@ class Servo:
             
             except ValueError:
                 print("Invalid input. Please enter an integer.")
+
+    def manual_control_angle(self):
+        print(f"Entering manual control for Servo {self.channel}.")
+        print(f"Type a number between {self.min_angle} and {self.max_angle}, or 'q' to quit.")
+        
+        while True:
+            user_input = input("Enter angle: ")
+
+            # Exit if user enters 'q'
+            if user_input.lower() == 'q':
+                print("Exiting manual control.")
+                break
+
+            # Try to convert input to an integer
+            try:
+                angle = int(user_input)
+                position = int(self.angle_to_position(angle))
+                # Check if position is within bounds
+                if self.min_angle <= angle <= self.max_angle:
+                    # Simulate writing the value to the servo
+                    self.move(position)
+                    print(f"Position set to {position}")
+                else:
+                    print(f"Error: Position must be between {self.min_pos} and {self.max_pos}.")
+            
+            except ValueError:
+                print("Invalid input. Please enter an integer.")
