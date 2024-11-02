@@ -31,8 +31,10 @@ class CreepyPod:
         }              
 
     def change_state(self, new_state: CreepyState):
-        print(f"Changing state from {self.state.name} to {new_state.name}")
-        self.state = new_state
+        # Only change if the new state is different
+        if self.state != new_state:
+            print(f"Changing state from {self.state.name} to {new_state.name}")
+            self.state = new_state
 
     def display_state(self):
         print(f"Current state: {self.state.name}")
@@ -46,13 +48,23 @@ class CreepyPod:
         # Update Pygame event queue
         pygame.event.pump()
 
-        # Button mappings for Xbox controller
-        if self.controller.get_button(0):  # Button A
+        # Read current button states
+        a_pressed = self.controller.get_button(0)  # Button A
+        b_pressed = self.controller.get_button(1)  # Button B
+        y_pressed = self.controller.get_button(3)  # Button Y
+
+        # Detect changes from unpressed (0) to pressed (1)
+        if a_pressed and not self.prev_a:
             self.change_state(CreepyState.MANUAL)
-        elif self.controller.get_button(1):  # Button B
+        elif b_pressed and not self.prev_b:
             self.change_state(CreepyState.AUTO)
-        elif self.controller.get_button(3):  # Button Y
+        elif y_pressed and not self.prev_y:
             self.change_state(CreepyState.SHUTDOWN)
+
+        # Update previous button states for the next check
+        self.prev_a = a_pressed
+        self.prev_b = b_pressed
+        self.prev_y = y_pressed
 
     def startup_action(self):
         print("Initializing systems... Please wait.")
