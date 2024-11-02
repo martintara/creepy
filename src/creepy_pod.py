@@ -2,13 +2,25 @@
 # har ikke testet dette enda
 # creepy_pod.py
 from creepy_state import CreepyState
+import time
+from controller import Controller
 #from leg import Leg
 
 class CreepyPod:
     def __init__(self):
         self.state = CreepyState.STARTUP # Initial state
-        print(f"Entering state: {self.state.name}") 
+        print(f"Entering state: {self.state.name}")
 
+        # Controller instance
+        self.controller = Controller()
+
+        self.state_actions = {
+            CreepyState.STARTUP: self.startup_action,
+            CreepyState.IDLE: self.idle_action,
+            CreepyState.MANUAL: self.manual_action,
+            CreepyState.AUTO: self.auto_action,
+            CreepyState.SHUTDOWN: self.shutdown_action
+        }              
 
     def change_state(self, new_state: CreepyState):
         print(f"Changing state from {self.state.name} to {new_state.name}")
@@ -17,16 +29,46 @@ class CreepyPod:
     def display_state(self):
         print(f"Current state: {self.state.name}")
 
+    def run_state_action(self):
+        action = self.state_actions.get(self.state)
+        if action:
+            action()
 
-#    def move_pod(self, leg_positions: list[list[int]]):
-#        """
-#        Moves each leg's servos to the given positions.
-#        leg_positions should be a list of 6 sub-lists, each containing 3 positions for the servos.
-#        """
-#        if len(leg_positions) != 6:
-#            raise ValueError("CreepyPod must have exactly 6 legs.")
-#        
-#        for i, positions in enumerate(leg_positions):
-#            print(f"Moving leg {i}")
-#            self.legs[i].move_leg(positions)
+    def check_for_state_change(self):
+        # Update the controller's current button states
+        self.controller.update()
 
+        # Check each button to see if it's been pressed
+        if self.controller.is_pressed('A'):
+            self.change_state(CreepyState.MANUAL)
+        elif self.controller.is_pressed('B'):
+            self.change_state(CreepyState.AUTO)
+        elif self.controller.is_pressed('Y'):
+            self.change_state(CreepyState.SHUTDOWN)
+
+    def startup_action(self):
+        print("Initializing systems... Please wait.")
+        time.sleep(2)  # Simulate delay during startup
+        print("System check complete.")
+        print("Transitioning to IDLE state.")
+        
+        # Automatically transition to IDLE state
+        self.change_state(CreepyState.IDLE)
+
+    def idle_action(self):
+        print("System is idle. Monitoring sensors...")
+        while self.state == CreepyState.IDLE:
+            self.check_for_state_change()
+
+    def manual_action(self):
+        print("Manual mode activated. Awaiting user input...")
+        while self.state == CreepyState.MANUAL:
+            self.check_for_state_change()
+
+    def auto_action(self):
+        print("Autonomous mode activated. Navigating environment...")
+        while self.state == CreepyState.AUTO:
+            self.check_for_state_change()
+
+    def shutdown_action(self):
+        print("Shutting down systems.")
