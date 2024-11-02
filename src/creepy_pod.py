@@ -128,7 +128,13 @@ class CreepyPod:
 
     def shutdown_action(self):
         print("Shutdown procedure started.")
-        time.sleep(2)  # Simulate delay during shutdown
+        self.legs[0].initial_position()
+        self.legs[1].initial_position()
+        self.legs[2].initial_position()
+        self.legs[3].initial_position()
+        self.legs[4].initial_position()
+        self.legs[5].initial_position()
+        time.sleep(3)  # Simulate delay during shutdown
         print("Shutdown procedure complete.")
         print("Transitioning to EXIT state.")
         self.change_state(CreepyState.EXIT)
