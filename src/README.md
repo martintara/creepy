@@ -1,10 +1,407 @@
-### Latest changes
+### Source files
 
 - **main.py**: The main script that controls the CreepyPod.
 - **creepy_pod.py**: Contains the main `CreepyPod` class responsible for the states and movements.
 - **leg.py**: Defines the `Leg` class representing each leg.
 - **servo.py**: Defines the `Servo` class representing individual servos in each leg.
 
+
+#### main.py
+```python
+# main.py
+
+from creepy_pod import CreepyPod
+from creepy_state import CreepyState
+from maestro import Controller
+import maestro
+# from leg import Leg
+import time
+
+# from servo import Servo
+
+def main():
+    # servo controller communication object
+    ctrl = maestro.Controller()
+
+    # Servo settings
+    leg_params = [
+        [  # Leg 0
+            {"channel": 0, "center_pos": 5900, "range": 2350, "center_angle": 0, "angle_range": 45},
+            {"channel": 1, "center_pos": 6125, "range": 3775, "center_angle": 0, "angle_range": 45},
+            {"channel": 2, "center_pos": 5100, "range": 3000, "center_angle": 0, "angle_range": 70}
+        ],
+        [  # Leg 1
+            {"channel": 3, "center_pos": 6025, "range": 2350, "center_angle": 90, "angle_range": 90},
+            {"channel": 4, "center_pos": 6400, "range": 3775, "center_angle": 90, "angle_range": 90},
+            {"channel": 5, "center_pos": 5125, "range": 3250, "center_angle": 90, "angle_range": 90}
+        ],
+        [  # Leg 2
+            {"channel": 6, "center_pos": 6400, "range": 2350, "center_angle": 90, "angle_range": 90},
+            {"channel": 7, "center_pos": 6450, "range": 3775, "center_angle": 90, "angle_range": 90},
+            {"channel": 8, "center_pos": 5050, "range": 3250, "center_angle": 90, "angle_range": 90}
+        ],
+        [  # Leg 3
+            {"channel": 9, "center_pos": 5750, "range": 2350, "center_angle": 90, "angle_range": 90},
+            {"channel": 10, "center_pos": 5875, "range": 3775, "center_angle": 90, "angle_range": 90},
+            {"channel": 11, "center_pos": 5200, "range": 3250, "center_angle": 90, "angle_range": 90}
+        ],
+        [  # Leg 4
+            {"channel": 12, "center_pos": 5600, "range": 2350, "center_angle": 90, "angle_range": 90},
+            {"channel": 13, "center_pos": 6400, "range": 3775, "center_angle": 90, "angle_range": 90},
+            {"channel": 14, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
+        ],
+        [  # Leg 5
+            {"channel": 15, "center_pos": 5000, "range": 2350, "center_angle": 90, "angle_range": 90},
+            {"channel": 16, "center_pos": 6250, "range": 3775, "center_angle": 90, "angle_range": 90},
+            {"channel": 17, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
+        ]
+    ]
+    creepy_pod = CreepyPod(leg_params, ctrl)  # Initialize CreepyPod in STARTUP state
+
+    # Run state actions until shutdown
+    while creepy_pod.state != CreepyState.EXIT:
+        creepy_pod.run_state_action()
+
+    print("CreepyPod has shut down.")
+
+if __name__ == "__main__":
+    main()
+```
+
+#### creepy_pod.py
+```python
+# creepy_pod.py
+from creepy_state import CreepyState
+import time
+import pygame
+from leg import Leg
+from maestro import Controller
+
+class CreepyPod:
+    def __init__(self, leg_params, controller : Controller):
+        # Initialize leg objects
+        self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
+
+        # Initialize Pygame and the controller
+        pygame.init()
+        pygame.joystick.init()
+
+        if pygame.joystick.get_count() > 0:
+            self.controller = pygame.joystick.Joystick(0)
+            self.controller.init()
+            print(f"Controller detected: {self.controller.get_name()}")
+        else:
+            print("No controller detected. Exiting.")
+            exit()
+        self.state = CreepyState.STARTUP # Initial state
+        print(f"Entering state: {self.state.name}")
+
+        self.state_actions = {
+            CreepyState.DEVMODE: self.devmode_action,
+            CreepyState.STARTUP: self.startup_action,
+            CreepyState.IDLE: self.idle_action,
+            CreepyState.MANUAL: self.manual_action,
+            CreepyState.AUTO: self.auto_action,
+            CreepyState.SHUTDOWN: self.shutdown_action,
+            CreepyState.EXIT: self.exit_action
+        }
+
+        # Track the previous state of each button to detect single presses
+        self.prev_a = 0
+        self.prev_b = 0
+        self.prev_y = 0
+        self.prev_left_bumper = 0
+        self.prev_right_bumper = 0
+        self.start_button_held_start_time = None  # Time when Start button is first pressed
+
+    def change_state(self, new_state: CreepyState):
+        # Only change if the new state is different
+        if self.state != new_state:
+            print(f"Changing state from {self.state.name} to {new_state.name}")
+            self.state = new_state
+
+    def display_state(self):
+        print(f"Current state: {self.state.name}")
+
+    def run_state_action(self):
+        action = self.state_actions.get(self.state)
+        if action:
+            action()
+
+    def check_for_state_change(self):
+        # Update Pygame event queue
+        pygame.event.pump()
+
+        # Read current button states
+        a_pressed = self.controller.get_button(0)  # Button A
+        b_pressed = self.controller.get_button(1)  # Button B
+        y_pressed = self.controller.get_button(3)  # Button Y
+        left_bumper_pressed = self.controller.get_button(4)  # Left Bumper
+        right_bumper_pressed = self.controller.get_button(5)  # Right Bumper
+
+        # Detect single presses for state changes
+        if a_pressed and not self.prev_a:
+            self.change_state(CreepyState.MANUAL)
+        elif b_pressed and not self.prev_b:
+            self.change_state(CreepyState.AUTO)
+        elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
+            self.change_state(CreepyState.DEVMODE)
+
+        # Check if Start button is pressed
+        start_button_pressed = self.controller.get_button(7)
+        if start_button_pressed:
+            # If Start button is pressed, start or continue tracking the hold time
+            if self.start_button_held_start_time is None:
+                self.start_button_held_start_time = time.time()  # Record the time the button was first pressed
+            elif time.time() - self.start_button_held_start_time >= 1:
+                # If the button has been held for 2 seconds, enter SHUTDOWN state
+                self.change_state(CreepyState.SHUTDOWN)
+        else:
+            # Reset the hold start time if the Start button is released
+            self.start_button_held_start_time = None
+
+        # Update previous button states for the next check
+        self.prev_a = a_pressed
+        self.prev_b = b_pressed
+        self.prev_y = y_pressed
+        self.prev_left_bumper = left_bumper_pressed
+        self.prev_right_bumper = right_bumper_pressed
+
+    def startup_action(self):
+        print("Initializing systems... Please wait.")
+        time.sleep(2)  # Simulate delay during startup
+        print("System check complete.")
+        print("Transitioning to IDLE state.")
+        
+        # Automatically transition to IDLE state
+        self.change_state(CreepyState.IDLE)
+
+    def idle_action(self):
+        print("System is idle. Monitoring sensors...")
+        while self.state == CreepyState.IDLE:
+            self.check_for_state_change()
+
+    def manual_action(self):
+        print("Manual mode activated. Awaiting user input...")
+        self.legs[0].lower_leg()
+        self.legs[1].lower_leg()
+        self.legs[2].lower_leg()
+        self.legs[3].lower_leg()
+        self.legs[4].lower_leg()
+        self.legs[5].lower_leg()
+
+        while self.state == CreepyState.MANUAL:
+            self.check_for_state_change()
+
+    def auto_action(self):
+        print("Autonomous mode activated. Navigating environment...")
+        while self.state == CreepyState.AUTO:
+            self.check_for_state_change()
+
+    def shutdown_action(self):
+        print("Shutdown procedure started.")
+        self.legs[0].initial_position()
+        self.legs[1].initial_position()
+        self.legs[2].initial_position()
+        self.legs[3].initial_position()
+        self.legs[4].initial_position()
+        self.legs[5].initial_position()
+        time.sleep(3)  # Simulate delay during shutdown
+        print("Shutdown procedure complete.")
+        print("Transitioning to EXIT state.")
+        self.change_state(CreepyState.EXIT)
+        pygame.quit()  # Properly quit Pygame
+
+    def devmode_action(self):
+        print("Developer mode activated! Performing special operations...")
+        while self.state == CreepyState.DEVMODE:
+            self.check_for_state_change()
+
+    def exit_action(self):
+        print("Exiting.")
+```
+
+#### leg.py
+```python
+# leg.py
+from servo import Servo
+from maestro import Controller
+
+class Leg:
+    def __init__(self, leg_id: int, servo_params, controller: Controller):
+        self.leg_id = leg_id  # Unique identifier for the leg
+        self.servos = [
+            Servo(controller, **params) for params in servo_params
+        ]
+    def lower_leg(self):
+        # self.servo_0.move(1474) #commented out while testing
+#       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
+        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/2))
+
+#       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
+        self.servos[2].move(int((self.servos[2].center_pos*2)/1.6))
+
+    def initial_position(self):
+#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
+        self.servos[0].move(self.servos[0].center_pos)
+        self.servos[1].move(self.servos[1].max_pos)
+        self.servos[2].move(self.servos[2].max_pos)
+
+    def straight_up(self):
+#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
+#       self.servos[0].move(self.servos[0].center_pos)
+        self.servos[1].move(self.servos[1].max_pos)
+        self.servos[2].move(self.servos[2].min_pos)
+
+    def straight_down(self):
+#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
+        self.servos[0].move(self.servos[0].center_pos)
+        self.servos[1].move(self.servos[1].min_pos)
+        self.servos[2].move(self.servos[2].min_pos)
+
+    def manual_control(self, id: int):
+        self.servos[id].manual_control()
+
+    def manual_control_angle(self, id: int):
+        self.servos[id].manual_control_angle()
+```
+
+#### servo.py
+```python
+# servo.py
+from maestro import Controller # neccessary to be able to pass controller object
+
+class Servo:
+    """
+    Class that controls position, speed and acceleration of a servo motor.
+
+    Attributes:
+    -----------
+    channel: int
+        ID number (and corresponding pin number) of unique servo.
+    controller: Controller
+        controller object passed from elsewhere in the system
+    position: int
+        Last given position of servo.
+    min_pos: int
+        Minimum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
+    max_pos: int
+        Maximum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
+
+    Methods:
+    -----------
+    move(position)
+        Moves servo to given position.
+    """
+    def __init__(self, controller: Controller, channel: int, center_pos: int, range: int, center_angle, angle_range):
+        self.channel = channel 
+        self.controller = controller
+        self.center_pos = center_pos
+        self.position = 0  # default start position
+        self.min_pos = center_pos-range
+        self.max_pos = center_pos+range
+        self.min_angle = center_angle - angle_range
+        self.max_angle = center_angle + angle_range
+        self.speed = 25 # default speed
+        self.acceleration = 25 # default acceleration
+
+    def move(self, position: int):
+        self.position = position
+        self.controller.setRange(self.channel, self.min_pos, self.max_pos)
+        self.controller.setAccel(self.channel, self.acceleration)
+        self.controller.setSpeed(self.channel, self.speed)
+        self.controller.setTarget(self.channel, position)
+        print(f"Servo {self.channel} moved to position {self.position}")
+        print(f"Angle {self.position_to_angle(self.position)}")
+
+    def setAcceleration(self, acceleration: int):
+        self.acceleration = acceleration
+
+    def setSpeed(self, speed: int):
+        self.speed = speed
+
+    def angle_to_position(self, angle):
+        """
+        Converts an angle to the corresponding servo position.
+        Ensures angle is clamped between min_angle and max_angle.
+        """
+        # Constrain the angle to within the servo's angle range
+        angle = max(self.min_angle, min(self.max_angle, angle))
+
+        # Map angle to position, using center as the midpoint
+        position = ((angle - self.min_angle) / (self.max_angle - self.min_angle)) * \
+                   (self.max_pos - self.min_pos) + self.min_pos
+        return position
+
+    def position_to_angle(self, position):
+        """
+        Converts a servo position to the corresponding angle.
+        Ensures position is clamped between min_pos and max_pos.
+        """
+        # Constrain the position to within the servo's position range
+        position = max(self.min_pos, min(self.max_pos, position))
+
+        # Map position back to angle, using center as the midpoint
+        angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * \
+                (self.max_angle - self.min_angle) + self.min_angle
+        return angle
+
+
+
+    def manual_control(self):
+        print(f"Entering manual control for Servo {self.channel}.")
+        print(f"Type a number between {self.min_pos} and {self.max_pos}, or 'q' to quit.")
+        
+        while True:
+            user_input = input("Enter position: ")
+
+            # Exit if user enters 'q'
+            if user_input.lower() == 'q':
+                print("Exiting manual control.")
+                break
+
+            # Try to convert input to an integer
+            try:
+                position = int(user_input)
+                
+                # Check if position is within bounds
+                if self.min_pos <= position <= self.max_pos:
+                    # Simulate writing the value to the servo
+                    self.move(position)
+                    #print(f"Position set to {position}")
+                else:
+                    print(f"Error: Position must be between {self.min_pos} and {self.max_pos}.")
+            
+            except ValueError:
+                print("Invalid input. Please enter an integer.")
+
+    def manual_control_angle(self):
+        print(f"Entering manual control for Servo {self.channel}.")
+        print(f"Type a number between {self.min_angle} and {self.max_angle}, or 'q' to quit.")
+        
+        while True:
+            user_input = input("Enter angle: ")
+
+            # Exit if user enters 'q'
+            if user_input.lower() == 'q':
+                print("Exiting manual control.")
+                break
+
+            # Try to convert input to an integer
+            try:
+                angle = int(user_input)
+                position = int(self.angle_to_position(angle))
+                # Check if position is within bounds
+                if self.min_angle <= angle <= self.max_angle:
+                    # Simulate writing the value to the servo
+                    self.move(position)
+                    print(f"Position set to {position}")
+                else:
+                    print(f"Error: Position must be between {self.min_pos} and {self.max_pos}.")
+            
+            except ValueError:
+                print("Invalid input. Please enter an integer.")
+```
 ### Latest Code
 
 #### main.py
