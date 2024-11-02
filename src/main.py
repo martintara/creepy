@@ -4,16 +4,13 @@ from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
-# from leg import Leg
 import time
 
-# from servo import Servo
-
 def main():
-    # servo controller communication object
+    # Servo controller object. Needed for communicating between Raspberry Pi and Pololu mini maestro servo module.
     ctrl = maestro.Controller()
 
-    # Servo settings
+    # List of settings the servos will get initialized with
     leg_params = [
         [  # Leg 0
             {"channel": 0, "center_pos": 5900, "range": 2350, "center_angle": 0, "angle_range": 45},
@@ -46,7 +43,8 @@ def main():
             {"channel": 17, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
         ]
     ]
-    creepy_pod = CreepyPod(leg_params, ctrl)  # Initialize CreepyPod in STARTUP state
+
+    creepy_pod = CreepyPod(leg_params, ctrl)  # Initializing a CreepyPod object with the instructions list.
 
     # Run state actions until shutdown
     while creepy_pod.state != CreepyState.EXIT:

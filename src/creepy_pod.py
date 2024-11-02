@@ -21,6 +21,16 @@ class CreepyPod:
         else:
             print("No controller detected. Exiting.")
             exit()
+
+        # Track the previous state of each button to detect single presses
+        self.prev_a = 0
+        self.prev_b = 0
+        self.prev_y = 0
+        self.prev_left_bumper = 0
+        self.prev_right_bumper = 0
+        self.start_button_held_start_time = None  # Time when Start button is first pressed
+
+        # Initializing states
         self.state = CreepyState.STARTUP # Initial state
         print(f"Entering state: {self.state.name}")
 
@@ -33,14 +43,6 @@ class CreepyPod:
             CreepyState.SHUTDOWN: self.shutdown_action,
             CreepyState.EXIT: self.exit_action
         }
-
-        # Track the previous state of each button to detect single presses
-        self.prev_a = 0
-        self.prev_b = 0
-        self.prev_y = 0
-        self.prev_left_bumper = 0
-        self.prev_right_bumper = 0
-        self.start_button_held_start_time = None  # Time when Start button is first pressed
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
@@ -57,7 +59,7 @@ class CreepyPod:
             action()
 
     def check_for_state_change(self):
-        # Update Pygame event queue
+        # Update Pygame event queue (needed for os to handle events coming from pygame)
         pygame.event.pump()
 
         # Read current button states
@@ -75,14 +77,14 @@ class CreepyPod:
         elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
             self.change_state(CreepyState.DEVMODE)
 
-        # Check if Start button is pressed
+        # Check if Start button is pressed for over 1 second
         start_button_pressed = self.controller.get_button(7)
         if start_button_pressed:
             # If Start button is pressed, start or continue tracking the hold time
             if self.start_button_held_start_time is None:
                 self.start_button_held_start_time = time.time()  # Record the time the button was first pressed
             elif time.time() - self.start_button_held_start_time >= 1:
-                # If the button has been held for 2 seconds, enter SHUTDOWN state
+                # If the button has been held for 1 seconds, enter SHUTDOWN state
                 self.change_state(CreepyState.SHUTDOWN)
         else:
             # Reset the hold start time if the Start button is released
