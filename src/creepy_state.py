@@ -4,9 +4,10 @@ class CreepyState(Enum):
     """
     Different states of CreepyPod
     """
-    STARTUP = 0
-    IDLE = 1
-    MANUAL = 2
-    AUTO = 3
-    SHUTDOWN = 4
-    EXIT = 5
+    DEVMODE = 0
+    STARTUP = 1
+    IDLE = 2
+    MANUAL = 3
+    AUTO = 4
+    SHUTDOWN = 5
+    EXIT = 6

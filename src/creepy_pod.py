@@ -23,12 +23,20 @@ class CreepyPod:
         print(f"Entering state: {self.state.name}")
 
         self.state_actions = {
+            CreepyState.DEVMODE: self.devmode_action,
             CreepyState.STARTUP: self.startup_action,
             CreepyState.IDLE: self.idle_action,
             CreepyState.MANUAL: self.manual_action,
             CreepyState.AUTO: self.auto_action,
             CreepyState.SHUTDOWN: self.shutdown_action
-        }              
+        }
+
+        # Track the previous state of each button to detect single presses
+        self.prev_a = 0
+        self.prev_b = 0
+        self.prev_y = 0
+        self.prev_left_bumper = 0
+        self.prev_right_bumper = 0
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
@@ -52,19 +60,25 @@ class CreepyPod:
         a_pressed = self.controller.get_button(0)  # Button A
         b_pressed = self.controller.get_button(1)  # Button B
         y_pressed = self.controller.get_button(3)  # Button Y
+        left_bumper_pressed = self.controller.get_button(4)  # Left Bumper
+        right_bumper_pressed = self.controller.get_button(5)  # Right Bumper
 
-        # Detect changes from unpressed (0) to pressed (1)
+        # Detect single presses for state changes
         if a_pressed and not self.prev_a:
             self.change_state(CreepyState.MANUAL)
         elif b_pressed and not self.prev_b:
             self.change_state(CreepyState.AUTO)
         elif y_pressed and not self.prev_y:
             self.change_state(CreepyState.SHUTDOWN)
+        elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
+            self.change_state(CreepyState.DEVMODE)
 
         # Update previous button states for the next check
         self.prev_a = a_pressed
         self.prev_b = b_pressed
         self.prev_y = y_pressed
+        self.prev_left_bumper = left_bumper_pressed
+        self.prev_right_bumper = right_bumper_pressed
 
     def startup_action(self):
         print("Initializing systems... Please wait.")
@@ -93,3 +107,8 @@ class CreepyPod:
     def shutdown_action(self):
         print("Shutting down systems.")
         pygame.quit()  # Properly quit Pygame
+
+    def devmode_action(self):
+        print("Developer mode activated! Performing special operations...")
+        while self.state == CreepyState.DEVMODE:
+            self.check_for_state_change()
