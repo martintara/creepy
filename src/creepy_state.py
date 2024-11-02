@@ -9,3 +9,4 @@ class CreepyState(Enum):
     MANUAL = 2
     AUTO = 3
     SHUTDOWN = 4
+    EXIT = 5
