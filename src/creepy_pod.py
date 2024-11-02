@@ -3,16 +3,24 @@
 # creepy_pod.py
 from creepy_state import CreepyState
 import time
-from controller import Controller
+import pygame
 #from leg import Leg
 
 class CreepyPod:
     def __init__(self):
+        # Initialize Pygame and the controller
+        pygame.init()
+        pygame.joystick.init()
+
+        if pygame.joystick.get_count() > 0:
+            self.controller = pygame.joystick.Joystick(0)
+            self.controller.init()
+            print(f"Controller detected: {self.controller.get_name()}")
+        else:
+            print("No controller detected. Exiting.")
+            exit()
         self.state = CreepyState.STARTUP # Initial state
         print(f"Entering state: {self.state.name}")
-
-        # Controller instance
-        self.controller = Controller()
 
         self.state_actions = {
             CreepyState.STARTUP: self.startup_action,
@@ -35,15 +43,15 @@ class CreepyPod:
             action()
 
     def check_for_state_change(self):
-        # Update the controller's current button states
-        self.controller.update()
+        # Update Pygame event queue
+        pygame.event.pump()
 
-        # Check each button to see if it's been pressed
-        if self.controller.is_pressed('A'):
+        # Button mappings for Xbox controller
+        if self.controller.get_button(0):  # Button A
             self.change_state(CreepyState.MANUAL)
-        elif self.controller.is_pressed('B'):
+        elif self.controller.get_button(1):  # Button B
             self.change_state(CreepyState.AUTO)
-        elif self.controller.is_pressed('Y'):
+        elif self.controller.get_button(3):  # Button Y
             self.change_state(CreepyState.SHUTDOWN)
 
     def startup_action(self):
@@ -72,3 +80,4 @@ class CreepyPod:
 
     def shutdown_action(self):
         print("Shutting down systems.")
+        pygame.quit()  # Properly quit Pygame
