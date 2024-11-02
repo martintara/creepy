@@ -1,7 +1,7 @@
 ### Latest changes
 
-- **main.py**: The main script to control the hexapod's movements.
-- **creepy_pod.py**: Contains the main `CreepyPod` class for hexapod coordination.
+- **main.py**: The main script that controls the CreepyPod.
+- **creepy_pod.py**: Contains the main `CreepyPod` class responsible for the states and movements.
 - **leg.py**: Defines the `Leg` class representing each leg.
 - **servo.py**: Defines the `Servo` class representing individual servos in each leg.
 
