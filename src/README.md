@@ -1,6 +1,4 @@
-## Latest changes:
-
-The project consists of several components:
+### Latest changes:
 - **main.py**: The main script that initializes servos and creates a CreepyPod object.
 - **creepy_pod.py**: Contains the main `CreepyPod` class responsible for states and movements.
 - **leg.py**: Defines the `Leg` class representing each leg.
