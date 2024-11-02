@@ -1,13 +1,15 @@
-# NB move_pod() er fortsatt noe gammelt generert fra chat gpt. se over dette
-# har ikke testet dette enda
 # creepy_pod.py
 from creepy_state import CreepyState
 import time
 import pygame
-#from leg import Leg
+from leg import Leg
+from maestro import Controller
 
 class CreepyPod:
-    def __init__(self):
+    def __init__(self, leg_params, controller : Controller):
+        # Initialize leg objects
+        self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
+
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()
@@ -28,7 +30,8 @@ class CreepyPod:
             CreepyState.IDLE: self.idle_action,
             CreepyState.MANUAL: self.manual_action,
             CreepyState.AUTO: self.auto_action,
-            CreepyState.SHUTDOWN: self.shutdown_action
+            CreepyState.SHUTDOWN: self.shutdown_action,
+            CreepyState.EXIT: self.exit_action
         }
 
         # Track the previous state of each button to detect single presses
@@ -37,6 +40,7 @@ class CreepyPod:
         self.prev_y = 0
         self.prev_left_bumper = 0
         self.prev_right_bumper = 0
+        self.start_button_held_start_time = None  # Time when Start button is first pressed
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
@@ -68,10 +72,21 @@ class CreepyPod:
             self.change_state(CreepyState.MANUAL)
         elif b_pressed and not self.prev_b:
             self.change_state(CreepyState.AUTO)
-        elif y_pressed and not self.prev_y:
-            self.change_state(CreepyState.SHUTDOWN)
         elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
             self.change_state(CreepyState.DEVMODE)
+
+        # Check if Start button is pressed
+        start_button_pressed = self.controller.get_button(7)
+        if start_button_pressed:
+            # If Start button is pressed, start or continue tracking the hold time
+            if self.start_button_held_start_time is None:
+                self.start_button_held_start_time = time.time()  # Record the time the button was first pressed
+            elif time.time() - self.start_button_held_start_time >= 1:
+                # If the button has been held for 2 seconds, enter SHUTDOWN state
+                self.change_state(CreepyState.SHUTDOWN)
+        else:
+            # Reset the hold start time if the Start button is released
+            self.start_button_held_start_time = None
 
         # Update previous button states for the next check
         self.prev_a = a_pressed
@@ -96,6 +111,13 @@ class CreepyPod:
 
     def manual_action(self):
         print("Manual mode activated. Awaiting user input...")
+        self.legs[0].lower_leg()
+        self.legs[1].lower_leg()
+        self.legs[2].lower_leg()
+        self.legs[3].lower_leg()
+        self.legs[4].lower_leg()
+        self.legs[5].lower_leg()
+
         while self.state == CreepyState.MANUAL:
             self.check_for_state_change()
 
@@ -105,10 +127,17 @@ class CreepyPod:
             self.check_for_state_change()
 
     def shutdown_action(self):
-        print("Shutting down systems.")
+        print("Shutdown procedure started.")
+        time.sleep(2)  # Simulate delay during shutdown
+        print("Shutdown procedure complete.")
+        print("Transitioning to EXIT state.")
+        self.change_state(CreepyState.EXIT)
         pygame.quit()  # Properly quit Pygame
 
     def devmode_action(self):
         print("Developer mode activated! Performing special operations...")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
+
+    def exit_action(self):
+        print("Exiting.")
