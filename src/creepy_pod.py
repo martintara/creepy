@@ -8,8 +8,15 @@ import display
 class CreepyPod:
     def __init__(self, leg_params, controller : Controller):
         # Initialize leg objects
-        self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
-
+        self.legs = [
+            Leg(
+                leg_id=i,
+                servo_params=leg["servos"],  # Pass only the servos list
+                controller=controller,
+                offset=leg["offset"]  # Pass the orientation offset for the leg
+            )
+            for i, leg in enumerate(leg_params)
+        ]
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()
