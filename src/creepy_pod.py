@@ -6,10 +6,9 @@ from leg import Leg
 from maestro import Controller
 import display
 class CreepyPod:
-    def __init__(self, leg_params, controller : Controller):
+    def __init__(self, controller : Controller, config_file="default_leg_params.json"):
         # Initialize leg objects
-        self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
-
+        self.load_leg_params(config_file)
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()
@@ -41,6 +40,21 @@ class CreepyPod:
         self.prev_left_bumper = 0
         self.prev_right_bumper = 0
         self.start_button_held_start_time = None  # Time when Start button is first pressed
+
+    def load_leg_params(self, config_file):
+        """Loads leg parameters from a JSON file and initializes legs."""
+        with open(config_file, 'r') as f:
+            leg_params = json.load(f)
+
+        # Debug: Print loaded leg parameters to confirm structure
+        print("Loaded leg parameters:", leg_params)
+
+        # Initialize leg objects, passing both offset and servos to Leg
+        self.legs = [
+            Leg(i, leg_config["servos"], leg_config["offset"], self.controller)
+            for i, leg_config in enumerate(leg_params)
+        ]
+        print(f"Leg parameters loaded from {config_file}")
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
