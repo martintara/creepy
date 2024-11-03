@@ -17,7 +17,7 @@ def main():
         return leg_params 
     # servo controller communication object
     ctrl = maestro.Controller()
-    leg_params = load_leg_params("leg_params.json")
+    leg_params = load_leg_params("default_leg_params.json")
     # Servo settings
     # leg_params = [
     #         {

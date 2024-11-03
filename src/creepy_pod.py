@@ -1,4 +1,5 @@
 # creepy_pod.py
+import json
 from creepy_state import CreepyState
 import time
 import pygame
@@ -6,17 +7,16 @@ from leg import Leg
 from maestro import Controller
 import display
 class CreepyPod:
+    DEFAULT_CONFIG_FILE = "default_leg_params.json"
+    CRAWL_CONFIG_FILE = "crawl_leg_params.json"
+    # CONSTRUCTOR
     def __init__(self, leg_params, controller : Controller):
         # Initialize leg objects
-        self.legs = [
-            Leg(
-                leg_id=i,
-                servo_params=leg["servos"],  # Pass only the servos list
-                controller=controller,
-                offset=leg["offset"]  # Pass the orientation offset for the leg
-            )
-            for i, leg in enumerate(leg_params)
-        ]
+        self.controller = controller
+        self.leg_params = []  # Initialize an empty list to store leg parameters
+
+        self.load_default_config()
+        self.initialize_legs()
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()
@@ -48,6 +48,37 @@ class CreepyPod:
         self.prev_left_bumper = 0
         self.prev_right_bumper = 0
         self.start_button_held_start_time = None  # Time when Start button is first pressed
+
+    # FUNCTIONS
+    def initialize_legs(self):
+        """Initialize legs based on self.leg_params."""
+        self.legs = [
+            Leg(
+                leg_id=i,
+                servo_params=leg["servos"],
+                controller=self.controller,
+                offset=leg["offset"]
+            )
+            for i, leg in enumerate(self.leg_params)
+        ]
+        print("Legs initialized with current parameters")
+
+    def load_default_config(self):
+        """Load the default configuration."""
+        print("Loading default configuration...")
+        self.load_leg_params(self.DEFAULT_CONFIG_FILE)
+        self.initialize_legs()
+
+    # Function that loads leg parameters from file
+    def load_leg_params(self, filename):
+        with open(filename, 'r') as file:
+            self.leg_params = json.load(file)
+
+    def load_crawl_config(self):
+        """Load the crawl configuration."""
+        print("Loading crawl configuration...")
+        self.load_leg_params(self.CRAWL_CONFIG_FILE)
+        self.initialize_legs()
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
@@ -167,6 +198,7 @@ class CreepyPod:
 
     def devmode_action(self):
         display.devmode()
+        self.load_crawl_config()
         print("Developer mode activated! Performing special operations...")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
