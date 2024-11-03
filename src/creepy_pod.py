@@ -13,7 +13,7 @@ class CreepyPod:
     def __init__(self, leg_params, ctrl : Controller):
         # Initialize leg objects
         self.leg_params = []  # Initialize an empty list to store leg parameters
-
+        self.controller = 0
         self.load_default_config()
         self.initialize_legs()
         # Initialize Pygame and the controller
