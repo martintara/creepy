@@ -104,6 +104,12 @@ class CreepyPod:
 
     def startup_action(self):
         display.startup() # updates sense hat led display
+        self.legs[0].initial_position()
+        self.legs[1].initial_position()
+        self.legs[2].initial_position()
+        self.legs[3].initial_position()
+        self.legs[4].initial_position()
+        self.legs[5].initial_position()
         print("Initializing systems... Please wait.")
         time.sleep(2)  # Simulate delay during startup
         print("System check complete.")
@@ -135,8 +141,10 @@ class CreepyPod:
         display.auto() # updating display
         #testing leg forward+backward
         self.legs[1].leg_forward()
-        time.sleep(2)
         self.legs[4].leg_forward()
+        time.sleep(2)
+        self.legs[1].leg_backward()
+        self.legs[4].leg_backward()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
             self.check_for_state_change()
