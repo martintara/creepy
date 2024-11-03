@@ -198,7 +198,6 @@ class CreepyPod:
 
     def devmode_action(self):
         display.devmode()
-        self.load_crawl_config()
         print("Developer mode activated! Performing special operations...")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
