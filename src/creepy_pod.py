@@ -5,9 +5,13 @@ import pygame
 from leg import Leg
 from maestro import Controller
 import display
+import json
+import os
 class CreepyPod:
-    def __init__(self, leg_params, controller : Controller):
-        # Initialize leg objects
+    def __init__(self, controller : Controller, config_file="default_leg_params"):
+        # Initialize leg objects from file
+        with open(config_file, 'r') as f:
+            leg_params = json.load(f)
         self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
 
         # Initialize Pygame and the controller
