@@ -150,6 +150,11 @@ class CreepyPod:
 
     def devmode_action(self):
         display.devmode()
+        self.legs[1].rotate_forward()
+        self.legs[4].rotate_forward()
+        time.sleep(2)  # Simulate delay during startup
+        self.legs[1].rotate_backward()
+        self.legs[4].rotate_backward()
         print("Developer mode activated! Performing special operations...")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
