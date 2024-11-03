@@ -17,7 +17,15 @@ class Servo:
         Minimum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
     max_pos: int
         Maximum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
-
+    min_angle:
+        Minimum angle of the servo.
+    max_angle:
+        Maximum angle of the servo.
+    speed:
+        The speed of the motion of the servo.
+    acceleration:
+        The accelleration of the servo.
+        
     Methods:
     -----------
     move(position)

@@ -12,16 +12,13 @@ from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
-# from leg import Leg
 import time
 
-# from servo import Servo
-
 def main():
-    # servo controller communication object
+    # Servo controller object. Needed for communicating between Raspberry Pi and Pololu mini maestro servo module.
     ctrl = maestro.Controller()
 
-    # Servo settings
+    # List of settings the servos will get initialized with
     leg_params = [
         [  # Leg 0
             {"channel": 0, "center_pos": 5900, "range": 2350, "center_angle": 0, "angle_range": 45},
@@ -54,7 +51,8 @@ def main():
             {"channel": 17, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
         ]
     ]
-    creepy_pod = CreepyPod(leg_params, ctrl)  # Initialize CreepyPod in STARTUP state
+
+    creepy_pod = CreepyPod(leg_params, ctrl)  # Initializing a CreepyPod object with the instructions list.
 
     # Run state actions until shutdown
     while creepy_pod.state != CreepyState.EXIT:
@@ -91,6 +89,16 @@ class CreepyPod:
         else:
             print("No controller detected. Exiting.")
             exit()
+
+        # Track the previous state of each button to detect single presses
+        self.prev_a = 0
+        self.prev_b = 0
+        self.prev_y = 0
+        self.prev_left_bumper = 0
+        self.prev_right_bumper = 0
+        self.start_button_held_start_time = None  # Time when Start button is first pressed
+
+        # Initializing states
         self.state = CreepyState.STARTUP # Initial state
         print(f"Entering state: {self.state.name}")
 
@@ -103,14 +111,6 @@ class CreepyPod:
             CreepyState.SHUTDOWN: self.shutdown_action,
             CreepyState.EXIT: self.exit_action
         }
-
-        # Track the previous state of each button to detect single presses
-        self.prev_a = 0
-        self.prev_b = 0
-        self.prev_y = 0
-        self.prev_left_bumper = 0
-        self.prev_right_bumper = 0
-        self.start_button_held_start_time = None  # Time when Start button is first pressed
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
@@ -127,7 +127,7 @@ class CreepyPod:
             action()
 
     def check_for_state_change(self):
-        # Update Pygame event queue
+        # Update Pygame event queue (needed for os to handle events coming from pygame)
         pygame.event.pump()
 
         # Read current button states
@@ -145,14 +145,14 @@ class CreepyPod:
         elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
             self.change_state(CreepyState.DEVMODE)
 
-        # Check if Start button is pressed
+        # Check if Start button is pressed for over 1 second
         start_button_pressed = self.controller.get_button(7)
         if start_button_pressed:
             # If Start button is pressed, start or continue tracking the hold time
             if self.start_button_held_start_time is None:
                 self.start_button_held_start_time = time.time()  # Record the time the button was first pressed
             elif time.time() - self.start_button_held_start_time >= 1:
-                # If the button has been held for 2 seconds, enter SHUTDOWN state
+                # If the button has been held for 1 seconds, enter SHUTDOWN state
                 self.change_state(CreepyState.SHUTDOWN)
         else:
             # Reset the hold start time if the Start button is released
@@ -285,7 +285,15 @@ class Servo:
         Minimum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
     max_pos: int
         Maximum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
-
+    min_angle:
+        Minimum angle of the servo.
+    max_angle:
+        Maximum angle of the servo.
+    speed:
+        The speed of the motion of the servo.
+    acceleration:
+        The accelleration of the servo.
+        
     Methods:
     -----------
     move(position)
