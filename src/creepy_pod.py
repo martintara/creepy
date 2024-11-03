@@ -40,12 +40,15 @@ class CreepyPod:
             CreepyState.MANUAL: self.manual_action,
             CreepyState.AUTO: self.auto_action,
             CreepyState.SHUTDOWN: self.shutdown_action,
-            CreepyState.EXIT: self.exit_action
+            CreepyState.EXIT: self.exit_action,
+            CreepyState.DEVMODE2: self.devmode2_action,
+            CreepyState.DEVMODE3: self.devmode3_action
         }
 
         # Track the previous state of each button to detect single presses
         self.prev_a = 0
         self.prev_b = 0
+        self.prev_x = 0
         self.prev_y = 0
         self.prev_left_bumper = 0
         self.prev_right_bumper = 0
@@ -103,6 +106,7 @@ class CreepyPod:
         # Read current button states
         a_pressed = self.controller.get_button(0)  # Button A
         b_pressed = self.controller.get_button(1)  # Button B
+        x_pressed = self.controller.get_button(2)  # Button X
         y_pressed = self.controller.get_button(3)  # Button Y
         left_bumper_pressed = self.controller.get_button(4)  # Left Bumper
         right_bumper_pressed = self.controller.get_button(5)  # Right Bumper
@@ -112,6 +116,11 @@ class CreepyPod:
             self.change_state(CreepyState.MANUAL)
         elif b_pressed and not self.prev_b:
             self.change_state(CreepyState.AUTO)
+        elif x_pressed and not self.prev_x:
+            self.change_state(CreepyState.DEVMODE2)
+        elif y_pressed and not self.prev_y:
+            self.change_state(CreepyState.DEVMODE3)
+
         elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
             self.change_state(CreepyState.DEVMODE)
 
@@ -202,9 +211,22 @@ class CreepyPod:
     def devmode_action(self):
         display.devmode()
         self.load_crawl_config()
-        print("Developer mode activated! Performing special operations...")
+        print("Developer mode")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
+
+    def devmode2_action(self):
+        display.devmode()
+        print("Developer mode 2")
+        while self.state == CreepyState.DEVMODE2:
+            self.check_for_state_change()
+
+    def devmode3_action(self):
+        display.devmode()
+        print("Developer mode 3")
+        while self.state == CreepyState.DEVMODE3:
+            self.check_for_state_change()
+
 
     def exit_action(self):
         print("Exiting.")

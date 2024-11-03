@@ -11,3 +11,5 @@ class CreepyState(Enum):
     AUTO = 4
     SHUTDOWN = 5
     EXIT = 6
+    DEVMODE2 = 7
+    DEVMODE3 = 8

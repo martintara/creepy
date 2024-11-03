@@ -49,7 +49,7 @@ class Leg:
 
     def leg_backward(self):
         """Move leg backward, adjusted for orientation."""
-        backward_position = self.servos[0].min_pos if self.offset in [315, 45, 180] else self.servos[0].max_pos
+        backward_position = self.servos[0].min_pos if self.offset in [315, 45, 0] else self.servos[0].max_pos
         self.servos[0].move(backward_position)
         print(f"Leg {self.leg_id} moved backward with orientation offset {self.offset}")
 
