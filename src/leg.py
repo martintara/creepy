@@ -3,10 +3,10 @@ from servo import Servo
 from maestro import Controller
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, controller: Controller, offset=0):
+    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0):
         self.leg_id = leg_id  # Unique identifier for the leg
         self.offset = offset
-        self.servos = [Servo(controller, **params) for params in servo_params]  # Initialize servos for the leg
+        self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
     def lower_leg(self):
         # self.servo_0.move(1474) #commented out while testing
 #       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
