@@ -7,52 +7,79 @@
 #### main.py
 ```python
 # main.py
-
+import json
 from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
+# from leg import Leg
 import time
 
+# from servo import Servo
+
 def main():
-    # Servo controller object. Needed for communicating between Raspberry Pi and Pololu mini maestro servo module.
+    def load_leg_params(filename):
+        """Load leg parameters from a JSON file."""
+        with open(filename, 'r') as file:
+            leg_params = json.load(file)
+        return leg_params 
+    # servo controller communication object
     ctrl = maestro.Controller()
+    leg_params = load_leg_params("default_leg_params.json")
+    # Servo settings
+    # leg_params = [
+    #         {
+    #         "offset": 315,
+    #         "servos": [
+    #             {"channel": 0, "center_pos": 5900, "range": 2350, "center_angle": 0, "angle_range": 45},
+    #             {"channel": 1, "center_pos": 6125, "range": 3775, "center_angle": 0, "angle_range": 45},
+    #             {"channel": 2, "center_pos": 5100, "range": 3000, "center_angle": 0, "angle_range": 70}
+    #         ]
+    #         },
+    #         { 
+    #         "offset": 0,
+    #         "servos": [  # Leg 1
+    #             {"channel": 3, "center_pos": 6025, "range": 2350, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 4, "center_pos": 6400, "range": 3775, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 5, "center_pos": 5125, "range": 3250, "center_angle": 90, "angle_range": 90}
+    #         ]
+    #         },
+    #         { 
+    #         "offset": 45,
+    #         "servos": [  # Leg 2
+    #             {"channel": 6, "center_pos": 6400, "range": 2350, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 7, "center_pos": 6450, "range": 3775, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 8, "center_pos": 5050, "range": 3250, "center_angle": 90, "angle_range": 90}
+    #         ]
+    #         },
+    #         { 
+    #         "offset": 135,
+    #         "servos": [  # Leg 3
+    #             {"channel": 9, "center_pos": 5750, "range": 2350, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 10, "center_pos": 5875, "range": 3775, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 11, "center_pos": 5200, "range": 3250, "center_angle": 90, "angle_range": 90}
+    #         ]
+    #         },
+    #         { 
+    #         "offset": 180,
+    #         "servos": [  # Leg 4
+    #             {"channel": 12, "center_pos": 5600, "range": 2350, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 13, "center_pos": 6400, "range": 3775, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 14, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
+    #         ]
+    #         },
+    #         { 
+    #         "offset": 225,
+    #         "servos": [  # Leg 5
+    #             {"channel": 15, "center_pos": 5000, "range": 2350, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 16, "center_pos": 6250, "range": 3775, "center_angle": 90, "angle_range": 90},
+    #             {"channel": 17, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
+    #         ]
+    #         }
+    #     ]
 
-    # List of settings the servos will get initialized with
-    leg_params = [
-        [  # Leg 0
-            {"channel": 0, "center_pos": 5900, "range": 2350, "center_angle": 0, "angle_range": 45},
-            {"channel": 1, "center_pos": 6125, "range": 3775, "center_angle": 0, "angle_range": 45},
-            {"channel": 2, "center_pos": 5100, "range": 3000, "center_angle": 0, "angle_range": 70}
-        ],
-        [  # Leg 1
-            {"channel": 3, "center_pos": 6025, "range": 2350, "center_angle": 90, "angle_range": 90},
-            {"channel": 4, "center_pos": 6400, "range": 3775, "center_angle": 90, "angle_range": 90},
-            {"channel": 5, "center_pos": 5125, "range": 3250, "center_angle": 90, "angle_range": 90}
-        ],
-        [  # Leg 2
-            {"channel": 6, "center_pos": 6400, "range": 2350, "center_angle": 90, "angle_range": 90},
-            {"channel": 7, "center_pos": 6450, "range": 3775, "center_angle": 90, "angle_range": 90},
-            {"channel": 8, "center_pos": 5050, "range": 3250, "center_angle": 90, "angle_range": 90}
-        ],
-        [  # Leg 3
-            {"channel": 9, "center_pos": 5750, "range": 2350, "center_angle": 90, "angle_range": 90},
-            {"channel": 10, "center_pos": 5875, "range": 3775, "center_angle": 90, "angle_range": 90},
-            {"channel": 11, "center_pos": 5200, "range": 3250, "center_angle": 90, "angle_range": 90}
-        ],
-        [  # Leg 4
-            {"channel": 12, "center_pos": 5600, "range": 2350, "center_angle": 90, "angle_range": 90},
-            {"channel": 13, "center_pos": 6400, "range": 3775, "center_angle": 90, "angle_range": 90},
-            {"channel": 14, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
-        ],
-        [  # Leg 5
-            {"channel": 15, "center_pos": 5000, "range": 2350, "center_angle": 90, "angle_range": 90},
-            {"channel": 16, "center_pos": 6250, "range": 3775, "center_angle": 90, "angle_range": 90},
-            {"channel": 17, "center_pos": 5025, "range": 3250, "center_angle": 90, "angle_range": 90}
-        ]
-    ]
 
-    creepy_pod = CreepyPod(leg_params, ctrl)  # Initializing a CreepyPod object with the instructions list.
+    creepy_pod = CreepyPod(leg_params, ctrl)  # Initialize CreepyPod in STARTUP state
 
     # Run state actions until shutdown
     while creepy_pod.state != CreepyState.EXIT:
@@ -67,17 +94,23 @@ if __name__ == "__main__":
 #### creepy_pod.py
 ```python
 # creepy_pod.py
+import json
 from creepy_state import CreepyState
 import time
 import pygame
 from leg import Leg
 from maestro import Controller
-
+import display
 class CreepyPod:
-    def __init__(self, leg_params, controller : Controller):
+    DEFAULT_CONFIG_FILE = "default_leg_params.json"
+    CRAWL_CONFIG_FILE = "crawl_leg_params.json"
+    # CONSTRUCTOR
+    def __init__(self, leg_params, ctrl : Controller):
         # Initialize leg objects
-        self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
-
+        self.leg_params = []  # Initialize an empty list to store leg parameters
+        self.ctrl = ctrl
+        self.load_default_config()
+        self.initialize_legs()
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()
@@ -89,16 +122,6 @@ class CreepyPod:
         else:
             print("No controller detected. Exiting.")
             exit()
-
-        # Track the previous state of each button to detect single presses
-        self.prev_a = 0
-        self.prev_b = 0
-        self.prev_y = 0
-        self.prev_left_bumper = 0
-        self.prev_right_bumper = 0
-        self.start_button_held_start_time = None  # Time when Start button is first pressed
-
-        # Initializing states
         self.state = CreepyState.STARTUP # Initial state
         print(f"Entering state: {self.state.name}")
 
@@ -111,6 +134,45 @@ class CreepyPod:
             CreepyState.SHUTDOWN: self.shutdown_action,
             CreepyState.EXIT: self.exit_action
         }
+
+        # Track the previous state of each button to detect single presses
+        self.prev_a = 0
+        self.prev_b = 0
+        self.prev_y = 0
+        self.prev_left_bumper = 0
+        self.prev_right_bumper = 0
+        self.start_button_held_start_time = None  # Time when Start button is first pressed
+
+    # FUNCTIONS
+    def initialize_legs(self):
+        """Initialize legs based on self.leg_params."""
+        self.legs = [
+            Leg(
+                leg_id=i,
+                servo_params=leg["servos"],
+                ctrl=self.ctrl,
+                offset=leg["offset"]
+            )
+            for i, leg in enumerate(self.leg_params)
+        ]
+        print("Legs initialized with current parameters")
+
+    def load_default_config(self):
+        """Load the default configuration."""
+        print("Loading default configuration...")
+        self.load_leg_params(self.DEFAULT_CONFIG_FILE)
+        self.initialize_legs()
+
+    # Function that loads leg parameters from file
+    def load_leg_params(self, filename):
+        with open(filename, 'r') as file:
+            self.leg_params = json.load(file)
+
+    def load_crawl_config(self):
+        """Load the crawl configuration."""
+        print("Loading crawl configuration...")
+        self.load_leg_params(self.CRAWL_CONFIG_FILE)
+        self.initialize_legs()
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
@@ -127,7 +189,7 @@ class CreepyPod:
             action()
 
     def check_for_state_change(self):
-        # Update Pygame event queue (needed for os to handle events coming from pygame)
+        # Update Pygame event queue
         pygame.event.pump()
 
         # Read current button states
@@ -145,14 +207,14 @@ class CreepyPod:
         elif left_bumper_pressed and right_bumper_pressed and not (self.prev_left_bumper and self.prev_right_bumper):
             self.change_state(CreepyState.DEVMODE)
 
-        # Check if Start button is pressed for over 1 second
+        # Check if Start button is pressed
         start_button_pressed = self.controller.get_button(7)
         if start_button_pressed:
             # If Start button is pressed, start or continue tracking the hold time
             if self.start_button_held_start_time is None:
                 self.start_button_held_start_time = time.time()  # Record the time the button was first pressed
             elif time.time() - self.start_button_held_start_time >= 1:
-                # If the button has been held for 1 seconds, enter SHUTDOWN state
+                # If the button has been held for 2 seconds, enter SHUTDOWN state
                 self.change_state(CreepyState.SHUTDOWN)
         else:
             # Reset the hold start time if the Start button is released
@@ -166,6 +228,13 @@ class CreepyPod:
         self.prev_right_bumper = right_bumper_pressed
 
     def startup_action(self):
+        display.startup() # updates sense hat led display
+        self.legs[0].initial_position()
+        self.legs[1].initial_position()
+        self.legs[2].initial_position()
+        self.legs[3].initial_position()
+        self.legs[4].initial_position()
+        self.legs[5].initial_position()
         print("Initializing systems... Please wait.")
         time.sleep(2)  # Simulate delay during startup
         print("System check complete.")
@@ -175,11 +244,13 @@ class CreepyPod:
         self.change_state(CreepyState.IDLE)
 
     def idle_action(self):
+        display.idle()
         print("System is idle. Monitoring sensors...")
         while self.state == CreepyState.IDLE:
             self.check_for_state_change()
 
     def manual_action(self):
+        display.manual()
         print("Manual mode activated. Awaiting user input...")
         self.legs[0].lower_leg()
         self.legs[1].lower_leg()
@@ -192,11 +263,19 @@ class CreepyPod:
             self.check_for_state_change()
 
     def auto_action(self):
+        display.auto() # updating display
+        #testing leg forward+backward
+        self.legs[1].leg_forward()
+        self.legs[4].leg_forward()
+        time.sleep(2)
+        self.legs[1].leg_backward()
+        self.legs[4].leg_backward()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
             self.check_for_state_change()
 
     def shutdown_action(self):
+        display.shutdown()
         print("Shutdown procedure started.")
         self.legs[0].initial_position()
         self.legs[1].initial_position()
@@ -209,8 +288,11 @@ class CreepyPod:
         print("Transitioning to EXIT state.")
         self.change_state(CreepyState.EXIT)
         pygame.quit()  # Properly quit Pygame
+        display.disable() # turn off display
 
     def devmode_action(self):
+        display.devmode()
+        self.load_crawl_config()
         print("Developer mode activated! Performing special operations...")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
@@ -226,11 +308,10 @@ from servo import Servo
 from maestro import Controller
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, controller: Controller):
+    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0):
         self.leg_id = leg_id  # Unique identifier for the leg
-        self.servos = [
-            Servo(controller, **params) for params in servo_params
-        ]
+        self.offset = offset
+        self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
     def lower_leg(self):
         # self.servo_0.move(1474) #commented out while testing
 #       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
@@ -256,6 +337,18 @@ class Leg:
         self.servos[0].move(self.servos[0].center_pos)
         self.servos[1].move(self.servos[1].min_pos)
         self.servos[2].move(self.servos[2].min_pos)
+
+    def leg_forward(self):
+        """Move leg forward, adjusted for orientation."""
+        forward_position = self.servos[0].max_pos if self.offset in [0, 45, 90] else self.servos[0].min_pos
+        self.servos[0].move(forward_position)
+        print(f"Leg {self.leg_id} moved forward with orientation offset {self.offset}")
+
+    def leg_backward(self):
+        """Move leg backward, adjusted for orientation."""
+        backward_position = self.servos[0].min_pos if self.offset in [0, 45, 90] else self.servos[0].max_pos
+        self.servos[0].move(backward_position)
+        print(f"Leg {self.leg_id} moved backward with orientation offset {self.offset}")
 
     def manual_control(self, id: int):
         self.servos[id].manual_control()
@@ -285,15 +378,7 @@ class Servo:
         Minimum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
     max_pos: int
         Maximum position the servo is allowed to use. Used to restrict the servo to operate within safe range.
-    min_angle:
-        Minimum angle of the servo.
-    max_angle:
-        Maximum angle of the servo.
-    speed:
-        The speed of the motion of the servo.
-    acceleration:
-        The accelleration of the servo.
-        
+
     Methods:
     -----------
     move(position)
