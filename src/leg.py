@@ -33,6 +33,18 @@ class Leg:
         self.servos[1].move(self.servos[1].min_pos)
         self.servos[2].move(self.servos[2].min_pos)
 
+    def leg_forward(self):
+        """Move leg forward, adjusted for orientation."""
+        forward_position = self.servos[0].max_pos if self.orientation_offset in [0, 45, 90] else self.servos[0].min_pos
+        self.servos[0].move(forward_position)
+        print(f"Leg {self.leg_id} moved forward with orientation offset {self.orientation_offset}")
+
+    def leg_backward(self):
+        """Move leg backward, adjusted for orientation."""
+        backward_position = self.servos[0].min_pos if self.orientation_offset in [0, 45, 90] else self.servos[0].max_pos
+        self.servos[0].move(backward_position)
+        print(f"Leg {self.leg_id} moved backward with orientation offset {self.orientation_offset}")
+
     def manual_control(self, id: int):
         self.servos[id].manual_control()
 

@@ -132,7 +132,11 @@ class CreepyPod:
             self.check_for_state_change()
 
     def auto_action(self):
-        display.auto()
+        display.auto() # updating display
+        #testing leg forward+backward
+        self.leg[1].leg_forward()
+        time.sleep(2)
+        self.leg[4].leg_forward()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
             self.check_for_state_change()
