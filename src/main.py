@@ -4,7 +4,10 @@ from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
+# from leg import Leg
 import time
+
+# from servo import Servo
 
 def main():
     def load_leg_params(filename):
@@ -15,7 +18,7 @@ def main():
     # servo controller communication object
     ctrl = maestro.Controller()
     leg_params = load_leg_params("default_leg_params.json")
-
+    
     creepy_pod = CreepyPod(leg_params, ctrl)  # Initialize CreepyPod in STARTUP state
 
     # Run state actions until shutdown

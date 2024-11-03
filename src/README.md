@@ -12,7 +12,10 @@ from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
+# from leg import Leg
 import time
+
+# from servo import Servo
 
 def main():
     def load_leg_params(filename):
@@ -23,7 +26,7 @@ def main():
     # servo controller communication object
     ctrl = maestro.Controller()
     leg_params = load_leg_params("default_leg_params.json")
-
+    
     creepy_pod = CreepyPod(leg_params, ctrl)  # Initialize CreepyPod in STARTUP state
 
     # Run state actions until shutdown
@@ -46,6 +49,7 @@ import pygame
 from leg import Leg
 from maestro import Controller
 import display
+from gait import Gait
 class CreepyPod:
     DEFAULT_CONFIG_FILE = "default_leg_params.json"
     CRAWL_CONFIG_FILE = "crawl_leg_params.json"
@@ -56,6 +60,8 @@ class CreepyPod:
         self.ctrl = ctrl
         self.load_default_config()
         self.initialize_legs()
+
+        self.gait_controller = Gait(self)  # Initialize Gait with CreepyPod reference
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()
@@ -210,11 +216,12 @@ class CreepyPod:
     def auto_action(self):
         display.auto() # updating sense hat display
         #testing leg forward+backward
-        self.legs[1].leg_forward()
-        self.legs[4].leg_forward()
-        time.sleep(2)
-        self.legs[1].leg_backward()
-        self.legs[4].leg_backward()
+        self.gait_controller.tripod_gait()
+        # self.legs[1].leg_forward()
+        # self.legs[4].leg_forward()
+        # time.sleep(2)
+        # self.legs[1].leg_backward()
+        # self.legs[4].leg_backward()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
             self.check_for_state_change()
