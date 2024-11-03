@@ -5,13 +5,10 @@ import pygame
 from leg import Leg
 from maestro import Controller
 import display
-import json
-import os
 class CreepyPod:
-    def __init__(self, controller : Controller, config_file="default_leg_params.json"):
-        # Load initial leg parameters from JSON file
-        self.controller = controller
-        self.load_leg_params(config_file)
+    def __init__(self, leg_params, controller : Controller):
+        # Initialize leg objects
+        self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
 
         # Initialize Pygame and the controller
         pygame.init()
@@ -44,25 +41,6 @@ class CreepyPod:
         self.prev_left_bumper = 0
         self.prev_right_bumper = 0
         self.start_button_held_start_time = None  # Time when Start button is first pressed
-
-
-
-    def load_leg_params(self, config_file):
-        """Loads leg parameters from a JSON file and initializes legs."""
-        with open(config_file, 'r') as f:
-            leg_params = json.load(f)
-
-        # Initialize leg objects with new parameters
-        self.legs = [Leg(i, leg_params[i], self.controller) for i in range(len(leg_params))]
-        print(f"Leg parameters loaded from {config_file}")
-
-    def load_crawl_settings(self, crawl_config_file):
-        """
-        Updates the CreepyPod's leg settings from another JSON configuration file.
-        Useful for dynamically changing configurations for different crawling behaviors.
-        """
-        self.load_leg_params(crawl_config_file)
-        print("Crawl settings updated.")
 
     def change_state(self, new_state: CreepyState):
         # Only change if the new state is different
