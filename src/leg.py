@@ -5,6 +5,7 @@ from maestro import Controller
 class Leg:
     def __init__(self, leg_id: int, servo_params, controller: Controller):
         self.leg_id = leg_id  # Unique identifier for the leg
+        self.offset = servo_params[0].get("offset", 0)  # Get offset from first servo
         self.servos = [
             Servo(controller, **params) for params in servo_params
         ]
