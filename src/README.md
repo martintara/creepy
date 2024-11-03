@@ -251,22 +251,33 @@ class CreepyPod:
         pygame.quit()  # Properly quit Pygame
         display.disable() # turn off display
 
-    def devmode_action(self):
+    def devmode_action(self): # left+right bumper
         display.devmode()
         self.load_crawl_config()
         print("Developer mode")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
 
-    def devmode2_action(self):
+    def devmode2_action(self): #X
         display.devmode()
-        print("Developer mode 2")
+        print("Developer mode 2: testing leg 0")
+        self.legs[0].servos[0].lower_leg()
+        time.sleep(2)
+        self.legs[0].servos[0].rise_leg()
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
-    def devmode3_action(self):
+    def devmode3_action(self): #y
         display.devmode()
-        print("Developer mode 3")
+        print("Developer mode 3: Testing leg 0 through 5")
+        
+        self.legs[0].servos[0].manual_control()
+        self.legs[1].servos[0].manual_control()
+        self.legs[2].servos[0].manual_control()
+        self.legs[3].servos[0].manual_control()
+        self.legs[4].servos[0].manual_control()
+        self.legs[5].servos[0].manual_control()
+
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()
 
@@ -293,6 +304,16 @@ class Leg:
 
 #       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
         self.servos[2].move(int((self.servos[2].center_pos*2)/1.6))
+
+    def rise_leg(self):
+        # self.servo_0.move(1474) #commented out while testing
+#       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
+        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/1.5))
+
+#       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
+        self.servos[2].move(int((self.servos[2].center_pos*2)/1.3))
+
+
 
     def initial_position(self):
 #       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
