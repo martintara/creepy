@@ -4,7 +4,7 @@ import time
 import pygame
 from leg import Leg
 from maestro import Controller
-
+import display
 class CreepyPod:
     def __init__(self, leg_params, controller : Controller):
         # Initialize leg objects
@@ -96,6 +96,7 @@ class CreepyPod:
         self.prev_right_bumper = right_bumper_pressed
 
     def startup_action(self):
+        display.startup() # updates sense hat led display
         print("Initializing systems... Please wait.")
         time.sleep(2)  # Simulate delay during startup
         print("System check complete.")
@@ -105,11 +106,13 @@ class CreepyPod:
         self.change_state(CreepyState.IDLE)
 
     def idle_action(self):
+        display.idle()
         print("System is idle. Monitoring sensors...")
         while self.state == CreepyState.IDLE:
             self.check_for_state_change()
 
     def manual_action(self):
+        display.manual()
         print("Manual mode activated. Awaiting user input...")
         self.legs[0].lower_leg()
         self.legs[1].lower_leg()
@@ -122,11 +125,13 @@ class CreepyPod:
             self.check_for_state_change()
 
     def auto_action(self):
+        display.auto()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
             self.check_for_state_change()
 
     def shutdown_action(self):
+        display.shutdown()
         print("Shutdown procedure started.")
         self.legs[0].initial_position()
         self.legs[1].initial_position()
@@ -139,8 +144,10 @@ class CreepyPod:
         print("Transitioning to EXIT state.")
         self.change_state(CreepyState.EXIT)
         pygame.quit()  # Properly quit Pygame
+        display.disable() # turn off display
 
     def devmode_action(self):
+        display.devmode()
         print("Developer mode activated! Performing special operations...")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()

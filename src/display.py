@@ -32,7 +32,22 @@ spider_image =[
 ]
 
 def idle():
-	sense.set_pixels(spider_image)
+    sense.clear(orange)
+
+def manual():
+    sense.clear(white)
 
 def startup():
 	sense.clear(blue)
+
+def shutdown():
+	sense.clear(red)
+
+def auto():
+    sense.set_pixels(spider_image)
+
+def devmode():
+    sense.clear(black) # placeholder
+
+def disable():
+    sense.clear(black)
