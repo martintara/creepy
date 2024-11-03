@@ -3,7 +3,7 @@ from servo import Servo
 from maestro import Controller
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, controller: Controller):
+    def __init__(self, leg_id: int, servo_params, controller: Controller, offset):
         self.leg_id = leg_id  # Unique identifier for the leg
         self.offset = offset# Get offset from first servo
         self.servos = [
