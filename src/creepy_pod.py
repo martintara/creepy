@@ -9,7 +9,7 @@ class CreepyPod:
     def __init__(self, leg_params, controller : Controller):
         # Initialize leg objects
         self.legs = [Leg(i, leg_params[i], controller) for i in range(len(leg_params))]
-
+        
         # Initialize Pygame and the controller
         pygame.init()
         pygame.joystick.init()

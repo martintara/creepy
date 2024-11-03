@@ -5,6 +5,7 @@ from maestro import Controller
 class Leg:
     def __init__(self, leg_id: int, servo_params, controller: Controller):
         self.leg_id = leg_id  # Unique identifier for the leg
+        self.offset = servo_params[0].get("offset", 0)  # Get offset from first servo
         self.servos = [
             Servo(controller, **params) for params in servo_params
         ]
@@ -35,11 +36,11 @@ class Leg:
         self.servos[2].move(self.servos[2].min_pos)
 
     def rotate_forward(self):
-        self.servos[0].move(self.servos[0].max_pos)
-
+        forward_position = self.servos[0].max_pos if self.orientation_offset in [0, 45, 90] else self.servos[0].min_pos
+        self.servos[0].move(forward_position)
     def rotate_backward(self):
-        self.servos[0].move(self.servos[0].min_pos)
-
+       backward_position = self.servos[0].min_pos if self.orientation_offset in [0, 45, 90] else self.servos[0].max_pos
+       self.servos[0].move(backward_position)
     def manual_control(self, id: int):
         self.servos[id].manual_control()
 
