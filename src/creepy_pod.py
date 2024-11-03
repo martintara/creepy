@@ -8,7 +8,7 @@ import display
 import json
 import os
 class CreepyPod:
-    def __init__(self, controller : Controller, config_file="default_leg_params"):
+    def __init__(self, controller : Controller, config_file="default_leg_params.json"):
         # Initialize leg objects from file
         with open(config_file, 'r') as f:
             leg_params = json.load(f)
