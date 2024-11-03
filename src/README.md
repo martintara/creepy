@@ -50,7 +50,7 @@ class CreepyPod:
     DEFAULT_CONFIG_FILE = "default_leg_params.json"
     CRAWL_CONFIG_FILE = "crawl_leg_params.json"
     # CONSTRUCTOR
-    def __init__(self, leg_params, ctrl : Controller):
+    def __init__(self, leg_params, ctrl : Controller): # NB!!! ctrl : Controller er mini maestro objektet, må ikke forvirres med pygame controller. Bør ryddes opp i!
         # Initialize leg objects
         self.leg_params = []  # Initialize an empty list to store leg parameters
         self.ctrl = ctrl
@@ -190,13 +190,13 @@ class CreepyPod:
 
     def idle_action(self):
         display.idle()
-        print("System is idle. Monitoring sensors...")
+        print("System is idle.")
         while self.state == CreepyState.IDLE:
             self.check_for_state_change()
 
     def manual_action(self):
         display.manual()
-        print("Manual mode activated. Awaiting user input...")
+        print("Tester lower leg på 6 bein")
         self.legs[0].lower_leg()
         self.legs[1].lower_leg()
         self.legs[2].lower_leg()
@@ -208,7 +208,7 @@ class CreepyPod:
             self.check_for_state_change()
 
     def auto_action(self):
-        display.auto() # updating display
+        display.auto() # updating sense hat display
         #testing leg forward+backward
         self.legs[1].leg_forward()
         self.legs[4].leg_forward()
