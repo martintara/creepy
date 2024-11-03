@@ -37,7 +37,7 @@ class Leg:
         """Move leg forward, adjusted for orientation."""
         forward_position = self.servos[0].max_pos if self.offset in [0, 45, 90] else self.servos[0].min_pos
         self.servos[0].move(forward_position)
-        print(f"Leg {self.leg_id} moved forward with orientation offset {self.orientation_offset}")
+        print(f"Leg {self.leg_id} moved forward with orientation offset {self.offset}")
 
     def leg_backward(self):
         """Move leg backward, adjusted for orientation."""
