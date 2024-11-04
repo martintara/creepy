@@ -3,7 +3,7 @@
         "offset": 315,
         "servos": [
             {"channel": 0, "center_pos": 5900, "range": 2350, "center_angle": 0, "angle_range": 45},
-            {"channel": 1, "center_pos": 6125, "range": 3775, "center_angle": 0, "angle_range": 45},
+            {"channel": 1, "center_pos": 6125, "range": 3775, "center_angle": 0, "angle_range": 90},
             {"channel": 2, "center_pos": 5100, "range": 3000, "center_angle": 0, "angle_range": 70}
         ]
     },
