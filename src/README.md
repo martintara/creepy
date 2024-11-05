@@ -261,9 +261,10 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Developer mode 2: testing leg 0")
-        self.legs[0].lower_leg()
+        self.legs[5].servos[1].manual_control_angle()
+        self.legs[5].lower_leg()
         time.sleep(2)
-        self.legs[0].rise_leg()
+        self.legs[5].rise_leg()
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
@@ -271,9 +272,9 @@ class CreepyPod:
         display.devmode()
         print("Developer mode 3: Testing leg 0 through 5")
         
-     
-        self.legs[0].servos[2].manual_control_angle()
-        self.legs[0].servos[1].manual_control_angle()
+        self.legs[0].lower_leg()   
+        time.sleep(3) 
+        self.legs[0].rise_leg()   
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()
@@ -295,20 +296,12 @@ class Leg:
         self.offset = offset
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
     def lower_leg(self):
-        # self.servo_0.move(1474) #commented out while testing
-#       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
-        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/2))
+        self.servos[1].move_to_angle(57)
 
-#       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
-        self.servos[2].move(int((self.servos[2].center_pos*2)/1.6))
+        self.servos[2].move_to_angle(40)
 
     def rise_leg(self):
-        # self.servo_0.move(1474) #commented out while testing
-#       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
-        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/1.5))
-
-#       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
-        self.servos[2].move(int((self.servos[2].center_pos*2)/1.3))
+        self.servos[1].move_to_angle(90)
 
 
 
@@ -405,6 +398,9 @@ class Servo:
         print(f"Servo {self.channel} moved to position {self.position}")
         print(f"Angle {self.position_to_angle(self.position)}")
 
+    def move_to_angle(self, angle):
+        self.move(int(self.angle_to_position(angle)))
+
     def setAcceleration(self, acceleration: int):
         self.acceleration = acceleration
 
@@ -436,7 +432,6 @@ class Servo:
         angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * \
                 (self.max_angle - self.min_angle) + self.min_angle
         return angle
-
 
 
     def manual_control(self):

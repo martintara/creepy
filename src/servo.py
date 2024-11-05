@@ -44,6 +44,9 @@ class Servo:
         print(f"Servo {self.channel} moved to position {self.position}")
         print(f"Angle {self.position_to_angle(self.position)}")
 
+    def move_to_angle(self, angle):
+        self.move(int(self.angle_to_position(angle)))
+
     def setAcceleration(self, acceleration: int):
         self.acceleration = acceleration
 
@@ -75,7 +78,6 @@ class Servo:
         angle = ((position - self.min_pos) / (self.max_pos - self.min_pos)) * \
                 (self.max_angle - self.min_angle) + self.min_angle
         return angle
-
 
 
     def manual_control(self):

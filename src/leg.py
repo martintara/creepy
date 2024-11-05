@@ -8,20 +8,12 @@ class Leg:
         self.offset = offset
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
     def lower_leg(self):
-        # self.servo_0.move(1474) #commented out while testing
-#       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
-        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/2))
+        self.servos[1].move_to_angle(57)
 
-#       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
-        self.servos[2].move(int((self.servos[2].center_pos*2)/1.6))
+        self.servos[2].move_to_angle(40)
 
     def rise_leg(self):
-        # self.servo_0.move(1474) #commented out while testing
-#       self.servos[1].move(int(((((self.servos[1].max_pos+self.servos[1].min_pos)/2)+self.servos[1].max_pos))/2))
-        self.servos[1].move(int((self.servos[1].center_pos+self.servos[1].max_pos)/1.5))
-
-#       self.servos[2].move(int((self.servos[2].max_pos+self.servos[2].min_pos)/1.6))
-        self.servos[2].move(int((self.servos[2].center_pos*2)/1.3))
+        self.servos[1].move_to_angle(90)
 
 
 
