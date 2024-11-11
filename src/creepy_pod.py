@@ -218,15 +218,13 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[1].calculate_angles(5,5,-5)
+        self.legs[1].calculate_angles(100,0,-100)
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
     def devmode3_action(self): #y
         display.devmode()
         
-        self.legs[0].servos[2].manual_control_angle()
-        self.legs[0].servos[1].manual_control_angle()
         self.legs[1].servos[2].manual_control_angle()
         self.legs[1].servos[1].manual_control_angle()
 
