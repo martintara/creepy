@@ -263,9 +263,12 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[1].move_parallel(x_global_fixed=200, y_start=0, y_distance=-100, z=-100, delay=0.2)
+        self.legs[1].move_parallel(x_offset_from_origin=200, y_start=0, y_distance=-50, z=-100, delay=0.2)
         self.legs[1].initial_position()
-
+        time.sleep(1)
+        self.legs[2].move_parallel(x_offset_from_origin=100, y_start=-2500, y_distance=-50, z=-100, delay=0.2)
+        time.sleep(1)
+        self.legs[2].initial_position()
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
@@ -403,13 +406,15 @@ class Leg:
         return theta1, theta2, theta3
 
 
-    def move_parallel(self, x_global_fixed, y_start, y_distance, z, step=5, delay=0.1):
+ 
+
+
+       def move_parallel(self, x_offset_from_origin, y_start, y_distance, z, step=5, delay=0.1):
         """
-        Moves the leg along a line parallel to the global y-axis at a fixed global x position,
-        compensating for the offset angle to follow the y-axis direction of leg 1.
+        Moves the leg along a line parallel to the global y-axis, at a fixed x offset from the origin.
 
         Parameters:
-        x_global_fixed (float): The global x-coordinate for this leg’s movement.
+        x_offset_from_origin (float): The x-distance from the origin in the global coordinate system.
         y_start (float): The starting y-coordinate in the global coordinate system.
         y_distance (float): The distance to move along the y-axis (positive or negative).
         z (float): The fixed z-coordinate.
@@ -429,14 +434,14 @@ class Leg:
             y_global = y_start + i * step * y_direction
 
             # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
-            x_local = x_global_fixed * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
-            y_local = x_global_fixed * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
+            x_local = x_offset_from_origin * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
+            y_local = x_offset_from_origin * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
 
             # Move the leg to the transformed local coordinates
             self.move_to_coordinates(x_local, y_local, z)
             
             # Pause to allow observation of each step
-            time.sleep(delay)
+            time.sleep(delay) 
 ```
 
 #### servo.py
