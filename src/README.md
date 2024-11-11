@@ -50,6 +50,8 @@ from leg import Leg
 from maestro import Controller
 import display
 from gait import Gait
+import math
+
 class CreepyPod:
     DEFAULT_CONFIG_FILE = "default_leg_params.json"
     CRAWL_CONFIG_FILE = "crawl_leg_params.json"
