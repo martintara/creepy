@@ -218,7 +218,20 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[1].calculate_angles(100,0,-100)
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 0    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 

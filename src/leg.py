@@ -105,8 +105,5 @@ class Leg:
 
         # Step 11: Calculate theta3, with negative values lifting the arm and positive values lowering it
         theta3 = 90 - phi3
-
-        # Print the calculated angles
-        print(f"Theta1: {theta1:.2f}°")
-        print(f"Theta2: {theta2:.2f}°")
-        print(f"Theta3: {theta3:.2f}°")
+        
+        return theta1, theta2, theta3
