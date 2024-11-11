@@ -228,7 +228,7 @@ class CreepyPod:
 
         # Target coordinates for each leg in the global coordinate system
         x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
-        x_target_leg2 = 100      # Leg 2 should move along x = 100 in the global system
+        x_target_leg2 = 40      # Leg 2 should move along x = 100 in the global system
 
         # Move leg 1 (center right leg) directly to its target coordinates
         self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
@@ -240,7 +240,7 @@ class CreepyPod:
 
         # Transform target coordinates for leg 2 to match its local offset
         # We need to rotate by +45 degrees to align with leg 2’s -45 degree orientation
-        angle_offset_leg_2 = -45  # Rotate +45 degrees for alignment
+        angle_offset_leg_2 = 45  # Rotate +45 degrees for alignment
         x_local_leg2 = x_target_leg2 * math.cos(math.radians(angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(angle_offset_leg_2))
         y_local_leg2 = x_target_leg2 * math.sin(math.radians(angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(angle_offset_leg_2))
 
