@@ -16,7 +16,7 @@
         ]
     },
     { 
-        "offset": 45,
+        "offset": -45,
         "servos": [
             {"channel": 6, "center_pos": 6400, "range": 2350, "center_angle": 0, "angle_range": 45},
             {"channel": 7, "center_pos": 6450, "range": 3775, "center_angle": 0, "angle_range": 90},

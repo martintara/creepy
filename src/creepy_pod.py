@@ -220,8 +220,15 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
+        self.legs[1].move_to_coordinates(200,-100,-100)
+        time.sleep(1)
+        self.legs[1].move_parallel(200,-100,200,-100)
+        self.legs[1].initial_position()
+        time.sleep(1)
+        self.legs[2].move_parallel(150,-600,200,-100)
+        self.legs[2].initial_position()
+        time.sleep(1)
 
-        self.legs[1].move_parallel(200,0,50,-100)
 
 
         while self.state == CreepyState.DEVMODE2:

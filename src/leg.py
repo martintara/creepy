@@ -2,6 +2,7 @@
 from servo import Servo
 from maestro import Controller
 import math
+import time
 
 class Leg:
     def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0):
@@ -144,3 +145,4 @@ class Leg:
 
             # Move the leg to the transformed local coordinates
             self.move_to_coordinates(x_local, y_local, z)
+            time.sleep(0.1)
