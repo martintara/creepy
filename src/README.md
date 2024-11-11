@@ -265,10 +265,9 @@ class CreepyPod:
         print("Testing IK")
         # Example target coordinates
 
-
         # Desired y distance for both legs in the global coordinate system
         y_target_distance = -50  # Move both legs in the negative y direction
-        z_target = -100           # Shared z-coordinate for both legs
+        z_target = -100          # Shared z-coordinate for both legs
 
         # Target coordinates for each leg in the global coordinate system
         x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
@@ -278,19 +277,19 @@ class CreepyPod:
         self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
 
         # Transform target coordinates for leg 2 to match its local offset
-        # We need to rotate by -45 degrees since leg 2 has a +45 degree offset
-        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
-        x_local_leg2 = x_target_leg2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(-angle_offset_leg_2))
-        y_local_leg2 = x_target_leg2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(-angle_offset_leg_2))
+        # We need to rotate by +45 degrees to align with leg 2’s -45 degree orientation
+        angle_offset_leg_2 = 45  # Rotate +45 degrees for alignment
+        x_local_leg2 = x_target_leg2 * math.cos(math.radians(angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(angle_offset_leg_2))
+        y_local_leg2 = x_target_leg2 * math.sin(math.radians(angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(angle_offset_leg_2))
 
         # Move leg 2 (back right leg) to the transformed local coordinates
         self.legs[2].move_to_coordinates(x_local_leg2, y_local_leg2, z_target)
 
         time.sleep(1)
 
-        # Desired y distance for both legs in the global coordinate system
+                # Desired y distance for both legs in the global coordinate system
         y_target_distance = -100  # Move both legs in the negative y direction
-        z_target = -100           # Shared z-coordinate for both legs
+        z_target = -100          # Shared z-coordinate for both legs
 
         # Target coordinates for each leg in the global coordinate system
         x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
@@ -300,13 +299,14 @@ class CreepyPod:
         self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
 
         # Transform target coordinates for leg 2 to match its local offset
-        # We need to rotate by -45 degrees since leg 2 has a +45 degree offset
-        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
-        x_local_leg2 = x_target_leg2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(-angle_offset_leg_2))
-        y_local_leg2 = x_target_leg2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(-angle_offset_leg_2))
+        # We need to rotate by +45 degrees to align with leg 2’s -45 degree orientation
+        angle_offset_leg_2 = 45  # Rotate +45 degrees for alignment
+        x_local_leg2 = x_target_leg2 * math.cos(math.radians(angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(angle_offset_leg_2))
+        y_local_leg2 = x_target_leg2 * math.sin(math.radians(angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(angle_offset_leg_2))
 
         # Move leg 2 (back right leg) to the transformed local coordinates
         self.legs[2].move_to_coordinates(x_local_leg2, y_local_leg2, z_target)
+
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
