@@ -220,16 +220,210 @@ class CreepyPod:
         print("Testing IK")
         # Example target coordinates
         x_target = 220  # in mm
-        y_target = 0    # in mm
+        y_target = 150    # in mm
         z_target = -100 # in mm
 
         # Calculate the angles
-        theta1, theta2, theta3 = calculate_angles(x_target, y_target, z_target)
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
 
         # Move each servo to the calculated angles
         self.legs[1].servos[0].move_to_angle(theta1)
         self.legs[1].servos[1].move_to_angle(theta2)
         self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 125    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 100    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 75    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 50    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 25    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = 0    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = -25    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = -50    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = -75    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = -100    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = -125    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+        time.sleep(1)
+
+        print("Testing IK")
+        # Example target coordinates
+        x_target = 220  # in mm
+        y_target = -150    # in mm
+        z_target = -100 # in mm
+
+        # Calculate the angles
+        theta1, theta2, theta3 = self.legs[1].calculate_angles(x_target, y_target, z_target)
+
+        # Move each servo to the calculated angles
+        self.legs[1].servos[0].move_to_angle(theta1)
+        self.legs[1].servos[1].move_to_angle(theta2)
+        self.legs[1].servos[2].move_to_angle(theta3)
+
+
 
 
         while self.state == CreepyState.DEVMODE2:
