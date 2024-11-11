@@ -217,11 +217,8 @@ class CreepyPod:
 
     def devmode2_action(self): #X
         display.devmode()
-        print("Developer mode 2: testing leg 0")
-        self.legs[5].servos[1].manual_control_angle()
-        self.legs[5].lower_leg()
-        time.sleep(2)
-        self.legs[5].rise_leg()
+        print("Testing IK")
+        self.legs[1].calculate_angles(5,5,-5)
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 

@@ -1,6 +1,7 @@
 # leg.py
 from servo import Servo
 from maestro import Controller
+import math
 
 class Leg:
     def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0):
@@ -61,53 +62,52 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
-import math
 
-def calculate_angles(x, y, z):
-    # Constants in millimeters
-    Z_offset = 10.2     # Vertical offset between innermost and middle servos
-    r1 = 45             # Fixed horizontal distance from innermost to middle servo
-    a2 = 149.5          # Length of the middle arm
-    a3 = 213.66         # Length of the outer arm
-    
-    # Step 1: Adjust the target z-coordinate relative to the middle servo
-    z_adjusted = z - Z_offset
+    def calculate_angles(self, x, y, z):
+        # Constants in millimeters
+        Z_offset = 10.2     # Vertical offset between innermost and middle servos
+        r1 = 45             # Fixed horizontal distance from innermost to middle servo
+        a2 = 149.5          # Length of the middle arm
+        a3 = 213.66         # Length of the outer arm
+        
+        # Step 1: Adjust the target z-coordinate relative to the middle servo
+        z_adjusted = z - Z_offset
 
-    # Step 2: Calculate theta1 (horizontal rotation angle)
-    theta1 = math.degrees(math.atan2(y, x))
+        # Step 2: Calculate theta1 (horizontal rotation angle)
+        theta1 = math.degrees(math.atan2(y, x))
 
-    # Step 3: Calculate r_horizontal (effective horizontal distance in the x-y plane)
-    r_horizontal = math.sqrt(x**2 + y**2)
+        # Step 3: Calculate r_horizontal (effective horizontal distance in the x-y plane)
+        r_horizontal = math.sqrt(x**2 + y**2)
 
-    # Step 4: Calculate r_total (total distance from base to endpoint in 3D space)
-    r_total = math.sqrt(r_horizontal**2 + z_adjusted**2)
+        # Step 4: Calculate r_total (total distance from base to endpoint in 3D space)
+        r_total = math.sqrt(r_horizontal**2 + z_adjusted**2)
 
-    # Step 5: Calculate r4 (horizontal distance from middle servo to endpoint)
-    r4 = r_horizontal - r1
+        # Step 5: Calculate r4 (horizontal distance from middle servo to endpoint)
+        r4 = r_horizontal - r1
 
-    # Step 6: Calculate r2 (vertical distance from the horizontal line at the middle servo to the endpoint)
-    r2 = z_adjusted
+        # Step 6: Calculate r2 (vertical distance from the horizontal line at the middle servo to the endpoint)
+        r2 = z_adjusted
 
-    # Step 7: Calculate r3 (distance from middle servo to endpoint)
-    r3 = math.sqrt(r2**2 + r4**2)
+        # Step 7: Calculate r3 (distance from middle servo to endpoint)
+        r3 = math.sqrt(r2**2 + r4**2)
 
-    # Step 8: Calculate phi2 (angle between the middle arm and the line to the endpoint)
-    phi2 = math.degrees(math.acos((a2**2 + r3**2 - a3**2) / (2 * a2 * r3)))
+        # Step 8: Calculate phi2 (angle between the middle arm and the line to the endpoint)
+        phi2 = math.degrees(math.acos((a2**2 + r3**2 - a3**2) / (2 * a2 * r3)))
 
-    # Step 9: Calculate alpha (angle between the horizontal line and r3)
-    alpha = math.degrees(math.atan2(r2, r4))
+        # Step 9: Calculate alpha (angle between the horizontal line and r3)
+        alpha = math.degrees(math.atan2(r2, r4))
 
-    # Step 10: Calculate theta2 (lifting angle of the middle arm)
-    theta2 = phi2 - alpha
+        # Step 10: Calculate theta2 (lifting angle of the middle arm)
+        theta2 = phi2 - alpha
 
-    # Step 11: Calculate phi3 (internal angle between the middle arm and the outer arm)
-    phi3 = math.degrees(math.acos((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)))
+        # Step 11: Calculate phi3 (internal angle between the middle arm and the outer arm)
+        phi3 = math.degrees(math.acos((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)))
 
-    # Step 12: Calculate theta3 (angle between a 90-degree projection from the middle servo and the outermost arm)
-    theta3 = 90 - phi3
+        # Step 12: Calculate theta3 (angle between a 90-degree projection from the middle servo and the outermost arm)
+        theta3 = 90 - phi3
 
-    # Print the calculated angles
-    print(f"Theta1: {theta1:.2f}°")
-    print(f"Theta2: {theta2:.2f}°")
-    print(f"Theta3: {theta3:.2f}°")
+        # Print the calculated angles
+        print(f"Theta1: {theta1:.2f}°")
+        print(f"Theta2: {theta2:.2f}°")
+        print(f"Theta3: {theta3:.2f}°")
 
