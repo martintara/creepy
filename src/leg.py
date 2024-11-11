@@ -62,8 +62,7 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
-
-    def calculate_angles(self, x, y, z):
+    def calculate_angles(x, y, z):
         # Constants in millimeters
         Z_offset = 10.2     # Vertical offset between innermost and middle servos
         r1 = 45             # Fixed horizontal distance from innermost to middle servo
@@ -91,8 +90,10 @@ class Leg:
         # Step 7: Calculate r3 (distance from middle servo to endpoint)
         r3 = math.sqrt(r2**2 + r4**2)
 
-        # Step 8: Calculate phi2 (angle between the middle arm and the line to the endpoint)
-        phi2 = math.degrees(math.acos((a2**2 + r3**2 - a3**2) / (2 * a2 * r3)))
+        # Step 8: Calculate phi2 (angle between the middle arm and the line to the endpoint), with clamping to avoid domain errors
+        phi2_value = (a2**2 + r3**2 - a3**2) / (2 * a2 * r3)
+        phi2_value = max(-1, min(1, phi2_value))  # Clamp to the range [-1, 1]
+        phi2 = math.degrees(math.acos(phi2_value))
 
         # Step 9: Calculate alpha (angle between the horizontal line and r3)
         alpha = math.degrees(math.atan2(r2, r4))
@@ -100,8 +101,10 @@ class Leg:
         # Step 10: Calculate theta2 (lifting angle of the middle arm)
         theta2 = phi2 - alpha
 
-        # Step 11: Calculate phi3 (internal angle between the middle arm and the outer arm)
-        phi3 = math.degrees(math.acos((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)))
+        # Step 11: Calculate phi3 (internal angle between the middle arm and the outer arm), with clamping
+        phi3_value = (r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)
+        phi3_value = max(-1, min(1, phi3_value))  # Clamp to the range [-1, 1]
+        phi3 = math.degrees(math.acos(phi3_value))
 
         # Step 12: Calculate theta3 (angle between a 90-degree projection from the middle servo and the outermost arm)
         theta3 = 90 - phi3
@@ -110,4 +113,3 @@ class Leg:
         print(f"Theta1: {theta1:.2f}°")
         print(f"Theta2: {theta2:.2f}°")
         print(f"Theta3: {theta3:.2f}°")
-
