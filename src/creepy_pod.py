@@ -64,7 +64,9 @@ class CreepyPod:
                 leg_id=i,
                 servo_params=leg["servos"],
                 ctrl=self.ctrl,
-                offset=leg["offset"]
+                offset=leg["offset"],
+                origin_x=leg["origin_x"],
+                origin_y=leg["origin_y"]
             )
             for i, leg in enumerate(self.leg_params)
         ]
@@ -226,10 +228,22 @@ class CreepyPod:
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
-    def devmode3_action(self): #y
+    def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
         
+        self.legs[0].servos[0].manual_control()
+        self.legs[1].servos[0].manual_control()
+        self.legs[2].servos[0].manual_control()
+        self.legs[3].servos[0].manual_control()
+        self.legs[4].servos[0].manual_control()
+        self.legs[5].servos[0].manual_control()
+
+        self.legs[0].servos[0].manual_control_angle()
+        self.legs[1].servos[0].manual_control_angle()
         self.legs[2].servos[0].manual_control_angle()
+        self.legs[3].servos[0].manual_control_angle()
+        self.legs[4].servos[0].manual_control_angle()
+        self.legs[5].servos[0].manual_control_angle()
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()

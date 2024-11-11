@@ -5,7 +5,7 @@ import math
 import time
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0):
+    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0, origin_x, origin_y):
         self.leg_id = leg_id  # Unique identifier for the leg
         self.offset = offset
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg

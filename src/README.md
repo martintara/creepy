@@ -107,7 +107,9 @@ class CreepyPod:
                 leg_id=i,
                 servo_params=leg["servos"],
                 ctrl=self.ctrl,
-                offset=leg["offset"]
+                offset=leg["offset"],
+                origin_x=leg["origin_x"],
+                origin_y=leg["origin_y"]
             )
             for i, leg in enumerate(self.leg_params)
         ]
@@ -264,15 +266,27 @@ class CreepyPod:
         display.devmode()
         print("Testing IK")
 
-        self.move_leg1_in_line(x=200, y_start=100, y_end=-100, z=-100, delay=0.2)
+        self.legs[1].move_leg1_in_line(x=200, y_start=200, y_end=-200, z=-100, delay=0.2)
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
-    def devmode3_action(self): #y
+    def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
         
+        self.legs[0].servos[0].manual_control()
+        self.legs[1].servos[0].manual_control()
+        self.legs[2].servos[0].manual_control()
+        self.legs[3].servos[0].manual_control()
+        self.legs[4].servos[0].manual_control()
+        self.legs[5].servos[0].manual_control()
+
+        self.legs[0].servos[0].manual_control_angle()
+        self.legs[1].servos[0].manual_control_angle()
         self.legs[2].servos[0].manual_control_angle()
+        self.legs[3].servos[0].manual_control_angle()
+        self.legs[4].servos[0].manual_control_angle()
+        self.legs[5].servos[0].manual_control_angle()
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()
@@ -291,7 +305,7 @@ import math
 import time
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0):
+    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0, origin_x, origin_y):
         self.leg_id = leg_id  # Unique identifier for the leg
         self.offset = offset
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
@@ -462,7 +476,7 @@ class Leg:
             y_current = y_start + i * step * y_direction
 
             # Move the leg to the (x, y_current, z) coordinates directly
-            self.legs[1].move_to_coordinates(x, y_current, z)
+            self.move_to_coordinates(x, y_current, z)
             
             # Pause to allow observation of each step
             time.sleep(delay)
