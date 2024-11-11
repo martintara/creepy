@@ -266,73 +266,47 @@ class CreepyPod:
         # Example target coordinates
 
 
-        # Desired target coordinates for each leg
-        x_target_1 = 200  # For leg 1, along the global x-axis
-        y_target_1 = 0    # Leg 1 stays on the global x-axis
-        z_target = -100   # Shared z-coordinate for both legs
+        # Desired y distance for both legs in the global coordinate system
+        y_target_distance = -50  # Move both legs in the negative y direction
+        z_target = -100           # Shared z-coordinate for both legs
 
-        # For leg 2, choose a point offset in the y-direction to move parallel
-        x_target_2 = 200  # Same x distance as leg 1 for parallel movement
-        y_target_2 = -30  # Offset for parallel movement
-        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
+        # Target coordinates for each leg in the global coordinate system
+        x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
+        x_target_leg2 = 100      # Leg 2 should move along x = 100 in the global system
 
         # Move leg 1 (center right leg) directly to its target coordinates
-        self.legs[1].move_to_coordinates(x_target_1, y_target_1, z_target)
+        self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
 
-        # Transform target coordinates for leg 2 to move parallel
-        x_local_2 = x_target_2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_2 * math.sin(math.radians(-angle_offset_leg_2))
-        y_local_2 = x_target_2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_2 * math.cos(math.radians(-angle_offset_leg_2))
+        # Transform target coordinates for leg 2 to match its local offset
+        # We need to rotate by -45 degrees since leg 2 has a +45 degree offset
+        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
+        x_local_leg2 = x_target_leg2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(-angle_offset_leg_2))
+        y_local_leg2 = x_target_leg2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(-angle_offset_leg_2))
 
         # Move leg 2 (back right leg) to the transformed local coordinates
-        self.legs[2].move_to_coordinates(x_local_2, y_local_2, z_target)
+        self.legs[2].move_to_coordinates(x_local_leg2, y_local_leg2, z_target)
 
         time.sleep(1)
 
-        x_target_1 = 200  # For leg 1, along the global x-axis
-        y_target_1 = -30    # Leg 1 stays on the global x-axis
-        z_target = -100   # Shared z-coordinate for both legs
+        # Desired y distance for both legs in the global coordinate system
+        y_target_distance = -100  # Move both legs in the negative y direction
+        z_target = -100           # Shared z-coordinate for both legs
 
-        # For leg 2, choose a point offset in the y-direction to move parallel
-        x_target_2 = 200  # Same x distance as leg 1 for parallel movement
-        y_target_2 = -30  # Offset for parallel movement
-        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
-
-        # Move leg 1 (center right leg) directly to its target coordinates
-        self.legs[1].move_to_coordinates(x_target_1, y_target_1, z_target)
-
-        # Transform target coordinates for leg 2 to move parallel
-        x_local_2 = x_target_2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_2 * math.sin(math.radians(-angle_offset_leg_2))
-        y_local_2 = x_target_2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_2 * math.cos(math.radians(-angle_offset_leg_2))
-
-        # Move leg 2 (back right leg) to the transformed local coordinates
-        self.legs[2].move_to_coordinates(x_local_2, y_local_2, z_target)
-
-        time.sleep(1)
-
-        x_target_1 = 200  # For leg 1, along the global x-axis
-        y_target_1 = -60    # Leg 1 stays on the global x-axis
-        z_target = -100   # Shared z-coordinate for both legs
-
-        # For leg 2, choose a point offset in the y-direction to move parallel
-        x_target_2 = 200  # Same x distance as leg 1 for parallel movement
-        y_target_2 = -30  # Offset for parallel movement
-        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
+        # Target coordinates for each leg in the global coordinate system
+        x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
+        x_target_leg2 = 100      # Leg 2 should move along x = 100 in the global system
 
         # Move leg 1 (center right leg) directly to its target coordinates
-        self.legs[1].move_to_coordinates(x_target_1, y_target_1, z_target)
+        self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
 
-        # Transform target coordinates for leg 2 to move parallel
-        x_local_2 = x_target_2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_2 * math.sin(math.radians(-angle_offset_leg_2))
-        y_local_2 = x_target_2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_2 * math.cos(math.radians(-angle_offset_leg_2))
+        # Transform target coordinates for leg 2 to match its local offset
+        # We need to rotate by -45 degrees since leg 2 has a +45 degree offset
+        angle_offset_leg_2 = 45  # Offset of leg 2 in degrees
+        x_local_leg2 = x_target_leg2 * math.cos(math.radians(-angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(-angle_offset_leg_2))
+        y_local_leg2 = x_target_leg2 * math.sin(math.radians(-angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(-angle_offset_leg_2))
 
         # Move leg 2 (back right leg) to the transformed local coordinates
-        self.legs[2].move_to_coordinates(x_local_2, y_local_2, z_target)
-
-        time.sleep(1)
-
-
-
-
+        self.legs[2].move_to_coordinates(x_local_leg2, y_local_leg2, z_target)
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
