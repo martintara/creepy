@@ -345,8 +345,7 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
-
-    def calculate_angles(self, x, y, z):
+    def calculate_angles(x, y, z):
         # Constants in millimeters
         Z_offset = 10.2     # Vertical offset between innermost and middle servos
         r1 = 45             # Fixed horizontal distance from innermost to middle servo
@@ -387,8 +386,8 @@ class Leg:
         phi3_value = max(-1, min(1, phi3_value))  # Clamp to the range [-1, 1]
         phi3 = math.degrees(math.acos(phi3_value))
 
-        # Step 11: Calculate theta3 relative to the perpendicular (90-degree) position
-        theta3 = phi3 - 90
+        # Step 11: Calculate theta3, with negative values lifting the arm and positive values lowering it
+        theta3 = 90 - phi3
 
         # Print the calculated angles
         print(f"Theta1: {theta1:.2f}°")
