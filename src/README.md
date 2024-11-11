@@ -345,7 +345,7 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
-    def calculate_angles(x, y, z):
+    def calculate_angles(self, x, y, z):
         # Constants in millimeters
         Z_offset = 10.2     # Vertical offset between innermost and middle servos
         r1 = 45             # Fixed horizontal distance from innermost to middle servo
