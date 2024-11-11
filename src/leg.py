@@ -115,21 +115,22 @@ class Leg:
 
         return theta1, theta2, theta3
 
-    def move_parallel(self, x_local, y_start, distance, z, step=5, delay=0.1):
+
+    def move_parallel(self, x_global_fixed, y_start, y_distance, z, step=5, delay=0.1):
         """
-        Moves the leg along a line parallel to the local y-axis from y_start 
-        by a specified distance, while keeping x_local constant.
+        Moves the leg along a line parallel to the global y-axis at a fixed global x position,
+        compensating for the offset angle to follow the y-axis direction of leg 1.
 
         Parameters:
-        x_local (float): The fixed x-coordinate in the local coordinate system.
-        y_start (float): The starting y-coordinate in the local coordinate system.
-        distance (float): The distance to move along the y-axis (positive or negative).
+        x_global_fixed (float): The global x-coordinate for this leg’s movement.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        y_distance (float): The distance to move along the y-axis (positive or negative).
         z (float): The fixed z-coordinate.
         step (float): The incremental step size in the y-direction (default is 5).
         delay (float): The delay in seconds between each step for observation (default is 0.1).
         """
-        # Calculate the end y-position in the local coordinate system
-        y_end = y_start + distance
+        # Calculate the end y-position in the global coordinate system
+        y_end = y_start + y_distance
 
         # Determine the direction and number of steps
         y_direction = 1 if y_end > y_start else -1
@@ -137,11 +138,15 @@ class Leg:
 
         # Loop to move from start to end in increments of `step`
         for i in range(num_steps + 1):
-            # Calculate the current local y position
-            y_current = y_start + i * step * y_direction
+            # Calculate the current global y position
+            y_global = y_start + i * step * y_direction
 
-            # Move the leg to the fixed x_local and current y position
-            self.move_to_coordinates(x_local, y_current, z)
+            # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
+            x_local = x_global_fixed * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
+            y_local = x_global_fixed * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
+
+            # Move the leg to the transformed local coordinates
+            self.move_to_coordinates(x_local, y_local, z)
             
             # Pause to allow observation of each step
             time.sleep(delay)
