@@ -225,9 +225,9 @@ class CreepyPod:
         self.legs[1].move_parallel(200,-100,200,-100)
         self.legs[1].initial_position()
         time.sleep(1)
-        self.legs[2].move_parallel(150,-600,200,-100)
-        self.legs[2].initial_position()
-        time.sleep(1)
+        # self.legs[2].move_parallel(150,-600,200,-100)
+        # self.legs[2].initial_position()
+        # time.sleep(1)
 
 
 
