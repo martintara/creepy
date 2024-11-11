@@ -113,3 +113,34 @@ class Leg:
         theta3 = 90 - phi3
 
         return theta1, theta2, theta3
+
+    def move_parallel(self, x_global, y_start, distance, z, step=5):
+        """
+        Moves the leg along a line parallel to the global x-axis from y_start 
+        by a specified distance, using an internal step size.
+
+        Parameters:
+        x_global (float): The fixed x-coordinate in the global coordinate system.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        distance (float): The distance to move along the y-axis (positive or negative).
+        z (float): The fixed z-coordinate.
+        step (float): The incremental step size in the y-direction (default is 5).
+        """
+        # Determine the end y-position
+        y_end = y_start + distance
+
+        # Determine the direction and number of steps
+        y_direction = 1 if y_end > y_start else -1
+        num_steps = abs(y_end - y_start) // step
+
+        # Loop to move from start to end in increments of `step`
+        for i in range(num_steps + 1):
+            # Calculate the current global y position
+            y_global = y_start + i * step * y_direction
+
+            # Transform the global (x, y) coordinates to the leg’s local coordinates
+            x_local = x_global * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
+            y_local = x_global * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
+
+            # Move the leg to the transformed local coordinates
+            self.move_to_coordinates(x_local, y_local, z)

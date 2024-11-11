@@ -263,49 +263,8 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        # Example target coordinates
 
-        # Desired y distance for both legs in the global coordinate system
-        y_target_distance = -50  # Move both legs in the negative y direction
-        z_target = -100          # Shared z-coordinate for both legs
-
-        # Target coordinates for each leg in the global coordinate system
-        x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
-        x_target_leg2 = 100      # Leg 2 should move along x = 100 in the global system
-
-        # Move leg 1 (center right leg) directly to its target coordinates
-        self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
-
-        # Transform target coordinates for leg 2 to match its local offset
-        # We need to rotate by +45 degrees to align with leg 2’s -45 degree orientation
-        angle_offset_leg_2 = 45  # Rotate +45 degrees for alignment
-        x_local_leg2 = x_target_leg2 * math.cos(math.radians(angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(angle_offset_leg_2))
-        y_local_leg2 = x_target_leg2 * math.sin(math.radians(angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(angle_offset_leg_2))
-
-        # Move leg 2 (back right leg) to the transformed local coordinates
-        self.legs[2].move_to_coordinates(x_local_leg2, y_local_leg2, z_target)
-
-        time.sleep(1)
-
-                # Desired y distance for both legs in the global coordinate system
-        y_target_distance = -100  # Move both legs in the negative y direction
-        z_target = -100          # Shared z-coordinate for both legs
-
-        # Target coordinates for each leg in the global coordinate system
-        x_target_leg1 = 200      # Leg 1 should move along x = 200 in the global system
-        x_target_leg2 = 100      # Leg 2 should move along x = 100 in the global system
-
-        # Move leg 1 (center right leg) directly to its target coordinates
-        self.legs[1].move_to_coordinates(x_target_leg1, y_target_distance, z_target)
-
-        # Transform target coordinates for leg 2 to match its local offset
-        # We need to rotate by +45 degrees to align with leg 2’s -45 degree orientation
-        angle_offset_leg_2 = 45  # Rotate +45 degrees for alignment
-        x_local_leg2 = x_target_leg2 * math.cos(math.radians(angle_offset_leg_2)) - y_target_distance * math.sin(math.radians(angle_offset_leg_2))
-        y_local_leg2 = x_target_leg2 * math.sin(math.radians(angle_offset_leg_2)) + y_target_distance * math.cos(math.radians(angle_offset_leg_2))
-
-        # Move leg 2 (back right leg) to the transformed local coordinates
-        self.legs[2].move_to_coordinates(x_local_leg2, y_local_leg2, z_target)
+        self.legs[1].move_parallel(200,0,50,-100)
 
 
         while self.state == CreepyState.DEVMODE2:
@@ -442,6 +401,37 @@ class Leg:
         theta3 = 90 - phi3
 
         return theta1, theta2, theta3
+
+    def move_parallel(self, x_global, y_start, distance, z, step=5):
+        """
+        Moves the leg along a line parallel to the global x-axis from y_start 
+        by a specified distance, using an internal step size.
+
+        Parameters:
+        x_global (float): The fixed x-coordinate in the global coordinate system.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        distance (float): The distance to move along the y-axis (positive or negative).
+        z (float): The fixed z-coordinate.
+        step (float): The incremental step size in the y-direction (default is 5).
+        """
+        # Determine the end y-position
+        y_end = y_start + distance
+
+        # Determine the direction and number of steps
+        y_direction = 1 if y_end > y_start else -1
+        num_steps = abs(y_end - y_start) // step
+
+        # Loop to move from start to end in increments of `step`
+        for i in range(num_steps + 1):
+            # Calculate the current global y position
+            y_global = y_start + i * step * y_direction
+
+            # Transform the global (x, y) coordinates to the leg’s local coordinates
+            x_local = x_global * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
+            y_local = x_global * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
+
+            # Move the leg to the transformed local coordinates
+            self.move_to_coordinates(x_local, y_local, z)
 ```
 
 #### servo.py
