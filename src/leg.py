@@ -119,36 +119,36 @@ class Leg:
  
 
 
-        def move_parallel(self, x_offset_from_origin, y_start, y_distance, z, step=5, delay=0.1):
-            """
-            Moves the leg along a line parallel to the global y-axis, at a fixed x offset from the origin.
+    def move_parallel(self, x_offset_from_origin, y_start, y_distance, z, step=5, delay=0.1):
+        """
+        Moves the leg along a line parallel to the global y-axis, at a fixed x offset from the origin.
 
-            Parameters:
-            x_offset_from_origin (float): The x-distance from the origin in the global coordinate system.
-            y_start (float): The starting y-coordinate in the global coordinate system.
-            y_distance (float): The distance to move along the y-axis (positive or negative).
-            z (float): The fixed z-coordinate.
-            step (float): The incremental step size in the y-direction (default is 5).
-            delay (float): The delay in seconds between each step for observation (default is 0.1).
-            """
-            # Calculate the end y-position in the global coordinate system
-            y_end = y_start + y_distance
+        Parameters:
+        x_offset_from_origin (float): The x-distance from the origin in the global coordinate system.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        y_distance (float): The distance to move along the y-axis (positive or negative).
+        z (float): The fixed z-coordinate.
+        step (float): The incremental step size in the y-direction (default is 5).
+        delay (float): The delay in seconds between each step for observation (default is 0.1).
+        """
+        # Calculate the end y-position in the global coordinate system
+        y_end = y_start + y_distance
 
-            # Determine the direction and number of steps
-            y_direction = 1 if y_end > y_start else -1
-            num_steps = abs(y_end - y_start) // step
+        # Determine the direction and number of steps
+        y_direction = 1 if y_end > y_start else -1
+        num_steps = abs(y_end - y_start) // step
 
-            # Loop to move from start to end in increments of `step`
-            for i in range(num_steps + 1):
-                # Calculate the current global y position
-                y_global = y_start + i * step * y_direction
+        # Loop to move from start to end in increments of `step`
+        for i in range(num_steps + 1):
+            # Calculate the current global y position
+            y_global = y_start + i * step * y_direction
 
-                # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
-                x_local = x_offset_from_origin * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
-                y_local = x_offset_from_origin * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
+            # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
+            x_local = x_offset_from_origin * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
+            y_local = x_offset_from_origin * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
 
-                # Move the leg to the transformed local coordinates
-                self.move_to_coordinates(x_local, y_local, z)
-                
-                # Pause to allow observation of each step
-                time.sleep(delay) 
+            # Move the leg to the transformed local coordinates
+            self.move_to_coordinates(x_local, y_local, z)
+            
+            # Pause to allow observation of each step
+            time.sleep(delay) 
