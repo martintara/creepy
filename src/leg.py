@@ -74,12 +74,12 @@ class Leg:
         r1 = 45             # Fixed horizontal distance from innermost to middle servo
         a2 = 149.5          # Length of the middle arm
         a3 = 213.66         # Length of the outer arm
-        
+
         # Step 1: Adjust the target z-coordinate relative to the middle servo
         z_adjusted = z - Z_offset
 
-        # Step 2: Calculate theta1 (horizontal rotation angle)
-        theta1 = math.degrees(math.atan2(y, x))
+        # Step 2: Calculate theta1 (horizontal rotation angle) and add the leg-specific offset
+        theta1 = math.degrees(math.atan2(y, x)) + self.offset
 
         # Step 3: Calculate r_horizontal (effective horizontal distance in the x-y plane)
         r_horizontal = math.sqrt(x**2 + y**2)
@@ -111,5 +111,5 @@ class Leg:
 
         # Step 11: Calculate theta3, with negative values lifting the arm and positive values lowering it
         theta3 = 90 - phi3
-        
+
         return theta1, theta2, theta3
