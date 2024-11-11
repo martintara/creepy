@@ -237,8 +237,7 @@ class CreepyPod:
     def devmode3_action(self): #y
         display.devmode()
         
-        self.legs[1].servos[2].manual_control_angle()
-        self.legs[1].servos[1].manual_control_angle()
+        self.legs[2].servos[0].manual_control_angle()
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()
