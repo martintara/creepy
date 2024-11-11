@@ -152,3 +152,31 @@ class Leg:
             
             # Pause to allow observation of each step
             time.sleep(delay) 
+
+    def move_leg1_in_line(self, x, y_start, y_end, z, step=5, delay=0.1):
+        """
+        Moves leg 1 in a straight line along the global y-axis.
+
+        Parameters:
+        leg1 (Leg): The Leg object for leg 1 with 0 offset.
+        x (float): The fixed x-coordinate for leg 1.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        y_end (float): The ending y-coordinate in the global coordinate system.
+        z (float): The fixed z-coordinate.
+        step (float): The incremental step size in the y-direction (default is 5).
+        delay (float): The delay in seconds between each step for observation (default is 0.1).
+        """
+        # Determine the direction and number of steps
+        y_direction = 1 if y_end > y_start else -1
+        num_steps = abs(y_end - y_start) // step
+
+        # Loop to move from start to end in increments of `step`
+        for i in range(num_steps + 1):
+            # Calculate the current y position
+            y_current = y_start + i * step * y_direction
+
+            # Move the leg to the (x, y_current, z) coordinates directly
+            self.legs[1].move_to_coordinates(x, y_current, z)
+            
+            # Pause to allow observation of each step
+            time.sleep(delay)

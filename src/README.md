@@ -263,12 +263,8 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[1].move_parallel(x_offset_from_origin=200, y_start=0, y_distance=-50, z=-100, delay=0.2)
-        self.legs[1].initial_position()
-        time.sleep(1)
-        self.legs[2].move_parallel(x_offset_from_origin=100, y_start=-2500, y_distance=-50, z=-100, delay=0.2)
-        time.sleep(1)
-        self.legs[2].initial_position()
+
+        self.move_leg1_in_line(x=200, y_start=100, y_end=-100, z=-100, delay=0.2)
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
@@ -409,39 +405,67 @@ class Leg:
  
 
 
-        def move_parallel(self, x_offset_from_origin, y_start, y_distance, z, step=5, delay=0.1):
-            """
-            Moves the leg along a line parallel to the global y-axis, at a fixed x offset from the origin.
+    def move_parallel(self, x_offset_from_origin, y_start, y_distance, z, step=5, delay=0.1):
+        """
+        Moves the leg along a line parallel to the global y-axis, at a fixed x offset from the origin.
 
-            Parameters:
-            x_offset_from_origin (float): The x-distance from the origin in the global coordinate system.
-            y_start (float): The starting y-coordinate in the global coordinate system.
-            y_distance (float): The distance to move along the y-axis (positive or negative).
-            z (float): The fixed z-coordinate.
-            step (float): The incremental step size in the y-direction (default is 5).
-            delay (float): The delay in seconds between each step for observation (default is 0.1).
-            """
-            # Calculate the end y-position in the global coordinate system
-            y_end = y_start + y_distance
+        Parameters:
+        x_offset_from_origin (float): The x-distance from the origin in the global coordinate system.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        y_distance (float): The distance to move along the y-axis (positive or negative).
+        z (float): The fixed z-coordinate.
+        step (float): The incremental step size in the y-direction (default is 5).
+        delay (float): The delay in seconds between each step for observation (default is 0.1).
+        """
+        # Calculate the end y-position in the global coordinate system
+        y_end = y_start + y_distance
 
-            # Determine the direction and number of steps
-            y_direction = 1 if y_end > y_start else -1
-            num_steps = abs(y_end - y_start) // step
+        # Determine the direction and number of steps
+        y_direction = 1 if y_end > y_start else -1
+        num_steps = abs(y_end - y_start) // step
 
-            # Loop to move from start to end in increments of `step`
-            for i in range(num_steps + 1):
-                # Calculate the current global y position
-                y_global = y_start + i * step * y_direction
+        # Loop to move from start to end in increments of `step`
+        for i in range(num_steps + 1):
+            # Calculate the current global y position
+            y_global = y_start + i * step * y_direction
 
-                # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
-                x_local = x_offset_from_origin * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
-                y_local = x_offset_from_origin * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
+            # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
+            x_local = x_offset_from_origin * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
+            y_local = x_offset_from_origin * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
 
-                # Move the leg to the transformed local coordinates
-                self.move_to_coordinates(x_local, y_local, z)
-                
-                # Pause to allow observation of each step
-                time.sleep(delay) 
+            # Move the leg to the transformed local coordinates
+            self.move_to_coordinates(x_local, y_local, z)
+            
+            # Pause to allow observation of each step
+            time.sleep(delay) 
+
+    def move_leg1_in_line(self, x, y_start, y_end, z, step=5, delay=0.1):
+        """
+        Moves leg 1 in a straight line along the global y-axis.
+
+        Parameters:
+        leg1 (Leg): The Leg object for leg 1 with 0 offset.
+        x (float): The fixed x-coordinate for leg 1.
+        y_start (float): The starting y-coordinate in the global coordinate system.
+        y_end (float): The ending y-coordinate in the global coordinate system.
+        z (float): The fixed z-coordinate.
+        step (float): The incremental step size in the y-direction (default is 5).
+        delay (float): The delay in seconds between each step for observation (default is 0.1).
+        """
+        # Determine the direction and number of steps
+        y_direction = 1 if y_end > y_start else -1
+        num_steps = abs(y_end - y_start) // step
+
+        # Loop to move from start to end in increments of `step`
+        for i in range(num_steps + 1):
+            # Calculate the current y position
+            y_current = y_start + i * step * y_direction
+
+            # Move the leg to the (x, y_current, z) coordinates directly
+            self.legs[1].move_to_coordinates(x, y_current, z)
+            
+            # Pause to allow observation of each step
+            time.sleep(delay)
 ```
 
 #### servo.py
