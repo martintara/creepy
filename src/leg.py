@@ -62,6 +62,12 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
+    def move_to_coordinates(self, x, y, z):
+        theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+        self.servos[0].move_to_angle(theta1)
+        self.servos[1].move_to_angle(theta2)
+        self.servos[2].move_to_angle(theta3)
+
     def calculate_angles(self, x, y, z):
         # Constants in millimeters
         Z_offset = 10.2     # Vertical offset between innermost and middle servos
