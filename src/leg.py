@@ -62,7 +62,6 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
-    import math
 
     def calculate_angles(self, x, y, z):
         # Constants in millimeters
@@ -97,16 +96,16 @@ class Leg:
         # Step 8: Calculate alpha (angle between the horizontal line and r3)
         alpha = math.degrees(math.atan2(r2, r4))
 
-        # Step 9: Calculate theta2 with horizontal as 0 degrees
-        theta2 = alpha - phi2
+        # Step 9: Calculate theta2 with horizontal as 0 degrees and anti-clockwise as positive
+        theta2 = alpha + phi2
 
         # Step 10: Calculate phi3 (internal angle between the middle arm and the outer arm), with clamping
         phi3_value = (r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)
         phi3_value = max(-1, min(1, phi3_value))  # Clamp to the range [-1, 1]
         phi3 = math.degrees(math.acos(phi3_value))
 
-        # Step 11: Calculate theta3 (angle between a 90-degree projection from the middle servo and the outermost arm)
-        theta3 = 90 - phi3
+        # Step 11: Calculate theta3 relative to the perpendicular (90-degree) position
+        theta3 = phi3 - 90
 
         # Print the calculated angles
         print(f"Theta1: {theta1:.2f}°")
