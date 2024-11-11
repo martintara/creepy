@@ -176,7 +176,7 @@ class Leg:
             y_current = y_start + i * step * y_direction
 
             # Move the leg to the (x, y_current, z) coordinates directly
-            self.legs[1].move_to_coordinates(x, y_current, z)
+            self.move_to_coordinates(x, y_current, z)
             
             # Pause to allow observation of each step
             time.sleep(delay)
