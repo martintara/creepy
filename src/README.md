@@ -347,7 +347,9 @@ class Leg:
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
 
-    def calculate_angles(x, y, z):
+    import math
+
+    def calculate_angles(self, x, y, z):
         # Constants in millimeters
         Z_offset = 10.2     # Vertical offset between innermost and middle servos
         r1 = 45             # Fixed horizontal distance from innermost to middle servo
@@ -363,35 +365,32 @@ class Leg:
         # Step 3: Calculate r_horizontal (effective horizontal distance in the x-y plane)
         r_horizontal = math.sqrt(x**2 + y**2)
 
-        # Step 4: Calculate r_total (total distance from base to endpoint in 3D space)
-        r_total = math.sqrt(r_horizontal**2 + z_adjusted**2)
-
-        # Step 5: Calculate r4 (horizontal distance from middle servo to endpoint)
+        # Step 4: Calculate r4 (horizontal distance from middle servo to endpoint)
         r4 = r_horizontal - r1
 
-        # Step 6: Calculate r2 (vertical distance from the horizontal line at the middle servo to the endpoint)
+        # Step 5: Calculate r2 (vertical distance from the horizontal line at the middle servo to the endpoint)
         r2 = z_adjusted
 
-        # Step 7: Calculate r3 (distance from middle servo to endpoint)
+        # Step 6: Calculate r3 (distance from middle servo to endpoint)
         r3 = math.sqrt(r2**2 + r4**2)
 
-        # Step 8: Calculate phi2 (angle between the middle arm and the line to the endpoint), with clamping to avoid domain errors
+        # Step 7: Calculate phi2 (angle between the middle arm and the line to the endpoint), with clamping
         phi2_value = (a2**2 + r3**2 - a3**2) / (2 * a2 * r3)
         phi2_value = max(-1, min(1, phi2_value))  # Clamp to the range [-1, 1]
         phi2 = math.degrees(math.acos(phi2_value))
 
-        # Step 9: Calculate alpha (angle between the horizontal line and r3)
+        # Step 8: Calculate alpha (angle between the horizontal line and r3)
         alpha = math.degrees(math.atan2(r2, r4))
 
-        # Step 10: Calculate theta2 (lifting angle of the middle arm)
-        theta2 = phi2 - alpha
+        # Step 9: Calculate theta2 with horizontal as 0 degrees
+        theta2 = alpha - phi2
 
-        # Step 11: Calculate phi3 (internal angle between the middle arm and the outer arm), with clamping
+        # Step 10: Calculate phi3 (internal angle between the middle arm and the outer arm), with clamping
         phi3_value = (r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)
         phi3_value = max(-1, min(1, phi3_value))  # Clamp to the range [-1, 1]
         phi3 = math.degrees(math.acos(phi3_value))
 
-        # Step 12: Calculate theta3 (angle between a 90-degree projection from the middle servo and the outermost arm)
+        # Step 11: Calculate theta3 (angle between a 90-degree projection from the middle servo and the outermost arm)
         theta3 = 90 - phi3
 
         # Print the calculated angles
