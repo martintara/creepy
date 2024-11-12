@@ -188,7 +188,7 @@ class CreepyPod:
         self.load_crawl_config()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
-            self.gait_controller.rotate_tripod()
+            self.gait_controller.rotate_tripod_left()
             self.check_for_state_change()
 
     def shutdown_action(self):
