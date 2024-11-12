@@ -38,7 +38,7 @@ class Gait:
         self.creepy_pod.legs[5].lower_leg()
         time.sleep(1)
 
-    def rotate_tripod_right(self):
+    def rotate_tripod_left(self):
         self.creepy_pod.legs[0].lower_leg()
         self.creepy_pod.legs[2].lower_leg()
         self.creepy_pod.legs[4].lower_leg()
@@ -68,7 +68,7 @@ class Gait:
         self.creepy_pod.legs[4].leg_backward()
         time.sleep(1)
 
-    def rotate_tripod_left(self):
+    def rotate_tripod_right(self):
         self.creepy_pod.legs[0].lower_leg()
         self.creepy_pod.legs[2].lower_leg()
         self.creepy_pod.legs[4].lower_leg()
