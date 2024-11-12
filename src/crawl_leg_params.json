@@ -1,6 +1,8 @@
 [
     {
         "offset": 315,
+        "origin_x": -44.84,
+        "origin_y": 89.68,
         "servos": [
             {"channel": 0, "center_pos": 4000, "range": 250, "center_angle": 0, "angle_range": 45},
             {"channel": 1, "center_pos": 6125, "range": 3775, "center_angle": 0, "angle_range": 90},
@@ -9,6 +11,8 @@
     },
     { 
         "offset": 0,
+        "origin_x": 0,
+        "origin_y": 0,
         "servos": [
             {"channel": 3, "center_pos": 6150, "range": 250, "center_angle": 0, "angle_range": 45},
             {"channel": 4, "center_pos": 6400, "range": 3775, "center_angle": 0, "angle_range": 90},
@@ -17,6 +21,8 @@
     },
     { 
         "offset": 45,
+        "origin_x": -44.84,
+        "origin_y": -89.86,
         "servos": [
             {"channel": 6, "center_pos": 8300, "range": 250, "center_angle": 0, "angle_range": 45},
             {"channel": 7, "center_pos": 6450, "range": 3775, "center_angle": 0, "angle_range": 90},
@@ -25,6 +31,8 @@
     },
     { 
         "offset": 135,
+        "origin_x": -174.56,
+        "origin_y": -89.86,
         "servos": [  
             {"channel": 9, "center_pos": 3900, "range": 250, "center_angle": 0, "angle_range": 45},
             {"channel": 10, "center_pos": 5875, "range": 3775, "center_angle": 0, "angle_range": 90},
@@ -33,6 +41,8 @@
     },
     { 
         "offset": 180,
+        "origin_x": -219.4,
+        "origin_y": 0,
         "servos": [
             {"channel": 12, "center_pos": 5600, "range": 250, "center_angle": 0, "angle_range": 45},
             {"channel": 13, "center_pos": 6400, "range": 3775, "center_angle": 0, "angle_range": 90},
@@ -41,6 +51,8 @@
     },
     { 
         "offset": 225,
+        "origin_x": -174.56,
+        "origin_y": 89.86,
         "servos": [
             {"channel": 15, "center_pos": 7000, "range": 250, "center_angle": 0, "angle_range": 45},
             {"channel": 16, "center_pos": 6250, "range": 3775, "center_angle": 0, "angle_range": 90},
