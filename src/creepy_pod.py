@@ -185,12 +185,7 @@ class CreepyPod:
 
     def auto_action(self):
         display.auto() # updating sense hat display
-        #testing leg forward+backward
-        # self.legs[1].leg_forward()
-        # self.legs[4].leg_forward()
-        # time.sleep(2)
-        # self.legs[1].leg_backward()
-        # self.legs[4].leg_backward()
+        self.load_crawl_config()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
             self.gait_controller.tripod_gait()
