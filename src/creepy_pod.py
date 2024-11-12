@@ -230,7 +230,7 @@ class CreepyPod:
 
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
-        
+        self.legs[0].print_offsets()
         self.legs[0].servos[0].manual_control()
         self.legs[1].servos[0].manual_control()
         self.legs[2].servos[0].manual_control()

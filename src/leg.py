@@ -5,11 +5,11 @@ import math
 import time
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0, origin_x, origin_y):
+    def __init__(self, leg_id: int, servo_params, ctrl: Controller, origin_x, origin_y, offset=0):
         self.leg_id = leg_id  # Unique identifier for the leg
         self.offset = offset
         self.origin_x = origin_x
-        self. origin_y = origin_y
+        self.origin_y = origin_y
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
     def lower_leg(self):
         self.servos[1].move_to_angle(57)
@@ -182,3 +182,6 @@ class Leg:
             
             # Pause to allow observation of each step
             time.sleep(delay)
+
+    def print_offsets(self):
+        print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
