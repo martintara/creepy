@@ -225,19 +225,12 @@ class CreepyPod:
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
         self.legs[0].print_offsets()
-        self.legs[0].servos[0].manual_control()
-        self.legs[1].servos[0].manual_control()
-        self.legs[2].servos[0].manual_control()
-        self.legs[3].servos[0].manual_control()
-        self.legs[4].servos[0].manual_control()
-        self.legs[5].servos[0].manual_control()
-
-        self.legs[0].servos[0].manual_control_angle()
-        self.legs[1].servos[0].manual_control_angle()
-        self.legs[2].servos[0].manual_control_angle()
-        self.legs[3].servos[0].manual_control_angle()
-        self.legs[4].servos[0].manual_control_angle()
-        self.legs[5].servos[0].manual_control_angle()
+#       self.legs[0].servos[0].manual_control_angle()
+#       self.legs[1].servos[0].manual_control_angle()
+        self.legs[3].servos[2].manual_control_angle()
+        self.legs[3].servos[1].manual_control_angle()
+#       self.legs[4].servos[0].manual_control_angle()
+#       self.legs[5].servos[0].manual_control_angle()
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()

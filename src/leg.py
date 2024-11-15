@@ -100,7 +100,8 @@ class Leg:
         
         # Calculate theta2 and theta3
         theta2 = phi2 + phi1
-        theta3 = -(180 - phi3) -90
+        theta3 = 90 - phi3 #-(180 - phi3) + 90
+
         print(f"theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
 
  
