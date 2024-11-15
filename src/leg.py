@@ -102,9 +102,39 @@ class Leg:
         theta2 = phi2 + phi1
         theta3 = 90 - phi3 #-(180 - phi3) + 90
 
-        print(f"theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
+        return theta1, theta2, theta3
+    
 
- 
+
+    def move_straight_line(self, start, end, steps=10, delay=0.1):
+        """
+        Moves the end effector in a straight line from `start` to `end` using
+        `calculate_angles` to compute servo positions.
+
+        Args:
+            start (tuple): Starting position (x, y, z).
+            end (tuple): Ending position (x, y, z).
+            steps (int): Number of steps in the movement.
+            delay (float): Delay in seconds between each step.
+        """
+        x1, y1, z1 = start
+        x2, y2, z2 = end
+
+        for i in range(steps + 1):
+            # Interpolate between start and end positions
+            x = x1 + (x2 - x1) * i / steps
+            y = y1 + (y2 - y1) * i / steps
+            z = z1 + (z2 - z1) * i / steps
+
+            # Calculate angles for the current step
+            theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+
+            # Print the angles (replace this with actual servo commands in your robot control system)
+            self.servos[0].move_to_angle(theta1)
+            self.servos[1].move_to_angle(theta2)
+            self.servos[2].move_to_angle(theta3)
+            # Wait for the delay
+            time.sleep(delay)
 
 
     def print_offsets(self):

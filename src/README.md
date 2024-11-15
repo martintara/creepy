@@ -260,7 +260,9 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[0].calculate_angles(250, 0, -150)
+        self.legs[3].move_to_coordinates(250, 50, -150)
+        time.sleep(1)
+        self.legs[3].move_straight_line(start=(250, 50, -150), end=(250, -50, -150))
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
@@ -268,19 +270,12 @@ class CreepyPod:
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
         self.legs[0].print_offsets()
-        self.legs[0].servos[0].manual_control()
-        self.legs[1].servos[0].manual_control()
-        self.legs[2].servos[0].manual_control()
-        self.legs[3].servos[0].manual_control()
-        self.legs[4].servos[0].manual_control()
-        self.legs[5].servos[0].manual_control()
-
-        self.legs[0].servos[0].manual_control_angle()
-        self.legs[1].servos[0].manual_control_angle()
-        self.legs[2].servos[0].manual_control_angle()
-        self.legs[3].servos[0].manual_control_angle()
-        self.legs[4].servos[0].manual_control_angle()
-        self.legs[5].servos[0].manual_control_angle()
+#       self.legs[0].servos[0].manual_control_angle()
+#       self.legs[1].servos[0].manual_control_angle()
+        self.legs[3].servos[2].manual_control_angle()
+        self.legs[3].servos[1].manual_control_angle()
+#       self.legs[4].servos[0].manual_control_angle()
+#       self.legs[5].servos[0].manual_control_angle()
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()
@@ -394,10 +389,41 @@ class Leg:
         
         # Calculate theta2 and theta3
         theta2 = phi2 + phi1
-        theta3 = -(180 - phi3) -90
-        print(f"theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
+        theta3 = 90 - phi3 #-(180 - phi3) + 90
 
- 
+        return theta1, theta2, theta3
+    
+
+
+    def move_straight_line(self, start, end, steps=10, delay=0.1):
+        """
+        Moves the end effector in a straight line from `start` to `end` using
+        `calculate_angles` to compute servo positions.
+
+        Args:
+            start (tuple): Starting position (x, y, z).
+            end (tuple): Ending position (x, y, z).
+            steps (int): Number of steps in the movement.
+            delay (float): Delay in seconds between each step.
+        """
+        x1, y1, z1 = start
+        x2, y2, z2 = end
+
+        for i in range(steps + 1):
+            # Interpolate between start and end positions
+            x = x1 + (x2 - x1) * i / steps
+            y = y1 + (y2 - y1) * i / steps
+            z = z1 + (z2 - z1) * i / steps
+
+            # Calculate angles for the current step
+            theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+
+            # Print the angles (replace this with actual servo commands in your robot control system)
+            self.servos[0].move_to_angle(theta1)
+            self.servos[1].move_to_angle(theta2)
+            self.servos[2].move_to_angle(theta3)
+            # Wait for the delay
+            time.sleep(delay)
 
 
     def print_offsets(self):
