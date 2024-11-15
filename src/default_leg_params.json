@@ -1,6 +1,6 @@
 [
     {
-        "offset": 315,
+        "offset": -315,
         "origin_x": -44.84,
         "origin_y": 89.68,
         "servos": [
@@ -20,7 +20,7 @@
         ]
     },
     {
-        "offset": 45,
+        "offset": -45,
         "origin_x": -44.84,
         "origin_y": -89.86,
         "servos": [
