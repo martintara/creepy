@@ -228,15 +228,10 @@ class CreepyPod:
 
     def auto_action(self):
         display.auto() # updating sense hat display
-        #testing leg forward+backward
-        # self.legs[1].leg_forward()
-        # self.legs[4].leg_forward()
-        # time.sleep(2)
-        # self.legs[1].leg_backward()
-        # self.legs[4].leg_backward()
+        self.load_crawl_config()
         print("Autonomous mode activated. Navigating environment...")
         while self.state == CreepyState.AUTO:
-            self.gait_controller.tripod_gait()
+            self.gait_controller.rotate_tripod_left()
             self.check_for_state_change()
 
     def shutdown_action(self):
@@ -265,15 +260,14 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-
-        self.legs[1].move_leg1_in_line(x=200, y_start=200, y_end=-200, z=-100, delay=0.2)
+        legs[0].calculate_angles(250, 0, -150)
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
-        
+        self.legs[0].print_offsets()
         self.legs[0].servos[0].manual_control()
         self.legs[1].servos[0].manual_control()
         self.legs[2].servos[0].manual_control()
@@ -305,11 +299,11 @@ import math
 import time
 
 class Leg:
-    def __init__(self, leg_id: int, servo_params, ctrl: Controller, offset=0, origin_x, origin_y):
+    def __init__(self, leg_id: int, servo_params, ctrl: Controller, origin_x, origin_y, offset=0):
         self.leg_id = leg_id  # Unique identifier for the leg
         self.offset = offset
         self.origin_x = origin_x
-        self. origin_y = origin_y
+        self.origin_y = origin_y
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
     def lower_leg(self):
         self.servos[1].move_to_angle(57)
@@ -372,116 +366,42 @@ class Leg:
         self.servos[2].move_to_angle(theta3)
 
     def calculate_angles(self, x, y, z):
-        # Constants in millimeters
-        Z_offset = 10.2     # Vertical offset between innermost and middle servos
-        r1 = 45             # Fixed horizontal distance from innermost to middle servo
-        a2 = 149.5          # Length of the middle arm
-        a3 = 213.66         # Length of the outer arm
+        # Constants for the arm segments
+        Z_offset = -10.2  # cm (vertical segment positioned below the base)
+        r1 = 45   # cm (horizontal segment after the 90-degree bend)
+        a2 = 149.5  # cm (distance from second servo to outermost servo)
+        a3 = 213.66  # cm (distance from outermost servo to end effector)
 
-        # Step 1: Adjust the target z-coordinate relative to the middle servo
-        z_adjusted = z - Z_offset
+        # Calculate theta1 based on target (x, y)
+        theta1 = math.degrees(math.atan2(y, x))
+        
+        # Adjusted coordinates for target relative to the second servo
+        effective_x = x - horizontal_offset
+        r1 = math.sqrt(effective_x**2 + y**2)
+        
+        # Calculate effective r2 as the Z distance from the second servo’s height (below the base)
+        r2 = z - Z_offset  # Since vertical_segment is negative, this adds 10 to Z
 
-        # Step 2: Calculate theta1 (horizontal rotation angle) and add the leg-specific offset
-        theta1 = math.degrees(math.atan2(y, x)) + self.offset
-
-        # Step 3: Calculate r_horizontal (effective horizontal distance in the x-y plane)
-        r_horizontal = math.sqrt(x**2 + y**2)
-
-        # Step 4: Calculate r4 (horizontal distance from middle servo to endpoint)
-        r4 = r_horizontal - r1
-
-        # Step 5: Calculate r2 (vertical distance from the horizontal line at the middle servo to the endpoint)
-        r2 = z_adjusted
-
-        # Step 6: Calculate r3 (distance from middle servo to endpoint)
-        r3 = math.sqrt(r2**2 + r4**2)
-
-        # Step 7: Calculate phi2 (angle between the middle arm and the line to the endpoint), with clamping
-        phi2_value = (a2**2 + r3**2 - a3**2) / (2 * a2 * r3)
-        phi2_value = max(-1, min(1, phi2_value))  # Clamp to the range [-1, 1]
-        phi2 = math.degrees(math.acos(phi2_value))
-
-        # Step 8: Calculate alpha (angle between the horizontal line and r3)
-        alpha = math.degrees(math.atan2(r2, r4))
-
-        # Step 9: Calculate theta2 with horizontal as 0 degrees and anti-clockwise as positive
-        theta2 = alpha + phi2
-
-        # Step 10: Calculate phi3 (internal angle between the middle arm and the outer arm), with clamping
-        phi3_value = (r3**2 - a2**2 - a3**2) / (-2 * a2 * a3)
-        phi3_value = max(-1, min(1, phi3_value))  # Clamp to the range [-1, 1]
-        phi3 = math.degrees(math.acos(phi3_value))
-
-        # Step 11: Calculate theta3, with negative values lifting the arm and positive values lowering it
-        theta3 = 90 - phi3
-
-        return theta1, theta2, theta3
-
+        # Calculate phi2
+        phi2 = math.degrees(math.atan2(r2, r1))
+        
+        # Calculate r3
+        r3 = math.sqrt(r1**2 + r2**2)
+        
+        # Ensure r3 is within range to avoid math domain errors in acos
+        phi1 = math.degrees(math.acos(max(min((a3**2 - a2**2 - r3**2) / (-2 * a2 * r3), 1), -1)))
+        phi3 = math.degrees(math.acos(max(min((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3), 1), -1)))
+        
+        # Calculate theta2 and theta3
+        theta2 = phi2 + phi1
+        theta3 = -(180 - phi3) -90
+        print(f"theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
 
  
 
 
-    def move_parallel(self, x_offset_from_origin, y_start, y_distance, z, step=5, delay=0.1):
-        """
-        Moves the leg along a line parallel to the global y-axis, at a fixed x offset from the origin.
-
-        Parameters:
-        x_offset_from_origin (float): The x-distance from the origin in the global coordinate system.
-        y_start (float): The starting y-coordinate in the global coordinate system.
-        y_distance (float): The distance to move along the y-axis (positive or negative).
-        z (float): The fixed z-coordinate.
-        step (float): The incremental step size in the y-direction (default is 5).
-        delay (float): The delay in seconds between each step for observation (default is 0.1).
-        """
-        # Calculate the end y-position in the global coordinate system
-        y_end = y_start + y_distance
-
-        # Determine the direction and number of steps
-        y_direction = 1 if y_end > y_start else -1
-        num_steps = abs(y_end - y_start) // step
-
-        # Loop to move from start to end in increments of `step`
-        for i in range(num_steps + 1):
-            # Calculate the current global y position
-            y_global = y_start + i * step * y_direction
-
-            # Transform the fixed global (x, y) coordinates to the leg’s local coordinates
-            x_local = x_offset_from_origin * math.cos(math.radians(self.offset)) - y_global * math.sin(math.radians(self.offset))
-            y_local = x_offset_from_origin * math.sin(math.radians(self.offset)) + y_global * math.cos(math.radians(self.offset))
-
-            # Move the leg to the transformed local coordinates
-            self.move_to_coordinates(x_local, y_local, z)
-            
-            # Pause to allow observation of each step
-            time.sleep(delay) 
-
-    def move_leg1_in_line(self, x, y_start, y_end, z, step=5, delay=0.1):
-        """
-        Moves leg 1 in a straight line along the global y-axis.
-
-        Parameters:
-        leg1 (Leg): The Leg object for leg 1 with 0 offset.
-        x (float): The fixed x-coordinate for leg 1.
-        y_start (float): The starting y-coordinate in the global coordinate system.
-        y_end (float): The ending y-coordinate in the global coordinate system.
-        z (float): The fixed z-coordinate.
-        step (float): The incremental step size in the y-direction (default is 5).
-        delay (float): The delay in seconds between each step for observation (default is 0.1).
-        """
-        # Determine the direction and number of steps
-        y_direction = 1 if y_end > y_start else -1
-        num_steps = abs(y_end - y_start) // step
-
-        # Loop to move from start to end in increments of `step`
-        for i in range(num_steps + 1):
-            # Calculate the current y position
-            y_current = y_start + i * step * y_direction
-
-            # Move the leg to the (x, y_current, z) coordinates directly
-            self.move_to_coordinates(x, y_current, z)
-            
-            # Pause to allow observation of each step
-            time.sleep(delay)
+    def print_offsets(self):
+        print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
 ```
 
 #### servo.py
