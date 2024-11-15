@@ -217,7 +217,7 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        legs[0].calculate_angles(250, 0, -150)
+        self.legs[0].calculate_angles(250, 0, -150)
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
