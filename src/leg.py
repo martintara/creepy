@@ -107,7 +107,7 @@ class Leg:
         return theta1, theta2, theta3
  
 
-   def move_straight_line(self, start, end, steps=50, delay=0.05):
+    def move_straight_line(self, start, end, steps=50, delay=0.05):
         """
         Move the end effector in a straight line from `start` to `end`.
 
