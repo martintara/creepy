@@ -217,9 +217,9 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[2].move_to_coordinates(0, -50, -120)
+        self.legs[2].move_to_coordinates(200, -150, -120)
         time.sleep(2)
-        self.legs[2].move_straight_line(start=(0, -50, -120), end=(0, -410, -120))
+        self.legs[2].move_straight_line(start=(200, -150, -120), end=(200, 150, -120))
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()

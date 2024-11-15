@@ -72,7 +72,7 @@ class Leg:
         self.servos[2].move_to_angle(theta3)
 
     
-    def calculate_angles(self, x, y, z):
+    def calculate_angles_backup(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
         horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
@@ -110,7 +110,7 @@ class Leg:
 
         return theta1, theta2, theta3
  
-    def calculate_angles_backup(self, x, y, z):
+    def calculate_angles(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
         horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
