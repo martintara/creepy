@@ -260,9 +260,9 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[2].move_to_coordinates(200, 180, -120)
-        time.sleep(1)
-        self.legs[2].move_straight_line(start=(200, 180, -120), end=(200, -180, -120))
+        self.legs[1].move_to_coordinates(200, -150, -120)
+        time.sleep(2)
+        self.legs[1].move_straight_line(start=(200, -150, -120), end=(200, 150, -120), steps=10, delay=0.1)
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
@@ -361,45 +361,8 @@ class Leg:
         self.servos[2].move_to_angle(theta3)
 
     
+
     def calculate_angles(self, x, y, z):
-        # Constants for the arm segments
-        Z_offset = -10.2  # cm (vertical segment positioned below the base)
-        horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
-        a2 = 149.5  # cm (distance from second servo to outermost servo)
-        a3 = 213.66  # cm (distance from outermost servo to end effector)
-
-        offset_rad = math.radians(self.offset)
-        x_adjusted = x * math.cos(offset_rad) - y * math.sin(offset_rad)
-        y_adjusted = x * math.sin(offset_rad) + y * math.cos(offset_rad)
-
-
-        # Calculate theta1 based on target (x, y)
-        theta1 = math.degrees(math.atan2(y_adjusted, x_adjusted))
-        
-        # Adjusted coordinates for target relative to the second servo
-        effective_x = x_adjusted - horizontal_offset
-        r1 = math.sqrt(effective_x**2 + y_adjusted**2)
-        
-        # Calculate effective r2 as the Z distance from the second servo’s height (below the base)
-        r2 = z - Z_offset  # Since vertical_segment is negative, this adds 10 to Z
-
-        # Calculate phi2
-        phi2 = math.degrees(math.atan2(r2, r1))
-        
-        # Calculate r3
-        r3 = math.sqrt(r1**2 + r2**2)
-        
-        # Ensure r3 is within range to avoid math domain errors in acos
-        phi1 = math.degrees(math.acos(max(min((a3**2 - a2**2 - r3**2) / (-2 * a2 * r3), 1), -1)))
-        phi3 = math.degrees(math.acos(max(min((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3), 1), -1)))
-        
-        # Calculate theta2 and theta3
-        theta2 = phi2 + phi1
-        theta3 = 90 - phi3 #-(180 - phi3) + 90
-
-        return theta1, theta2, theta3
- 
-    def calculate_angles_backup(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
         horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
@@ -433,15 +396,14 @@ class Leg:
         return theta1, theta2, theta3
  
 
-    def move_straight_line(self, start, end, steps=50, delay=0.05, offset=0):
+   def move_straight_line(self, start, end, steps=50, delay=0.05):
         """
-        Moves the end effector in a straight line from `start` to `end` using
-        `calculate_angles` to compute servo positions.
+        Move the end effector in a straight line from `start` to `end`.
 
-        Args:
-            start (tuple): Starting position (x, y, z).
-            end (tuple): Ending position (x, y, z).
-            steps (int): Number of steps in the movement.
+        Parameters:
+            start (tuple): Starting position (x, y, z) in the global frame.
+            end (tuple): Ending position (x, y, z) in the global frame.
+            steps (int): Number of steps to divide the movement into.
             delay (float): Delay in seconds between each step.
         """
         x1, y1, z1 = start
@@ -449,23 +411,74 @@ class Leg:
 
         for i in range(steps + 1):
             # Interpolate between start and end positions
-            x = x1 + (x2 - x1) * i / steps
-            y = y1 + (y2 - y1) * i / steps
-            z = z1 + (z2 - z1) * i / steps
+            x_global = x1 + (x2 - x1) * i / steps
+            y_global = y1 + (y2 - y1) * i / steps
+            z_global = z1 + (z2 - z1) * i / steps
 
-            # Calculate angles for the current step
-            theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+            # Rotate to the leg's local coordinate system
+            x_local, y_local = self.rotate_coordinates(x_global, y_global)
 
-            # Print the angles (replace this with actual servo commands in your robot control system)
+            # Calculate angles in the local frame
+            theta1, theta2, theta3 = self.calculate_angles(x_local, y_local, z_global)
+
+            # Move the servos
             self.servos[0].move_to_angle(theta1)
             self.servos[1].move_to_angle(theta2)
             self.servos[2].move_to_angle(theta3)
-            # Wait for the delay
+
+            # Delay between steps
             time.sleep(delay)
+
+
+    # def move_straight_line(self, start, end, steps=50, delay=0.05, offset=0):
+    #     """
+    #     Moves the end effector in a straight line from `start` to `end` using
+    #     `calculate_angles` to compute servo positions.
+
+    #     Args:
+    #         start (tuple): Starting position (x, y, z).
+    #         end (tuple): Ending position (x, y, z).
+    #         steps (int): Number of steps in the movement.
+    #         delay (float): Delay in seconds between each step.
+    #     """
+    #     x1, y1, z1 = start
+    #     x2, y2, z2 = end
+
+    #     for i in range(steps + 1):
+    #         # Interpolate between start and end positions
+    #         x = x1 + (x2 - x1) * i / steps
+    #         y = y1 + (y2 - y1) * i / steps
+    #         z = z1 + (z2 - z1) * i / steps
+
+    #         # Calculate angles for the current step
+    #         theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+
+    #         # Print the angles (replace this with actual servo commands in your robot control system)
+    #         self.servos[0].move_to_angle(theta1)
+    #         self.servos[1].move_to_angle(theta2)
+    #         self.servos[2].move_to_angle(theta3)
+    #         # Wait for the delay
+    #         time.sleep(delay)
 
 
     def print_offsets(self):
         print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
+
+    def rotate_coordinates(self, x, y):
+        """
+        Rotate global coordinates (x, y) to the leg's local frame based on its offset.
+
+        Parameters:
+            x (float): The x-coordinate in the global frame.
+            y (float): The y-coordinate in the global frame.
+
+        Returns:
+            tuple: The rotated (x, y) coordinates in the leg's local frame.
+        """
+        angle_radians = math.radians(self.offset)
+        rotated_x = x * math.cos(angle_radians) + y * math.sin(angle_radians)
+        rotated_y = -x * math.sin(angle_radians) + y * math.cos(angle_radians)
+        return rotated_x, rotated_y
 ```
 
 #### servo.py
