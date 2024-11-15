@@ -74,7 +74,7 @@ class Leg:
     def calculate_angles(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
-        r1 = 45   # cm (horizontal segment after the 90-degree bend)
+        horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
         a2 = 149.5  # cm (distance from second servo to outermost servo)
         a3 = 213.66  # cm (distance from outermost servo to end effector)
 
