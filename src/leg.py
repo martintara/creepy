@@ -71,7 +71,46 @@ class Leg:
         self.servos[1].move_to_angle(theta2)
         self.servos[2].move_to_angle(theta3)
 
+    
     def calculate_angles(self, x, y, z):
+        # Constants for the arm segments
+        Z_offset = -10.2  # cm (vertical segment positioned below the base)
+        horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
+        a2 = 149.5  # cm (distance from second servo to outermost servo)
+        a3 = 213.66  # cm (distance from outermost servo to end effector)
+
+        offset_rad = math.radians(self.offset)
+        x_adjusted = x * math.cos(offset_rad) - y * math.sin(offset_rad)
+        y_adjusted = x * math.sin(offset_rad) + y * math.cos(offset_rad)
+
+
+        # Calculate theta1 based on target (x, y)
+        theta1 = math.degrees(math.atan2(y_adjusted, x_adjusted))
+        
+        # Adjusted coordinates for target relative to the second servo
+        effective_x = x_adjusted - horizontal_offset
+        r1 = math.sqrt(effective_x**2 + y_adjusted**2)
+        
+        # Calculate effective r2 as the Z distance from the second servo’s height (below the base)
+        r2 = z - Z_offset  # Since vertical_segment is negative, this adds 10 to Z
+
+        # Calculate phi2
+        phi2 = math.degrees(math.atan2(r2, r1))
+        
+        # Calculate r3
+        r3 = math.sqrt(r1**2 + r2**2)
+        
+        # Ensure r3 is within range to avoid math domain errors in acos
+        phi1 = math.degrees(math.acos(max(min((a3**2 - a2**2 - r3**2) / (-2 * a2 * r3), 1), -1)))
+        phi3 = math.degrees(math.acos(max(min((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3), 1), -1)))
+        
+        # Calculate theta2 and theta3
+        theta2 = phi2 + phi1
+        theta3 = 90 - phi3 #-(180 - phi3) + 90
+
+        return theta1, theta2, theta3
+ 
+    def calculate_angles_backup(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
         horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
@@ -103,10 +142,9 @@ class Leg:
         theta3 = 90 - phi3 #-(180 - phi3) + 90
 
         return theta1, theta2, theta3
-    
+ 
 
-
-    def move_straight_line(self, start, end, steps=50, delay=0.05):
+    def move_straight_line(self, start, end, steps=50, delay=0.05, offset=0):
         """
         Moves the end effector in a straight line from `start` to `end` using
         `calculate_angles` to compute servo positions.
