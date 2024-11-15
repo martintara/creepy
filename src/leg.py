@@ -106,7 +106,7 @@ class Leg:
     
 
 
-    def move_straight_line(self, start, end, steps=10, delay=0.1):
+    def move_straight_line(self, start, end, steps=50, delay=0.05):
         """
         Moves the end effector in a straight line from `start` to `end` using
         `calculate_angles` to compute servo positions.
