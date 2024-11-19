@@ -187,6 +187,7 @@ class CreepyPod:
         display.auto() # updating sense hat display
         self.load_crawl_config()
         print("Autonomous mode activated. Navigating environment...")
+        self.gait_controller.draw_straight_line_two_legs()
         while self.state == CreepyState.AUTO:
             self.gait_controller.rotate_tripod_left()
             self.check_for_state_change()
