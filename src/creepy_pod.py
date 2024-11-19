@@ -192,7 +192,7 @@ class CreepyPod:
         self.legs[3].move_to_global_position(-400, -200, 0)
         self.legs[4].move_to_global_position(-425, -50, -100)
         self.legs[5].move_to_global_position(-400, 280, 0)
-        time.sleep(2)
+        time.sleep(10)
 
 #       self.gait_controller.draw_straight_line_two_legs(165, 180, -100, 165, -300, -100, -425, -50, -100)
         self.gait_controller.draw_straight_line_two_legs(165, 180, -100, 200, 50, 0, 165, -300, -100, -400, -200, 0, -425, -50, -100, -400, 280, 0)
