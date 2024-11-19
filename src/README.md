@@ -228,11 +228,9 @@ class CreepyPod:
 
     def auto_action(self):
         display.auto() # updating sense hat display
-        self.load_crawl_config()
         print("Autonomous mode activated. Navigating environment...")
         self.gait_controller.draw_straight_line_two_legs()
         while self.state == CreepyState.AUTO:
-            self.gait_controller.rotate_tripod_left()
             self.check_for_state_change()
 
     def shutdown_action(self):
@@ -261,15 +259,14 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[0].move_to_global_position(175, 100, -150)
-        time.sleep(2)
-        self.legs[0].draw_straight_line(175, 100, -150, 175, 200, -150, steps=20)
-        time.sleep(2)
-        self.legs[0].draw_straight_line(175, 200, -150, 175, 200, -100, steps=20)
-        time.sleep(2)
-        self.legs[0].draw_straight_line(175, 200, -100, 175, 100, -100, steps=20)
-        time.sleep(2)
-        self.legs[0].draw_straight_line(175, 100, -100, 175, 100, -150, steps=20)
+#        time.sleep(2)
+#        self.legs[0].draw_straight_line(175, 100, -150, 175, 200, -150, steps=20)
+#        time.sleep(2)
+#        self.legs[0].draw_straight_line(175, 200, -150, 175, 200, -100, steps=20)
+#        time.sleep(2)
+#        self.legs[0].draw_straight_line(175, 200, -100, 175, 100, -100, steps=20)
+#        time.sleep(2)
+#        self.legs[0].draw_straight_line(175, 100, -100, 175, 100, -150, steps=20)
         time.sleep(2)
 
 
@@ -453,7 +450,7 @@ class Leg:
             
             try:
                 x, y, z = map(float, user_input.split(','))
-                self.move_to_global_coordinates(x, y, z)
+                self.move_to_global_position(x, y, z)
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
