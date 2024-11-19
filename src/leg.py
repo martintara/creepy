@@ -71,7 +71,15 @@ class Leg:
         self.servos[1].move_to_angle(theta2)
         self.servos[2].move_to_angle(theta3)
 
-    def manual_control_ik(self)
+    def move_to_global_position(self, x, y, z):
+        theta1, theta2, theta3 = self.calculate_global_angles(x, y, z)
+        print(f"moving to theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
+        self.servos[0].move_to_angle(theta1)
+        self.servos[1].move_to_angle(theta2)
+        self.servos[2].move_to_angle(theta3)
+
+
+    def manual_control_ik(self):
         """
         Continuously takes input for coordinates (x, y, z), separated by commas.
         Calls move_to_coordinates(x, y, z) for each input.
@@ -85,7 +93,7 @@ class Leg:
             
             try:
                 x, y, z = map(float, user_input.split(','))
-                self.move_to_coordinates(x, y, z)
+                self.move_to_global_coordinates(x, y, z)
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
@@ -128,7 +136,7 @@ class Leg:
 
         return theta1, theta2, theta3
 
-        def calculate_global_positions(self, x, y, z):
+    def calculate_global_angles(self, x, y, z):
         Z_offset = -10.2  # cm
         horizontal_offset = 45  # cm
         a2 = 149.5  # cm
@@ -142,8 +150,8 @@ class Leg:
         # Calculate angles
         theta1, theta2, theta3 = self.calculate_angles(x_local, y_local, z)
 
-        print(f"theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
 
+        return theta1, theta2, theta3
 
 
     def calculate_angles_backup(self, x, y, z):
@@ -247,19 +255,3 @@ class Leg:
 
     def print_offsets(self):
         print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
-
-    def rotate_coordinates(self, x, y):
-        """
-        Rotate global coordinates (x, y) to the leg's local frame based on its offset.
-
-        Parameters:
-            x (float): The x-coordinate in the global frame.
-            y (float): The y-coordinate in the global frame.
-
-        Returns:
-            tuple: The rotated (x, y) coordinates in the leg's local frame.
-        """
-        angle_radians = math.radians(self.offset)
-        rotated_x = x * math.cos(angle_radians) + y * math.sin(angle_radians)
-        rotated_y = -x * math.sin(angle_radians) + y * math.cos(angle_radians)
-        return rotated_x, rotated_y
