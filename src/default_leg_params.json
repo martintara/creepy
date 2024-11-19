@@ -1,6 +1,6 @@
 [
     {
-        "offset": 315,
+        "offset": 45,
         "origin_x": -44.84,
         "origin_y": 89.68,
         "servos": [
@@ -20,7 +20,7 @@
         ]
     },
     {
-        "offset": 45,
+        "offset": 315,
         "origin_x": -44.84,
         "origin_y": -89.86,
         "servos": [
@@ -30,7 +30,7 @@
         ]
     },
     {
-        "offset": 135,
+        "offset": 225,
         "origin_x": -174.56,
         "origin_y": -89.86,
         "servos": [
@@ -50,7 +50,7 @@
         ]
     },
     {
-        "offset": 225,
+        "offset": 135,
         "origin_x": -174.56,
         "origin_y": 89.86,
         "servos": [
