@@ -239,11 +239,21 @@ class CreepyPod:
 #        self.legs[0].move_to_global_position(200, 50, -120)
 #        time.sleep(2)
 #        self.legs[1].initial_position()
-        self.legs[0].move_to_global_position(50, 200, -120)
+
+        self.legs[0].move_to_global_position(200, 100, -120)
         time.sleep(2)
-        self.legs[0].move_to_global_position(50, 300, -120)
+        self.legs[0].move_to_global_position(200, 200, -120)
         time.sleep(2)
-        self.legs[1].initial_position()
+        self.legs[0].initial_position()
+
+        time.sleep(2)
+
+        self.legs[5].move_to_global_position(-400, 100, -120)
+        time.sleep(2)
+        self.legs[5].move_to_global_position(-400, 200, -120)
+        time.sleep(2)
+        self.legs[5].initial_position()
+
 
 
 #       self.legs[0].servos[0].manual_control_angle()
