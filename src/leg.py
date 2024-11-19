@@ -187,70 +187,23 @@ class Leg:
 
         return theta1, theta2, theta3
  
-
-    def move_straight_line(self, start, end, steps=50, delay=0.05):
+    def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, steps=10):
         """
-        Move the end effector in a straight line from `start` to `end`.
+        Draw a straight line from start to end coordinates in the global frame.
 
         Parameters:
-            start (tuple): Starting position (x, y, z) in the global frame.
-            end (tuple): Ending position (x, y, z) in the global frame.
-            steps (int): Number of steps to divide the movement into.
-            delay (float): Delay in seconds between each step.
+        - start_x, start_y, start_z: Starting coordinates of the line.
+        - end_x, end_y, end_z: Ending coordinates of the line.
+        - steps: Number of discrete steps to divide the line into.
         """
-        x1, y1, z1 = start
-        x2, y2, z2 = end
+        for step in range(steps + 1):
+            t = step / steps  # Interpolation factor (0 to 1)
+            x = start_x + t * (end_x - start_x)
+            y = start_y + t * (end_y - start_y)
+            z = start_z + t * (end_z - start_z)
+            self.move_to_global_position(x, y, z)
+            time.sleep(0.1) 
 
-        for i in range(steps + 1):
-            # Interpolate between start and end positions
-            x_global = x1 + (x2 - x1) * i / steps
-            y_global = y1 + (y2 - y1) * i / steps
-            z_global = z1 + (z2 - z1) * i / steps
-
-            # Rotate to the leg's local coordinate system
-            x_local, y_local = self.rotate_coordinates(x_global, y_global)
-
-            # Calculate angles in the local frame
-            theta1, theta2, theta3 = self.calculate_angles(x_local, y_local, z_global)
-
-            # Move the servos
-            self.servos[0].move_to_angle(theta1)
-            self.servos[1].move_to_angle(theta2)
-            self.servos[2].move_to_angle(theta3)
-
-            # Delay between steps
-            time.sleep(delay)
-
-
-    # def move_straight_line(self, start, end, steps=50, delay=0.05, offset=0):
-    #     """
-    #     Moves the end effector in a straight line from `start` to `end` using
-    #     `calculate_angles` to compute servo positions.
-
-    #     Args:
-    #         start (tuple): Starting position (x, y, z).
-    #         end (tuple): Ending position (x, y, z).
-    #         steps (int): Number of steps in the movement.
-    #         delay (float): Delay in seconds between each step.
-    #     """
-    #     x1, y1, z1 = start
-    #     x2, y2, z2 = end
-
-    #     for i in range(steps + 1):
-    #         # Interpolate between start and end positions
-    #         x = x1 + (x2 - x1) * i / steps
-    #         y = y1 + (y2 - y1) * i / steps
-    #         z = z1 + (z2 - z1) * i / steps
-
-    #         # Calculate angles for the current step
-    #         theta1, theta2, theta3 = self.calculate_angles(x, y, z)
-
-    #         # Print the angles (replace this with actual servo commands in your robot control system)
-    #         self.servos[0].move_to_angle(theta1)
-    #         self.servos[1].move_to_angle(theta2)
-    #         self.servos[2].move_to_angle(theta3)
-    #         # Wait for the delay
-    #         time.sleep(delay)
 
 
     def print_offsets(self):

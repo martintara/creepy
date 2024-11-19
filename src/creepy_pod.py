@@ -218,14 +218,9 @@ class CreepyPod:
         display.devmode()
         print("Testing IK")
 #       self.legs[1].move_to_coordinates(200, -150, -120)
+        self.legs[0].move_to_global_position(175, 100, -120)
         time.sleep(2)
-        self.legs[1].move_straight_line(start=(200, -100, -120), end=(200, 100, -120), steps=50, delay=0.1)
-        self.legs[1].initial_position()
-        time.sleep(2)
-        self.legs[2].move_straight_line(start=(50, -400, -120), end=(50, -200, -120), steps=50, delay=0.1)
-        self.legs[2].initial_position()
-        time.sleep(2)
-        self.legs[0].move_straight_line(start=(50, 200, -120), end=(50, 400, -120), steps=50, delay=0.1)
+        self.legs[0].draw_straight_line(175, 100, -120, 175, 200, -120, steps=20)
         self.legs[0].initial_position()
 
 
