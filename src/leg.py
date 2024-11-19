@@ -71,7 +71,23 @@ class Leg:
         self.servos[1].move_to_angle(theta2)
         self.servos[2].move_to_angle(theta3)
 
-    
+    def manual_control_ik(self)
+        """
+        Continuously takes input for coordinates (x, y, z), separated by commas.
+        Calls move_to_coordinates(x, y, z) for each input.
+        Enter 'q' to quit the loop.
+        """
+        while True:
+            user_input = input("Enter coordinates (x, y, z) separated by commas, or 'q' to quit: ")
+            if user_input.lower() == 'q':
+                print("Exiting the loop.")
+                break
+            
+            try:
+                x, y, z = map(float, user_input.split(','))
+                self.move_to_coordinates(x, y, z)
+            except ValueError:
+                print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
     def calculate_angles(self, x, y, z):
         # Constants for the arm segments

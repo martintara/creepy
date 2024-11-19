@@ -260,20 +260,28 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-        self.legs[1].move_to_coordinates(200, -150, -120)
+#       self.legs[1].move_to_coordinates(200, -150, -120)
         time.sleep(2)
-        self.legs[1].move_straight_line(start=(200, -150, -120), end=(200, 150, -120), steps=10, delay=0.1)
+        self.legs[1].move_straight_line(start=(200, -100, -120), end=(200, 100, -120), steps=50, delay=0.1)
+        self.legs[1].initial_position()
+        time.sleep(2)
+        self.legs[2].move_straight_line(start=(50, -400, -120), end=(50, -200, -120), steps=50, delay=0.1)
+        self.legs[2].initial_position()
+        time.sleep(2)
+        self.legs[0].move_straight_line(start=(50, 200, -120), end=(50, 400, -120), steps=50, delay=0.1)
+        self.legs[0].initial_position()
+
 
         while self.state == CreepyState.DEVMODE2:
             self.check_for_state_change()
 
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
-        self.legs[0].print_offsets()
+#       self.legs[1].manual_control_ik()
 #       self.legs[0].servos[0].manual_control_angle()
 #       self.legs[1].servos[0].manual_control_angle()
-        self.legs[3].servos[2].manual_control_angle()
-        self.legs[3].servos[1].manual_control_angle()
+#       self.legs[3].servos[2].manual_control_angle()
+#       self.legs[3].servos[1].manual_control_angle()
 #       self.legs[4].servos[0].manual_control_angle()
 #       self.legs[5].servos[0].manual_control_angle()
 
@@ -360,7 +368,23 @@ class Leg:
         self.servos[1].move_to_angle(theta2)
         self.servos[2].move_to_angle(theta3)
 
-    
+    def manual_control_ik(self)
+        """
+        Continuously takes input for coordinates (x, y, z), separated by commas.
+        Calls move_to_coordinates(x, y, z) for each input.
+        Enter 'q' to quit the loop.
+        """
+        while True:
+            user_input = input("Enter coordinates (x, y, z) separated by commas, or 'q' to quit: ")
+            if user_input.lower() == 'q':
+                print("Exiting the loop.")
+                break
+            
+            try:
+                x, y, z = map(float, user_input.split(','))
+                self.move_to_coordinates(x, y, z)
+            except ValueError:
+                print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
     def calculate_angles(self, x, y, z):
         # Constants for the arm segments
