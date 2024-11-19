@@ -217,10 +217,19 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Testing IK")
-#       self.legs[1].move_to_coordinates(200, -150, -120)
-        self.legs[0].move_to_global_position(175, 100, -120)
+        self.legs[0].move_to_global_position(175, 100, -150)
         time.sleep(2)
-        self.legs[0].draw_straight_line(175, 100, -120, 175, 200, -120, steps=20)
+        self.legs[0].draw_straight_line(175, 100, -150, 175, 200, -150, steps=20)
+        time.sleep(2)
+        self.legs[0].draw_straight_line(175, 200, -150, 175, 200, -100, steps=20)
+        time.sleep(2)
+        self.legs[0].draw_straight_line(175, 200, -100, 175, 100, -100, steps=20)
+        time.sleep(2)
+        self.legs[0].draw_straight_line(175, 100, -100, 175, 100, -150, steps=20)
+        time.sleep(2)
+
+
+
         self.legs[0].initial_position()
 
 
