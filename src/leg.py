@@ -93,7 +93,7 @@ class Leg:
             
             try:
                 x, y, z = map(float, user_input.split(','))
-                self.move_to_global_coordinates(x, y, z)
+                self.move_to_global_position(x, y, z)
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
