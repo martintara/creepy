@@ -202,7 +202,7 @@ class Leg:
             y = start_y + t * (end_y - start_y)
             z = start_z + t * (end_z - start_z)
             self.move_to_global_position(x, y, z)
-            time.sleep(0.1) 
+            time.sleep(0.05) 
 
 
 

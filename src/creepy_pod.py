@@ -186,7 +186,16 @@ class CreepyPod:
     def auto_action(self):
         display.auto() # updating sense hat display
         print("Autonomous mode activated. Navigating environment...")
-        self.gait_controller.draw_straight_line_two_legs()
+        self.legs[0].move_to_global_position(165, 180, -100)
+        self.legs[1].move_to_global_position(200, 50, 0)
+        self.legs[2].move_to_global_position(165, -300, -100)
+        self.legs[3].move_to_global_position(-400, -200, 0)
+        self.legs[4].move_to_global_position(-425, -50, -100)
+        self.legs[5].move_to_global_position(-400, 280, 0)
+        time.sleep(2)
+
+#       self.gait_controller.draw_straight_line_two_legs(165, 180, -100, 165, -300, -100, -425, -50, -100)
+        self.gait_controller.draw_straight_line_two_legs(165, 180, -100, 200, 50, 0, 165, -300, -100, -400, -200, 0, -425, -50, -100, -400, 280, 0)
         while self.state == CreepyState.AUTO:
             self.check_for_state_change()
 

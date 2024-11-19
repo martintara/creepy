@@ -124,9 +124,12 @@ class Gait:
 
 
     def draw_straight_line_two_legs(self, 
-                                    initial_0x, initial_0y, initial_0z, 
+                                    initial_0x, initial_0y, initial_0z,
+                                    initial_1x, initial_1y, initial_1z,
                                     initial_2x, initial_2y, initial_2z, 
-                                    initial_4x, initial_4y, initial_4z):
+                                    initial_3x, initial_3y, initial_3z, 
+                                    initial_4x, initial_4y, initial_4z, 
+                                    initial_5x, initial_5y, initial_5z):
         def move_leg0():
             self.creepy_pod.legs[0].draw_straight_line(initial_0x, initial_0y, initial_0z, initial_0x, initial_0y + 100, initial_0z, steps=20)
             time.sleep(2)
@@ -135,6 +138,16 @@ class Gait:
             self.creepy_pod.legs[0].draw_straight_line(initial_0x, initial_0y + 100, initial_0z + 50, initial_0x, initial_0y, initial_0z + 50, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[0].draw_straight_line(initial_0x, initial_0y, initial_0z + 50, initial_0x, initial_0y, initial_0z, steps=20)
+            time.sleep(2)
+
+        def move_leg1():
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y - 100, initial_1z, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y - 100, initial_1z, initial_1x, initial_1y - 100, initial_1z-50, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y - 100, initial_1z-50, initial_1x, initial_1y, initial_1z-50, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z-50, initial_1x, initial_1y, initial_1z, steps=20)
             time.sleep(2)
 
         def move_leg2():
@@ -147,6 +160,16 @@ class Gait:
             self.creepy_pod.legs[2].draw_straight_line(initial_2x, initial_2y, initial_2z + 50, initial_2x, initial_2y, initial_2z, steps=20)
             time.sleep(2)
 
+        def move_leg3():
+            self.creepy_pod.legs[3].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y - 100, initial_1z, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[3].draw_straight_line(initial_1x, initial_1y - 100, initial_1z, initial_1x, initial_1y - 100, initial_1z-50, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[3].draw_straight_line(initial_1x, initial_1y - 100, initial_1z-50, initial_1x, initial_1y, initial_1z-50, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[3].draw_straight_line(initial_1x, initial_1y, initial_1z-50, initial_1x, initial_1y, initial_1z, steps=20)
+            time.sleep(2)
+
         def move_leg4():
             self.creepy_pod.legs[4].draw_straight_line(initial_4x, initial_4y, initial_4z, initial_4x, initial_4y + 100, initial_4z, steps=20)
             time.sleep(2)
@@ -157,20 +180,41 @@ class Gait:
             self.creepy_pod.legs[4].draw_straight_line(initial_4x, initial_4y, initial_4z + 50, initial_4x, initial_4y, initial_4z, steps=20)
             time.sleep(2)
 
+        def move_leg5():
+            self.creepy_pod.legs[5].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y - 100, initial_1z, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[5].draw_straight_line(initial_1x, initial_1y - 100, initial_1z, initial_1x, initial_1y - 100, initial_1z-50, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[5].draw_straight_line(initial_1x, initial_1y - 100, initial_1z-50, initial_1x, initial_1y, initial_1z-50, steps=20)
+            time.sleep(2)
+            self.creepy_pod.legs[5].draw_straight_line(initial_1x, initial_1y, initial_1z-50, initial_1x, initial_1y, initial_1z, steps=20)
+            time.sleep(2)
+
+
+
         # Create threads for each leg
         thread0 = threading.Thread(target=move_leg0)
+        thread1 = threading.Thread(target=move_leg1)
         thread2 = threading.Thread(target=move_leg2)
+        thread3 = threading.Thread(target=move_leg3)
         thread4 = threading.Thread(target=move_leg4)
+        thread5 = threading.Thread(target=move_leg5)
 
         # Start the threads
         thread0.start()
+        thread1.start()
         thread2.start()
+        thread3.start()
         thread4.start()
+        thread5.start()
 
         # Wait for all threads to complete
         thread0.join()
+        thread1.join()
         thread2.join()
+        thread3.join()
         thread4.join()
+        thread5.join()
 
 
 
