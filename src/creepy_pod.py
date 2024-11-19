@@ -234,7 +234,7 @@ class CreepyPod:
 
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
-#       self.legs[1].manual_control_ik()
+        self.legs[1].calculate_global_positions(200, 0, 150)
 #       self.legs[0].servos[0].manual_control_angle()
 #       self.legs[1].servos[0].manual_control_angle()
 #       self.legs[3].servos[2].manual_control_angle()

@@ -89,7 +89,64 @@ class Leg:
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
+    def rotate_coordinates(self, x, y):
+        angle_radians = math.radians(self.offset)
+        rotated_x = x * math.cos(angle_radians) + y * math.sin(angle_radians)
+        rotated_y = -x * math.sin(angle_radians) + y * math.cos(angle_radians)
+        return rotated_x, rotated_y
+
     def calculate_angles(self, x, y, z):
+        # Constants for the arm segments
+        Z_offset = -10.2  # cm (vertical segment positioned below the base)
+        horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
+        a2 = 149.5  # cm (distance from second servo to outermost servo)
+        a3 = 213.66  # cm (distance from outermost servo to end effector)
+
+        # Calculate theta1 based on target (x, y)
+        theta1 = math.degrees(math.atan2(y, x))
+        
+        # Adjusted coordinates for target relative to the second servo
+        effective_x = x - horizontal_offset
+        r1 = math.sqrt(effective_x**2 + y**2)
+        
+        # Calculate effective r2 as the Z distance from the second servo’s height (below the base)
+        r2 = z - Z_offset  # Since vertical_segment is negative, this adds 10 to Z
+
+        # Calculate phi2
+        phi2 = math.degrees(math.atan2(r2, r1))
+        
+        # Calculate r3
+        r3 = math.sqrt(r1**2 + r2**2)
+        
+        # Ensure r3 is within range to avoid math domain errors in acos
+        phi1 = math.degrees(math.acos(max(min((a3**2 - a2**2 - r3**2) / (-2 * a2 * r3), 1), -1)))
+        phi3 = math.degrees(math.acos(max(min((r3**2 - a2**2 - a3**2) / (-2 * a2 * a3), 1), -1)))
+        
+        # Calculate theta2 and theta3
+        theta2 = phi2 + phi1
+        theta3 = 90 - phi3 #-(180 - phi3) + 90
+
+        return theta1, theta2, theta3
+
+        def calculate_global_positions(self, x, y, z):
+        Z_offset = -10.2  # cm
+        horizontal_offset = 45  # cm
+        a2 = 149.5  # cm
+        a3 = 213.66  # cm
+
+        # Global to local coordinate conversion
+        x_adjusted = x - self.origin_x
+        y_adjusted = y - self.origin_y
+        x_local, y_local = self.rotate_coordinates(x_adjusted, y_adjusted)
+
+        # Calculate angles
+        theta1, theta2, theta3 = self.calculate_angles(x_local, y_local, z)
+
+        print(f"theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
+
+
+
+    def calculate_angles_backup(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
         horizontal_offset = 45   # cm (horizontal segment after the 90-degree bend)
