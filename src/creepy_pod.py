@@ -234,15 +234,10 @@ class CreepyPod:
 
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
-#        self.legs[0].move_to_global_position(200, -50, -120)
-#        time.sleep(2)
-#        self.legs[0].move_to_global_position(200, 50, -120)
-#        time.sleep(2)
-#        self.legs[1].initial_position()
-
-        self.legs[0].move_to_global_position(200, 100, -120)
+         #leg 0
+        self.legs[0].move_to_global_position(175, 100, -120)
         time.sleep(2)
-        self.legs[0].move_to_global_position(200, 200, -120)
+        self.legs[0].move_to_global_position(175, 200, -120)
         time.sleep(2)
         self.legs[0].initial_position()
 
@@ -253,6 +248,48 @@ class CreepyPod:
         self.legs[5].move_to_global_position(-400, 200, -120)
         time.sleep(2)
         self.legs[5].initial_position()
+
+        time.sleep(2)
+
+         # leg 1
+        self.legs[1].move_to_global_position(200, -50, -120)
+        time.sleep(2)
+        self.legs[1].move_to_global_position(200, 50, -120)
+        time.sleep(2)
+        self.legs[1].initial_position()
+
+        time.sleep(2)
+
+        # leg 4 v
+        self.legs[4].move_to_global_position(-425, -50, -120)
+        time.sleep(2)
+        self.legs[4].move_to_global_position(-425, 50, -120)
+        time.sleep(2)
+        self.legs[4].initial_position()
+
+        time.sleep(2)
+
+        # leg 2 v
+        self.legs[2].move_to_global_position(175, -300, -120)
+        time.sleep(2)
+        self.legs[2].move_to_global_position(175, -200, -120)
+        time.sleep(2)
+        self.legs[2].initial_position()
+
+        time.sleep(2)
+
+        # leg 3 v
+        self.legs[3].move_to_global_position(-400, -300, -120)
+        time.sleep(2)
+        self.legs[3].move_to_global_position(-400, -200, -120)
+        time.sleep(2)
+        self.legs[3].initial_position()
+
+
+
+
+
+
 
 
 
