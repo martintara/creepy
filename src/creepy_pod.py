@@ -217,27 +217,30 @@ class CreepyPod:
 
     def devmode_action(self): # left+right bumper
         display.devmode()
-        self.load_crawl_config()
+        self.legs[0].move_to_global_position(165, 180, -50)
+#        self.legs[1].move_to_global_position(200, 50, 0)
+#        self.legs[2].move_to_global_position(165, -300, -150)
+#        self.legs[3].move_to_global_position(-400, -200, 0)
+#        self.legs[4].move_to_global_position(-425, -50, -150)
+#        self.legs[5].move_to_global_position(-400, 280, 0)
+        time.sleep(2)
+        self.gait_controller.draw_straight_line_three_legs(165, 180, -50, 200, 50, 0, 165, -300, -150, 50, 50)
+#        self.gait_controller.draw_straight_line_three_legs(165, 180, -50, 200, 50, 0, 165, -300, -150,-400, -200, 0, -425, -50, -150, -400, 280, 0 , 50, 50)
         print("Developer mode")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
 
     def devmode2_action(self): #X
         display.devmode()
-        print("Testing IK")
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 100, -150, 175, 200, -150, steps=20)
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 200, -150, 175, 200, -100, steps=20)
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 200, -100, 175, 100, -100, steps=20)
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 100, -100, 175, 100, -150, steps=20)
-        time.sleep(2)
+        print("Manually testing global coordinates")
 
+#        self.legs[0].move_to_global_position(165, 180, -150)
+#        self.legs[1].move_to_global_position(200, 50, 0)
+#        self.legs[2].move_to_global_position(165, -300, -150)
+#        self.legs[3].move_to_global_position(-400, -200, 0)
+#        self.legs[4].move_to_global_position(-425, -50, -150)
+#        self.legs[5].move_to_global_position(-400, 280, 0)
 
-
-        self.legs[0].initial_position()
 
 
         while self.state == CreepyState.DEVMODE2:
