@@ -11,6 +11,9 @@ class Leg:
         self.origin_x = origin_x
         self.origin_y = origin_y
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
+
+# The functions lower_leg, rise_leg, initial_position, leg_forward and leg_backward are used for simple walk
+
     def lower_leg(self):
         self.servos[1].move_to_angle(57)
 
@@ -19,25 +22,10 @@ class Leg:
     def rise_leg(self):
         self.servos[1].move_to_angle(90)
 
-
-
     def initial_position(self):
-#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
         self.servos[0].move(self.servos[0].center_pos)
         self.servos[1].move(self.servos[1].max_pos)
         self.servos[2].move(self.servos[2].max_pos)
-
-    def straight_up(self):
-#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
-#       self.servos[0].move(self.servos[0].center_pos)
-        self.servos[1].move(self.servos[1].max_pos)
-        self.servos[2].move(self.servos[2].min_pos)
-
-    def straight_down(self):
-#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
-        self.servos[0].move(self.servos[0].center_pos)
-        self.servos[1].move(self.servos[1].min_pos)
-        self.servos[2].move(self.servos[2].min_pos)
 
     def leg_forward(self):
         """Move leg forward, adjusted for orientation."""
@@ -59,25 +47,13 @@ class Leg:
         self.servos[0].move(backward_position)
         print(f"Leg {self.leg_id} moved backward with orientation offset {self.offset}")
 
+# manual_control, manual_control_angle and manual_control_ik are used to test the movement of the servos using input from the keybord
+
     def manual_control(self, id: int):
         self.servos[id].manual_control()
 
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
-
-    def move_to_coordinates(self, x, y, z):
-        theta1, theta2, theta3 = self.calculate_angles(x, y, z)
-        self.servos[0].move_to_angle(theta1)
-        self.servos[1].move_to_angle(theta2)
-        self.servos[2].move_to_angle(theta3)
-
-    def move_to_global_position(self, x, y, z):
-        theta1, theta2, theta3 = self.calculate_global_angles(x, y, z)
-        print(f"moving to theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
-        self.servos[0].move_to_angle(theta1)
-        self.servos[1].move_to_angle(theta2)
-        self.servos[2].move_to_angle(theta3)
-
 
     def manual_control_ik(self):
         """
@@ -96,6 +72,24 @@ class Leg:
                 self.move_to_global_position(x, y, z)
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
+
+# move_to_coordinates and move_to_global_position uses different scopes to determine coordinates the tip of a leg goes to.
+
+# move_to_coordinates is not implemented correctly.
+    def move_to_coordinates(self, x, y, z):
+        theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+        self.servos[0].move_to_angle(theta1)
+        self.servos[1].move_to_angle(theta2)
+        self.servos[2].move_to_angle(theta3)
+
+    def move_to_global_position(self, x, y, z):
+        theta1, theta2, theta3 = self.calculate_global_angles(x, y, z)
+        print(f"moving to theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
+        self.servos[0].move_to_angle(theta1)
+        self.servos[1].move_to_angle(theta2)
+        self.servos[2].move_to_angle(theta3)
+
+# rotate_coorinates, calculate_angles, calculate_global_angles, calculate_angles_backup are used by other functions.
 
     def rotate_coordinates(self, x, y):
         angle_radians = math.radians(self.offset)
@@ -187,6 +181,8 @@ class Leg:
 
         return theta1, theta2, theta3
  
+# draw_straight_line makes the tip of the leg move in a straight line and print_offsets is a helper function.
+
     def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, steps=10):
         """
         Draw a straight line from start to end coordinates in the global frame.
@@ -203,8 +199,6 @@ class Leg:
             z = start_z + t * (end_z - start_z)
             self.move_to_global_position(x, y, z)
             time.sleep(0.05) 
-
-
 
     def print_offsets(self):
         print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
