@@ -32,7 +32,7 @@ class Servo:
         self.max_pos = center_pos+range
         self.min_angle = center_angle - angle_range
         self.max_angle = center_angle + angle_range
-        self.speed = 25 # default speed
+        self.speed = 50 # default speed
         self.acceleration = 25 # default acceleration
 
     def move(self, position: int):

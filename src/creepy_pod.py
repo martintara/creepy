@@ -217,17 +217,12 @@ class CreepyPod:
 
     def devmode_action(self): # (left+right bumper) testing ripple gait
         display.devmode()
-        self.legs[0].move_to_global_position(165, 230, -120)
-        self.legs[1].move_to_global_position(200, -25, -120)
-        self.legs[2].move_to_global_position(165, -200, -120)
-        self.legs[3].move_to_global_position(-365, -150, -120)
-        self.legs[4].move_to_global_position(-400, -25, -120)
-        self.legs[5].move_to_global_position(-365, 180, -120)
-        time.sleep(5)
 
 #       self.legs[0].move_to_global_position(165, 180, 100)
 #       self.legs[3].move_to_global_position(-365, -200, 100)
-        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120)
+        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
         print("Developer mode")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()

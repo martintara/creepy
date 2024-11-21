@@ -183,7 +183,7 @@ class Leg:
  
 # draw_straight_line makes the tip of the leg move in a straight line and print_offsets is a helper function.
 
-    def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, steps=10):
+    def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, delay, steps=10):
         """
         Draw a straight line from start to end coordinates in the global frame.
 
@@ -198,7 +198,7 @@ class Leg:
             y = start_y + t * (end_y - start_y)
             z = start_z + t * (end_z - start_z)
             self.move_to_global_position(x, y, z)
-            time.sleep(0.05) 
+            time.sleep(delay) 
 
     def print_offsets(self):
         print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
