@@ -260,27 +260,52 @@ class CreepyPod:
 
     def devmode_action(self): # left+right bumper
         display.devmode()
-        self.load_crawl_config()
+#        self.legs[0].move_to_global_position(165, 180, -80)
+#        self.legs[1].move_to_global_position(200, -25, -80)
+#        self.legs[2].move_to_global_position(165, -200, -80)
+#        self.legs[3].move_to_global_position(-365, -200, -80)
+#        self.legs[4].move_to_global_position(-400, -25, -80)
+#        self.legs[5].move_to_global_position(-365, 180, -80)
+#        time.sleep(2)
+        self.legs[0].move_to_global_position(165, 230, -120)
+        self.legs[1].move_to_global_position(200, -25, -120)
+        self.legs[2].move_to_global_position(165, -200, -120)
+        self.legs[3].move_to_global_position(-365, -150, -120)
+        self.legs[4].move_to_global_position(-400, -25, -120)
+        self.legs[5].move_to_global_position(-365, 180, -120)
+        time.sleep(5)
+
+
+
+
+
+
+
+#       self.legs[0].move_to_global_position(165, 180, 100)
+#       self.legs[3].move_to_global_position(-365, -200, 100)
+#       self.gait_controller.draw_straight_line_three_legs(165, 180, -80, 200, 50, 0, 165, -300, -150, 50, 50)
+        self.gait_controller.draw_straight_line_six_legs(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120)
         print("Developer mode")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
 
     def devmode2_action(self): #X
         display.devmode()
-        print("Testing IK")
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 100, -150, 175, 200, -150, steps=20)
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 200, -150, 175, 200, -100, steps=20)
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 200, -100, 175, 100, -100, steps=20)
-#        time.sleep(2)
-#        self.legs[0].draw_straight_line(175, 100, -100, 175, 100, -150, steps=20)
-        time.sleep(2)
-
-
-
+        print("Manually testing global coordinates")
         self.legs[0].initial_position()
+        self.legs[1].initial_position()
+        self.legs[2].initial_position()
+        self.legs[3].initial_position()
+        self.legs[4].initial_position()
+        self.legs[5].initial_position()
+        time.sleep(1)
+        self.legs[0].move_to_global_position(165, 180, -150)
+#        self.legs[1].move_to_global_position(200, 50, 0)
+#        self.legs[2].move_to_global_position(165, -300, -150)
+#        self.legs[3].move_to_global_position(-400, -200, 0)
+#        self.legs[4].move_to_global_position(-425, -50, -150)
+#        self.legs[5].move_to_global_position(-400, 280, 0)
+
 
 
         while self.state == CreepyState.DEVMODE2:
@@ -377,6 +402,9 @@ class Leg:
         self.origin_x = origin_x
         self.origin_y = origin_y
         self.servos = [Servo(ctrl, **params) for params in servo_params]  # Initialize servos for the leg
+
+# The functions lower_leg, rise_leg, initial_position, leg_forward and leg_backward are used for simple walk
+
     def lower_leg(self):
         self.servos[1].move_to_angle(57)
 
@@ -385,25 +413,10 @@ class Leg:
     def rise_leg(self):
         self.servos[1].move_to_angle(90)
 
-
-
     def initial_position(self):
-#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
         self.servos[0].move(self.servos[0].center_pos)
         self.servos[1].move(self.servos[1].max_pos)
         self.servos[2].move(self.servos[2].max_pos)
-
-    def straight_up(self):
-#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
-#       self.servos[0].move(self.servos[0].center_pos)
-        self.servos[1].move(self.servos[1].max_pos)
-        self.servos[2].move(self.servos[2].min_pos)
-
-    def straight_down(self):
-#       self.servos[0].move(int((self.servos[0].max_pos+self.servos[0].min_pos)/2))
-        self.servos[0].move(self.servos[0].center_pos)
-        self.servos[1].move(self.servos[1].min_pos)
-        self.servos[2].move(self.servos[2].min_pos)
 
     def leg_forward(self):
         """Move leg forward, adjusted for orientation."""
@@ -425,25 +438,13 @@ class Leg:
         self.servos[0].move(backward_position)
         print(f"Leg {self.leg_id} moved backward with orientation offset {self.offset}")
 
+# manual_control, manual_control_angle and manual_control_ik are used to test the movement of the servos using input from the keybord
+
     def manual_control(self, id: int):
         self.servos[id].manual_control()
 
     def manual_control_angle(self, id: int):
         self.servos[id].manual_control_angle()
-
-    def move_to_coordinates(self, x, y, z):
-        theta1, theta2, theta3 = self.calculate_angles(x, y, z)
-        self.servos[0].move_to_angle(theta1)
-        self.servos[1].move_to_angle(theta2)
-        self.servos[2].move_to_angle(theta3)
-
-    def move_to_global_position(self, x, y, z):
-        theta1, theta2, theta3 = self.calculate_global_angles(x, y, z)
-        print(f"moving to theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
-        self.servos[0].move_to_angle(theta1)
-        self.servos[1].move_to_angle(theta2)
-        self.servos[2].move_to_angle(theta3)
-
 
     def manual_control_ik(self):
         """
@@ -462,6 +463,24 @@ class Leg:
                 self.move_to_global_position(x, y, z)
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
+
+# move_to_coordinates and move_to_global_position uses different scopes to determine coordinates the tip of a leg goes to.
+
+# move_to_coordinates is not implemented correctly.
+    def move_to_coordinates(self, x, y, z):
+        theta1, theta2, theta3 = self.calculate_angles(x, y, z)
+        self.servos[0].move_to_angle(theta1)
+        self.servos[1].move_to_angle(theta2)
+        self.servos[2].move_to_angle(theta3)
+
+    def move_to_global_position(self, x, y, z):
+        theta1, theta2, theta3 = self.calculate_global_angles(x, y, z)
+        print(f"moving to theta1:{theta1},theta2: {theta2} , theta3 {theta3}")
+        self.servos[0].move_to_angle(theta1)
+        self.servos[1].move_to_angle(theta2)
+        self.servos[2].move_to_angle(theta3)
+
+# rotate_coorinates, calculate_angles, calculate_global_angles, calculate_angles_backup are used by other functions.
 
     def rotate_coordinates(self, x, y):
         angle_radians = math.radians(self.offset)
@@ -553,6 +572,8 @@ class Leg:
 
         return theta1, theta2, theta3
  
+# draw_straight_line makes the tip of the leg move in a straight line and print_offsets is a helper function.
+
     def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, steps=10):
         """
         Draw a straight line from start to end coordinates in the global frame.
@@ -569,8 +590,6 @@ class Leg:
             z = start_z + t * (end_z - start_z)
             self.move_to_global_position(x, y, z)
             time.sleep(0.05) 
-
-
 
     def print_offsets(self):
         print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
