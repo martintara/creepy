@@ -124,7 +124,7 @@ class Gait:
 
 
     # Leg movement based on inverse kinematics and a global coordinate system
-    def draw_straight_line_six_legs(self, 
+    def ripple_gait(self, 
                                     initial_0x, initial_0y, initial_0z,
                                     initial_1x, initial_1y, initial_1z,
                                     initial_2x, initial_2y, initial_2z, 
