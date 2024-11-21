@@ -10,6 +10,7 @@ class Gait:
         """
         self.creepy_pod = creepy_pod
 
+    # A simplified gait based on preprogrammed positions
     def tripod_gait(self):
         self.creepy_pod.legs[0].leg_forward()
         self.creepy_pod.legs[2].leg_forward()
@@ -122,7 +123,7 @@ class Gait:
         time.sleep(2)
 
 
-
+    # Leg movement based on inverse kinematics and a global coordinate system
     def draw_straight_line_two_legs(self, 
                                     initial_0x, initial_0y, initial_0z,
                                     initial_1x, initial_1y, initial_1z,
@@ -132,7 +133,7 @@ class Gait:
                                     initial_5x, initial_5y, initial_5z):
         def move_leg0():
             self.creepy_pod.legs[0].draw_straight_line(initial_0x, initial_0y, initial_0z, initial_0x, initial_0y + 150, initial_0z, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[0].draw_straight_line(initial_0x, initial_0y + 150, initial_0z, initial_0x, initial_0y + 150, initial_0z + 50, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[0].draw_straight_line(initial_0x, initial_0y + 150, initial_0z + 50, initial_0x, initial_0y, initial_0z + 50, steps=20)
@@ -144,15 +145,15 @@ class Gait:
             self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y - 150, initial_1z, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y - 150, initial_1z, initial_1x, initial_1y - 150, initial_1z-50, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y - 150, initial_1z-50, initial_1x, initial_1y, initial_1z-50, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z-50, initial_1x, initial_1y, initial_1z, steps=20)
             time.sleep(2)
 
         def move_leg2():
             self.creepy_pod.legs[2].draw_straight_line(initial_2x, initial_2y, initial_2z, initial_2x, initial_2y + 150, initial_2z, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[2].draw_straight_line(initial_2x, initial_2y + 150, initial_2z, initial_2x, initial_2y + 150, initial_2z + 50, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[2].draw_straight_line(initial_2x, initial_2y + 150, initial_2z + 50, initial_2x, initial_2y, initial_2z + 50, steps=20)
@@ -164,15 +165,15 @@ class Gait:
             self.creepy_pod.legs[3].draw_straight_line(initial_3x, initial_3y, initial_3z, initial_3x, initial_3y - 150, initial_3z, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[3].draw_straight_line(initial_3x, initial_3y - 150, initial_3z, initial_3x, initial_3y - 150, initial_3z-50, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[3].draw_straight_line(initial_3x, initial_3y - 150, initial_3z-50, initial_3x, initial_3y, initial_3z-50, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[3].draw_straight_line(initial_3x, initial_3y, initial_3z-50, initial_3x, initial_3y, initial_3z, steps=20)
             time.sleep(2)
 
         def move_leg4():
             self.creepy_pod.legs[4].draw_straight_line(initial_4x, initial_4y, initial_4z, initial_4x, initial_4y + 150, initial_4z, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[4].draw_straight_line(initial_4x, initial_4y + 150, initial_4z, initial_4x, initial_4y + 150, initial_4z + 50, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[4].draw_straight_line(initial_4x, initial_4y + 150, initial_4z + 50, initial_4x, initial_4y, initial_4z + 50, steps=20)
@@ -184,9 +185,9 @@ class Gait:
             self.creepy_pod.legs[5].draw_straight_line(initial_5x, initial_5y, initial_5z, initial_5x, initial_5y - 150, initial_5z, steps=20)
             time.sleep(2)
             self.creepy_pod.legs[5].draw_straight_line(initial_5x, initial_5y - 150, initial_5z, initial_5x, initial_5y - 150, initial_5z-50, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[5].draw_straight_line(initial_5x, initial_5y - 150, initial_5z-50, initial_5x, initial_5y, initial_5z-50, steps=20)
-            time.sleep(2)
+            time.sleep(4)
             self.creepy_pod.legs[5].draw_straight_line(initial_5x, initial_5y, initial_5z-50, initial_5x, initial_5y, initial_5z, steps=20)
             time.sleep(2)
 
