@@ -249,20 +249,13 @@ class CreepyPod:
     def devmode2_action(self): #X
         display.devmode()
         print("Manually testing global coordinates")
-        self.legs[0].initial_position()
-        self.legs[1].initial_position()
-        self.legs[2].initial_position()
-        self.legs[3].initial_position()
-        self.legs[4].initial_position()
-        self.legs[5].initial_position()
-        time.sleep(1)
-        self.legs[0].move_to_global_position(165, 180, -150)
-#        self.legs[1].move_to_global_position(200, 50, 0)
-#        self.legs[2].move_to_global_position(165, -300, -150)
-#        self.legs[3].move_to_global_position(-400, -200, 0)
-#        self.legs[4].move_to_global_position(-425, -50, -150)
-#        self.legs[5].move_to_global_position(-400, 280, 0)
-
+        self.legs[0].move_to_global_position(165, 230, -120)
+        self.legs[1].move_to_global_position(200, -25, -120)
+        self.legs[2].move_to_global_position(165, -200, -120)
+        self.legs[3].move_to_global_position(-365, -150, -120)
+        self.legs[4].move_to_global_position(-400, -25, -120)
+        self.legs[5].move_to_global_position(-365, 180, -120)
+ 
 
 
         while self.state == CreepyState.DEVMODE2:
