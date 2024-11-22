@@ -260,17 +260,19 @@ class CreepyPod:
 
     def devmode_action(self): # (left+right bumper) testing ripple gait
         display.devmode()
-        self.legs[0].move_to_global_position(165, 230, -120)
-        self.legs[1].move_to_global_position(200, -25, -120)
-        self.legs[2].move_to_global_position(165, -200, -120)
-        self.legs[3].move_to_global_position(-365, -150, -120)
-        self.legs[4].move_to_global_position(-400, -25, -120)
-        self.legs[5].move_to_global_position(-365, 180, -120)
-        time.sleep(5)
 
 #       self.legs[0].move_to_global_position(165, 180, 100)
 #       self.legs[3].move_to_global_position(-365, -200, 100)
-        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120)
+        self.legs[0].move_to_global_position(165, 180, -120)
+        self.legs[1].move_to_global_position(200, -25, -120)
+        self.legs[2].move_to_global_position(165, -200, -120)
+        self.legs[3].move_to_global_position(-365, -200, -120)
+        self.legs[4].move_to_global_position(-400, -25, -120)
+        self.legs[5].move_to_global_position(-365, 180, -120)
+        time.sleep(3)
+        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        self.gait_controller.ripple_gait(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
         print("Developer mode")
         while self.state == CreepyState.DEVMODE:
             self.check_for_state_change()
@@ -292,71 +294,15 @@ class CreepyPod:
 
     def devmode3_action(self): #y MANUAL TESTING
         display.devmode()
-         #leg 0
-        self.legs[0].move_to_global_position(175, 100, -120)
-        time.sleep(2)
-        self.legs[0].move_to_global_position(175, 200, -120)
-        time.sleep(2)
-        self.legs[0].initial_position()
 
-        time.sleep(2)
-
-        self.legs[5].move_to_global_position(-400, 100, -120)
-        time.sleep(2)
-        self.legs[5].move_to_global_position(-400, 200, -120)
-        time.sleep(2)
-        self.legs[5].initial_position()
-
-        time.sleep(2)
-
-         # leg 1
-        self.legs[1].move_to_global_position(200, -50, -120)
-        time.sleep(2)
-        self.legs[1].move_to_global_position(200, 50, -120)
-        time.sleep(2)
-        self.legs[1].initial_position()
-
-        time.sleep(2)
-
-        # leg 4 v
-        self.legs[4].move_to_global_position(-425, -50, -120)
-        time.sleep(2)
-        self.legs[4].move_to_global_position(-425, 50, -120)
-        time.sleep(2)
-        self.legs[4].initial_position()
-
-        time.sleep(2)
-
-        # leg 2 v
-        self.legs[2].move_to_global_position(175, -300, -120)
-        time.sleep(2)
-        self.legs[2].move_to_global_position(175, -200, -120)
-        time.sleep(2)
-        self.legs[2].initial_position()
-
-        time.sleep(2)
-
-        # leg 3 v
-        self.legs[3].move_to_global_position(-400, -300, -120)
-        time.sleep(2)
-        self.legs[3].move_to_global_position(-400, -200, -120)
-        time.sleep(2)
-        self.legs[3].initial_position()
-
-
-
-
-
-
-
-
-
-#       self.legs[0].servos[0].manual_control_angle()
-#       self.legs[1].servos[0].manual_control_angle()
-#       self.legs[3].servos[2].manual_control_angle()
-#       self.legs[3].servos[1].manual_control_angle()
-#       self.legs[4].servos[0].manual_control_angle()
-#       self.legs[5].servos[0].manual_control_angle()
+        self.legs[0].move_to_global_position(165, 130, -120)
+        self.legs[1].move_to_global_position(200, 25, -120)
+        self.legs[2].move_to_global_position(165, -150, -120)
+        self.legs[3].move_to_global_position(-365, -200, -120)
+        self.legs[4].move_to_global_position(-400, -25, -120)
+        self.legs[5].move_to_global_position(-365, 180, -120)
+        time.sleep(3)
+        self.gait_controller.ripple_rotate_left(165, 130, -120, 200, 25, -120, 165, -150, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
 
         while self.state == CreepyState.DEVMODE3:
             self.check_for_state_change()
@@ -553,7 +499,7 @@ class Leg:
  
 # draw_straight_line makes the tip of the leg move in a straight line and print_offsets is a helper function.
 
-    def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, steps=10):
+    def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, delay, steps=10):
         """
         Draw a straight line from start to end coordinates in the global frame.
 
@@ -568,7 +514,7 @@ class Leg:
             y = start_y + t * (end_y - start_y)
             z = start_z + t * (end_z - start_z)
             self.move_to_global_position(x, y, z)
-            time.sleep(0.05) 
+            time.sleep(delay) 
 
     def print_offsets(self):
         print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
@@ -610,7 +556,7 @@ class Servo:
         self.max_pos = center_pos+range
         self.min_angle = center_angle - angle_range
         self.max_angle = center_angle + angle_range
-        self.speed = 25 # default speed
+        self.speed = 50 # default speed
         self.acceleration = 25 # default acceleration
 
     def move(self, position: int):
