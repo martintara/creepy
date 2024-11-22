@@ -1,4 +1,4 @@
-def ripple_rotate_left(self, 
+def ripple_rotate_right(self, 
                                     initial_0x, initial_0y, initial_0z,
                                     initial_1x, initial_1y, initial_1z,
                                     initial_2x, initial_2y, initial_2z, 
