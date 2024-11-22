@@ -272,22 +272,22 @@ class Gait:
 
         def move_leg1():
             #step 1
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y, initial_1z + height, delay, steps=20)
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z, initial_1x, initial_1y, initial_1z, delay, steps=20)
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z + height, initial_1x, initial_1y + length, initial_1z, delay, steps=20)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z, initial_1x, initial_1y + length, initial_1z + height, delay, steps=20) #up
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z + height, initial_1x, initial_1y, initial_1z + height, delay, steps=20) #back
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z + height, initial_1x, initial_1y, initial_1z, delay, steps=20) #down
             #step 2
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z + height, initial_1x, initial_1y + length, initial_1z + height, delay, steps=20)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y + length, initial_1z, delay, steps=20) #forward
             time.sleep(2*delay*20)
             #step 3
             time.sleep(3*delay*20)
             #step 4
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y, initial_1z + height, delay, steps=20)
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z, initial_1x, initial_1y, initial_1z, delay, steps=20)
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z + height, initial_1x, initial_1y + length, initial_1z, delay, steps=20)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z, initial_1x, initial_1y + length, initial_1z + height, delay, steps=20) #up
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y + length, initial_1z + height, initial_1x, initial_1y, initial_1z + height, delay, steps=20) #back
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z + height, initial_1x, initial_1y, initial_1z, delay, steps=20) #down
             #step 5
             time.sleep(3*delay*20)
             #step 6
-            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z + height, initial_1x, initial_1y + length, initial_1z + height, delay, steps=20)
+            self.creepy_pod.legs[1].draw_straight_line(initial_1x, initial_1y, initial_1z, initial_1x, initial_1y + length, initial_1z, delay, steps=20) #forward
             time.sleep(2*delay*20)
 
         def move_leg2():
