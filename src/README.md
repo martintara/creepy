@@ -288,6 +288,8 @@ class CreepyPod:
         self.legs[5].move_to_global_position(-365, 230, -120)
         time.sleep(3)
         self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
 
 
 
