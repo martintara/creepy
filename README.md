@@ -1,6 +1,6 @@
 # Creepy Crawler Inc
 
-v2.0
+v3.0
 
 Dokumentasjon for prosjeket vårt i Smarte Systemer 2024
 
