@@ -370,8 +370,7 @@ class Leg:
         self.servos[0].move(backward_position)
         print(f"Leg {self.leg_id} moved backward with orientation offset {self.offset}")
 
-# manual_control, manual_control_angle and manual_control_ik are used to test the movement of the servos using input from the keybord
-
+    # manual_control, manual_control_angle and manual_control_ik are used to test the movement of the servos using input from the keyboard
     def manual_control(self, id: int):
         self.servos[id].manual_control()
 
@@ -396,9 +395,8 @@ class Leg:
             except ValueError:
                 print("Invalid input. Please enter three numbers separated by commas, or 'q' to quit.")   
 
-# move_to_coordinates and move_to_global_position uses different scopes to determine coordinates the tip of a leg goes to.
+    # move_to_coordinates and move_to_global_position is based on inverse kinematics. It moves the end effector of a leg to a desired xyz coordinate.
 
-# move_to_coordinates is not implemented correctly.
     def move_to_coordinates(self, x, y, z):
         theta1, theta2, theta3 = self.calculate_angles(x, y, z)
         self.servos[0].move_to_angle(theta1)
@@ -412,14 +410,16 @@ class Leg:
         self.servos[1].move_to_angle(theta2)
         self.servos[2].move_to_angle(theta3)
 
-# rotate_coorinates, calculate_angles, calculate_global_angles, calculate_angles_backup are used by other functions.
+    # rotate_coorinates, calculate_angles, calculate_global_angles, calculate_angles_backup are helper functions.
 
+    # Rotate_coordinates shifts the frame of reference with the offset angle of the legs.
     def rotate_coordinates(self, x, y):
         angle_radians = math.radians(self.offset)
         rotated_x = x * math.cos(angle_radians) + y * math.sin(angle_radians)
         rotated_y = -x * math.sin(angle_radians) + y * math.cos(angle_radians)
         return rotated_x, rotated_y
 
+    # calculate_angles is the core functionality that takes x,y,z coordinate as input and returns the angles the servos has to be in for the end effector to hit this point
     def calculate_angles(self, x, y, z):
         # Constants for the arm segments
         Z_offset = -10.2  # cm (vertical segment positioned below the base)
@@ -467,9 +467,7 @@ class Leg:
         # Calculate angles
         theta1, theta2, theta3 = self.calculate_angles(x_local, y_local, z)
 
-
         return theta1, theta2, theta3
-
 
     def calculate_angles_backup(self, x, y, z):
         # Constants for the arm segments
@@ -504,7 +502,7 @@ class Leg:
 
         return theta1, theta2, theta3
  
-# draw_straight_line makes the tip of the leg move in a straight line and print_offsets is a helper function.
+    # draw_straight_line makes the tip of the leg move in a straight line and print_offsets is a helper function.
 
     def draw_straight_line(self, start_x, start_y, start_z, end_x, end_y, end_z, delay, steps=10):
         """
@@ -523,8 +521,9 @@ class Leg:
             self.move_to_global_position(x, y, z)
             time.sleep(delay) 
 
-    def print_offsets(self):
-        print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
+    # # SLETTE?
+    # def print_offsets(self):
+    #     print(f"{self.offset},origin_x: {self.origin_x} , origin_y {self.origin_y}")
 ```
 
 #### servo.py
