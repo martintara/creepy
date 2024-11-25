@@ -1,13 +1,10 @@
-# main.py hei!
+# main.py
 import json
 from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
-# from leg import Leg
 import time
-
-# from servo import Servo
 
 def main():
     def load_leg_params(filename):
@@ -15,6 +12,7 @@ def main():
         with open(filename, 'r') as file:
             leg_params = json.load(file)
         return leg_params 
+
     # servo controller communication object
     ctrl = maestro.Controller()
     leg_params = load_leg_params("default_leg_params.json")

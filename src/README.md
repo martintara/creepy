@@ -6,16 +6,13 @@
 
 #### main.py
 ```python
-# main.py hei!
+# main.py
 import json
 from creepy_pod import CreepyPod
 from creepy_state import CreepyState
 from maestro import Controller
 import maestro
-# from leg import Leg
 import time
-
-# from servo import Servo
 
 def main():
     def load_leg_params(filename):
@@ -23,6 +20,7 @@ def main():
         with open(filename, 'r') as file:
             leg_params = json.load(file)
         return leg_params 
+
     # servo controller communication object
     ctrl = maestro.Controller()
     leg_params = load_leg_params("default_leg_params.json")
@@ -226,7 +224,7 @@ class CreepyPod:
         while self.state == CreepyState.MANUAL:
             self.check_for_state_change()
 
-    def auto_action(self):
+    def auto_action(self): # B
         display.auto() # updating sense hat display
         print("Autonomous mode activated. Navigating environment...")
         self.legs[0].move_to_global_position(165, 180, -150)
@@ -286,15 +284,16 @@ class CreepyPod:
         self.legs[3].move_to_global_position(-365, -200, -120)
         self.legs[4].move_to_global_position(-400, 25, -120)
         self.legs[5].move_to_global_position(-365, 230, -120)
-        time.sleep(3)
-        self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
-        self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
-        self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        time.sleep(1)
+        # self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        # self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
+        # self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
 
 
 
 
         while self.state == CreepyState.DEVMODE2:
+            self.gait_controller.ripple_rotate_right(165, 180, -120, 200, -25, -120, 165, -200, -120,-365, -200, -120, -400, -25, -120, -365, 180, -120 , 50, 120, 0.01)
             self.check_for_state_change()
 
     def devmode3_action(self): #y MANUAL TESTING

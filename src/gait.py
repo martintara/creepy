@@ -396,6 +396,7 @@ class Gait:
 
     # Rotate right movement based on inverse kinematics and a global coordinate system
     # Notes for further improvement: Refactoring so this function only involves the timing
+    # Constructor is getting too big, this should be initialized with a parameter list like we do in the leg constructor
     def ripple_rotate_right(self, 
                                     initial_0x, initial_0y, initial_0z,
                                     initial_1x, initial_1y, initial_1z,
