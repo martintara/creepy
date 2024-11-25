@@ -36,6 +36,10 @@ class Servo:
         self.acceleration = 25 # default acceleration
 
     def move(self, position: int):
+        """
+        Moves servo to given position.
+        Writes back id of servo, new position of servo and angle of servo.
+        """
         self.position = position
         self.controller.setRange(self.channel, self.min_pos, self.max_pos)
         self.controller.setAccel(self.channel, self.acceleration)
@@ -45,12 +49,21 @@ class Servo:
         print(f"Angle {self.position_to_angle(self.position)}")
 
     def move_to_angle(self, angle):
+        """
+        Moves servo to given angle.
+        """
         self.move(int(self.angle_to_position(angle)))
 
     def setAcceleration(self, acceleration: int):
+        """
+        Sets acceleration of given servo.
+        """
         self.acceleration = acceleration
 
     def setSpeed(self, speed: int):
+        """
+        Sets speed of given servo.
+        """
         self.speed = speed
 
     def angle_to_position(self, angle):
@@ -81,6 +94,11 @@ class Servo:
 
 
     def manual_control(self):
+        """
+        A helper function used in testing that allows user to input values between a given servos 
+        minimum and maximum value and moves the servo to the given value. Writes back instructions 
+        and can be ended by inputing 'q'. 
+        """
         print(f"Entering manual control for Servo {self.channel}.")
         print(f"Type a number between {self.min_pos} and {self.max_pos}, or 'q' to quit.")
         
@@ -108,6 +126,11 @@ class Servo:
                 print("Invalid input. Please enter an integer.")
 
     def manual_control_angle(self):
+        """
+        A helper function used in testing that allows user to input values between a given servos 
+        minimum and maximum angles and moves the servo to the given angle. Writes back instructions 
+        and can be ended by inputing 'q'. 
+        """
         print(f"Entering manual control for Servo {self.channel}.")
         print(f"Type a number between {self.min_angle} and {self.max_angle}, or 'q' to quit.")
         
