@@ -237,7 +237,7 @@ class CreepyPod:
         display.disable() # turn off display
 
     def devmode_action(self): # (left+right bumper) testing ripple gait
-        display.devmode()
+        display.arrow_up()
  
         self.legs[0].move_to_global_position(165, 280, -120) #forward
         self.legs[1].move_to_global_position(200, -40, -120) #backward
@@ -264,7 +264,7 @@ class CreepyPod:
 
 
     def devmode2_action(self): #X rotate right
-        display.devmode()
+        display.arrow_right()
         self.legs[0].move_to_global_position(165, 280, -120) #forward
         self.legs[1].move_to_global_position(200, -40, -120) #backward
         self.legs[2].move_to_global_position(165, -250, -120) #backward
@@ -289,7 +289,7 @@ class CreepyPod:
             self.check_for_state_change()
 
     def devmode3_action(self): #y rotate left
-        display.devmode()
+        display.arrow_left()
 
         self.legs[0].move_to_global_position(165, 200, -120) #backward
         self.legs[1].move_to_global_position(200, 40, -120) #forward

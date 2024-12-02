@@ -43,3 +43,51 @@ def devmode():
 
 def disable():
     sense.clear(black)
+
+def arrow_left():
+    """
+    Displays an arrow pointing to the left on the Sense HAT LED matrix.
+    """
+    arrow_left = [
+        O, O, O, R, O, O, O, O,
+        O, O, R, R, O, O, O, O,
+        O, R, R, R, R, R, R, R,
+        R, R, R, R, R, R, R, R,
+        O, R, R, R, R, R, R, R,
+        O, O, R, R, O, O, O, O,
+        O, O, O, R, O, O, O, O,
+        O, O, O, O, O, O, O, O
+    ]
+    sense.set_pixels(arrow_left)
+
+def arrow_right():
+    """
+    Displays an arrow pointing to the right on the Sense HAT LED matrix.
+    """
+    arrow = [
+        O, O, O, O, R, O, O, O,
+        O, O, O, O, R, R, O, O,
+        R, R, R, R, R, R, R, O,
+        R, R, R, R, R, R, R, R,
+        R, R, R, R, R, R, R, O,
+        O, O, O, O, R, R, O, O,
+        O, O, O, O, R, O, O, O,
+        O, O, O, O, O, O, O, O
+    ]
+    sense.set_pixels(arrow)
+
+def arrow_up():
+    """
+    Displays an arrow pointing upwards on the Sense HAT LED matrix.
+    """
+    arrow = [
+        O, O, O, O, R, O, O, O,
+        O, O, O, R, R, R, O, O,
+        O, O, R, R, R, R, R, O,
+        O, R, R, R, R, R, R, R,
+        O, O, O, R, R, R, O, O,
+        O, O, O, R, R, R, O, O,
+        O, O, O, R, R, R, O, O,
+        O, O, O, R, R, R, O, O
+    ]
+    sense.set_pixels(arrow)
